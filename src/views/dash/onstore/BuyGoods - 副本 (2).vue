@@ -1,12 +1,12 @@
 <template>
-  <div class="hello">
+  <div class="buy-goods">
     
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
+  name: 'buyGoods',
   data () {
     return {
     }
@@ -15,6 +15,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style lang="less" scoped>
+.buy-goods{
+	
+}
 </style>
