@@ -24,9 +24,13 @@ const onstore = {
   mutations: {
   },
   actions: {
-    storeGoodsChart_map(context,payload){
+    main_map(context,payload){
       let mock={};
-      return remote?api('/api/storeGoodsChart/map',{params:payload}):Promise.resolve(mock);
+      return remote?api('/api/main/map'):Promise.resolve(mock);
+    },
+    main_treemap(context,payload){
+      let mock={};
+      return remote?api('/api/main/treemap'):Promise.resolve(mock);
     },
     storeGoodsChart_goodstype(context){
       let mock={};
