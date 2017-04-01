@@ -18,7 +18,7 @@ const moduleA = {
   getters: {}
 }
 
-const onstore = {
+const main = {
   state: {
   },
   mutations: {
@@ -32,33 +32,9 @@ const onstore = {
       let mock={};
       return remote?api('/api/main/treemap'):Promise.resolve(mock);
     },
-    storeGoodsChart_goodstype(context){
+    main_projectPie(context,payload){
       let mock={};
-      return remote?api('/api/storeGoodsChart/goodstype'):Promise.resolve(mock);
-    },
-    storeGoodsChart_items(context,payload){
-      let mock={};
-      return remote?api('/api/storeGoodsChart/items',{params:payload}):Promise.resolve(mock);
-    },
-    buyGoodsChart_year(context,payload){
-      let mock={}
-      return remote?api('/api/buyGoodsChart/year',{params:payload}):Promise.resolve(mock);
-    },
-    buyGoodsChart_month(context,payload){
-      let mock={}
-      return remote?api('/api/buyGoodsChart/month',{params:payload}):Promise.resolve(mock);
-    },
-    buyGoodsChart_day(context,payload){
-      let mock={}
-      return remote?api('/api/buyGoodsChart/day',{params:payload}):Promise.resolve(mock);
-    },
-    buyGoodsChart_goodstype(context,payload){
-      let mock={}
-      return remote?api('/api/buyGoodsChart/goodstype',{params:payload}):Promise.resolve(mock);
-    },
-    buyGoodsChart_items(context,payload){
-      let mock={}
-      return remote?api('/api/buyGoodsChart/items',{params:payload}):Promise.resolve(mock);
+      return remote?api('/api/main/projectPie'):Promise.resolve(mock);
     }
   }
 }
@@ -66,7 +42,7 @@ const onstore = {
 const store = new Vuex.Store({
   modules: {
     moduleA,
-    onstore
+    main
   }
 })
 

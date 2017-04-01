@@ -5,7 +5,7 @@ import Main from '@/views/Main.vue'
 import Login from '@/views/Login.vue'
 import NotFound from '@/views/404.vue'
 
-import Dashboard from '@/views/dash/Dashboard.vue'
+import Index from '@/views/Index.vue'
 import StoreGoods from '@/views/dash/onstore/StoreGoods.vue'
 import BuyGoods from '@/views/dash/onstore/BuyGoods.vue'
 Vue.use(Router)
@@ -18,14 +18,14 @@ export default new Router({
     },{
         path: '/',
         component: Main,
-        description: '控制面板',
+        description: '首页',
         auth: true,
         children: [
 	      	{
 	        	path: '',
-	        	component: Dashboard,
-	        	name: 'Dashboard',
-                description: '控制面板'
+	        	component: Index,
+	        	name: 'Index',
+                description: '首页'
 	      	}
 	    ]
     },{

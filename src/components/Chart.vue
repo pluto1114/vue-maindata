@@ -19,9 +19,9 @@ export default {
     }
   },
   computed:{
-    myTheme(){
-      return this.theme?this.theme:'shine';
-    }
+    // myTheme(){
+    //   return this.theme?this.theme:'shine';
+    // }
   },
   watch:{
     'option':'fresh'
@@ -32,7 +32,12 @@ export default {
   methods:{
     fresh(){
       Object.assign(this.myOption,this.option)
-      myChart = echarts.init(this.$el,this.myTheme);
+      if(this.theme){
+        myChart = echarts.init(this.$el,this.theme);
+      }else{
+        myChart = echarts.init(this.$el);
+      }
+      
       myChart.setOption(this.myOption)
       
       if(this.loading!=undefined){
