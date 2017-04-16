@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
 import {api} from './api'
-import _ from 'lodash'
 
 var querystring = require('querystring');
 var remote=true;
@@ -26,15 +25,32 @@ const main = {
   actions: {
     main_map(context,payload){
       let mock={};
-      return remote?api('/api/main/map'):Promise.resolve(mock);
+      return remote?api('/api/storeGoods/map'):Promise.resolve(mock);
     },
-    main_treemap(context,payload){
+    main_buyGoods(context,payload){
       let mock={};
-      return remote?api('/api/main/treemap'):Promise.resolve(mock);
+      return remote?api('/api/buyGoods/year/2016'):Promise.resolve(mock);
     },
-    main_projectPie(context,payload){
+    main_goodsType(context,payload){
       let mock={};
-      return remote?api('/api/main/projectPie'):Promise.resolve(mock);
+      return remote?api('/api/goodsType/storeGoods'):Promise.resolve(mock);
+    },
+    main_orderInfo(context,payload){
+      let mock={};
+      return remote?api('/api/orderInfo'):Promise.resolve(mock);
+    }
+  }
+}
+const city = {
+  state: {
+  },
+  mutations: {
+  },
+  actions: {
+    
+    city_buyGoods(context,payload){
+      let mock={};
+      return remote?api('/api/city/buyGoods/3'):Promise.resolve(mock);
     }
   }
 }
@@ -42,7 +58,8 @@ const main = {
 const store = new Vuex.Store({
   modules: {
     moduleA,
-    main
+    main,
+    city
   }
 })
 

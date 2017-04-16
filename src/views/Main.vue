@@ -1,4 +1,4 @@
-<template>
+Main.vue<template>
   <div class="main">
   
         <transition name="fade"  mode="out-in">

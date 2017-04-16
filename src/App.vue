@@ -1,10 +1,19 @@
 <template>
   <div class="app">
- 
-        <transition name="fade"  mode="out-in">
-          <router-view></router-view>
-        </transition>
-      
+    <div class="container banner">
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">内蒙古联通全物资全生命周期信息管理平台</div>
+      </div>
+    </div>
+    <transition name="fade"  mode="out-in">
+      <router-view></router-view>
+    </transition>
+    <div class="footer">
+      <div class="container">
+      版权所有：联通系统集成内蒙古自治区分公司
+      </div>
+    </div>  
   </div>
 </template>
 
@@ -30,30 +39,8 @@ function isDesktop () {
 </script>
 
 <style lang="less">
-@import "../src/styles/import.less";
-
-         
-
-
-@media (min-width: 480px) {
-  .example-content{
-    padding: 10px;
-  }
-}
-
-@media (max-width: 993px) {
-  .example-appbar {
-    left: 0;
-  }
-  .example-content{
-    padding-left: 0;
-  }
-  .content-wrapper {
-    padding: 24px 36px;
-  }
-  .app-right{
-    margin-left: 0px;
-  }
+.footer{
+  text-align: center;
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -52,7 +52,7 @@ export default {
       
     },
     handleClick(params){
-      console.log(params)
+      // console.log(params)
       this.$emit('chartClick',params);
     }
   }

@@ -1,56 +1,94 @@
 <template>
   <div class="index">
-    <div id="fullpage">
-        <div class="section">
-            <Chart width="100%" height="80%" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+    <div class="menu">
+        <div class="container">
+            <div style="float:right;">
+                <div v-for="x of menus" class="menu-item">
+                    {{x.name}}
+                </div>
+            </div>
         </div>
-        <div class="section">
-            <Chart width="100%" height="80%" :option="optionTreeMap" theme='infographic' loading></Chart>
-        </div>
-        <div class="section active">
-            <mu-flexbox>
-              <mu-flexbox-item class="flex-demo">
-                <Chart width="40%" height="400px" :option="optionProject" theme='shine' loading></Chart>
-              </mu-flexbox-item>
-              全区项目库存物资总金额:{{projectTotal}}
-            </mu-flexbox> 
-        </div>
-        <div class="section">Some section</div>
     </div>
-    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <Chart width="100%" height="500px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+            </div>
+            <div class="col-md-5">
+                <Chart width="100%" height="300px" :option="optionType" theme='shine' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="200px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
+            </div>
+        </div>
+    </div>
+    <div class="container order-list">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="title">库存排名</div>
+                <ul>
+                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <div class="title">项目建设排名</div>
+                <ul>
+                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <div class="title">装机排名</div>
+                <ul>
+                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <div class="title">物资使用排名</div>
+                <ul>
+                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
 
 import Chart from '@/components/Chart'
-import _ from 'lodash'
 export default {
   name: 'index',
   data () {
     return {
+        menus:[{name:"物资分布分析"},{name:"项目建设分析"},{name:"闲置物资分析"},{name:"终端设备分析"},{name:"线上资源分析"}],
         optionMap:{},
-        optionTreeMap:{},
-        optionProject:{},
-        projectTotal:0
+        optionType:{},
+        optionLine:{},
+        orderInfo1:[],
+        orderInfo2:[],
+        orderInfo3:[],
+        orderInfo4:[]
     }
     
   },
   mounted(){
-    $('#fullpage').fullpage();
+    var users = [
+      { 'user': 'barney', 'age': 36, 'active': false, 'pets': ['hoppy'] },
+      { 'user': 'fred',   'age': 40, 'active': true, 'pets': ['baby puss', 'dino'] }
+    ];
+
+    // console.log(_.where(users, { 'age': 36, 'active': false }));
   	this.$store.dispatch("main_map").then((resp)=>{
         this.optionMap = {
             title: {
-                text: resp.body.itemMap.title,
+                text: '全区物资分布情况',
                 //subtext: '纯属虚构',
                 left: 'center'
             },
             tooltip: {
                 trigger: 'item',
                 formatter: function (params, ticket, callback) {
-                   
-                    return params.name+"<br />"+JSON.stringify(params.data);
-                }
+                    return this.toHTML(params,resp);
+                }.bind(this)
             },
             legend: {
                 orient: 'vertical',
@@ -97,98 +135,115 @@ export default {
         };
     });
     
-    this.$store.dispatch("main_treemap").then((resp)=>{
-        // console.log(resp.body.itemMap)
-        this.optionTreeMap={
-            title: {
-                text: '全区物资类别总体情况',
-                left: 'leafDepth'
+    
+
+    this.$store.dispatch("main_goodsType").then((resp)=>{
+        this.optionType={
+            title: { 
+                text: '全区物资类型分布(万元)',
+                left:'right'
             },
-            tooltip: {},
-            series: [{
-                name:"大类",
-                type: 'treemap',
-                visibleMin: 300,
-                roam:false,
-                data: [resp.body.itemMap],
-                leafDepth: 2,
-                label:{
-                    normal:{
-                        textStyle:{
-                            fontSize:20
-                        }
-                    }
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            roseType: 'radius',
+            avoidLabelOverlap: true,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'center'
                 },
-                levels: [
-                    {
-                        itemStyle: {
-                            normal: {
-                                color:'#90C0E5',
-                                borderColor: '#555',
-                                borderWidth: 4,
-                                gapWidth: 4
-                            }
-                        }
-                    },
-                    {
-                        colorSaturation: [0.3, 0.6],
-                        itemStyle: {
-                            normal: {
-                                borderColorSaturation: 0.7,
-                                gapWidth: 2,
-                                borderWidth: 2
-                            }
-                        }
-                    },
-                    {
-                        colorSaturation: [0.3, 0.5],
-                        itemStyle: {
-                            normal: {
-                                borderColorSaturation: 0.6,
-                                gapWidth: 1
-                            }
-                        }
-                    },
-                    {
-                        colorSaturation: [0.3, 0.5]
-                    }
-                ],
-                breadcrumb:{
-                    height:36,
-                    itemStyle:{
-                        normal:{
-                            textStyle:{
-                                fontSize:18
-                            }
-                        }
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '20',
+                        fontWeight: 'bold'
                     }
                 }
-        
-            }]
-        }
-    });
-
-    this.$store.dispatch("main_projectPie").then((resp)=>{
-        this.optionProject={
-            title: { text: '饼图示例' },
-            tooltip:{},
+            },
+            labelLine: {
+                normal: {
+                    show: true
+                }
+            },
             series : [
                 {
-                    name: '访问来源',
+                    name: '物资类型',
                     type: 'pie',
-                    radius: '75%',
+                    radius: ['40%','55%'],
                     data:resp.body.items
                 }
             ]
-        },
-        this.projectTotal=resp.body.itemMap.total;
+        }        
+    });
+
+    this.$store.dispatch("main_buyGoods").then((resp)=>{
+        this.optionLine={
+            title: {
+                text: '全区采购变化趋势(万元)',
+                left:'right'
+            },
+            tooltip: {},
+            legend: {
+                left:'left',
+                data:['2015','2016','2017']
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : resp.body.itemMap.months
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series: [{
+                name: '2015',
+                type: 'line',
+                data: resp.body.itemMap["2015"]
+            },
+            {
+                name: '2016',
+                type: 'line',
+                data: resp.body.itemMap["2016"]
+            },
+            {
+                name: '2017',
+                type: 'line',
+                data: resp.body.itemMap["2017"]
+            }]
+        }       
+    });
+
+    this.$store.dispatch("main_orderInfo").then((resp)=>{
+        this.orderInfo1=resp.body.itemMap.storeGoods;
     });
   },
   methods:{
   	handleMapClick(params){
+        console.log("push")
+        this.$router.push('/second') 
         if (params.componentType === 'series') {
-            this.comp_id=params.data.id;    
+            this.comp_id=params.data.id; 
+            this.$router.push('/second')   
         }
+    },
+    toHTML(params,resp){
+        var buyInfo=_.where(resp.body.itemMap.buyInfo,{id:params.data.id});
+        var outInfo=_.where(resp.body.itemMap.outInfo,{id:params.data.id});
+        if(buyInfo.length==0){
+            buyInfo[0]={order_count:0,value:0};
+        }
+        if(outInfo.length==0){
+            outInfo[0]={order_count:0,value:0};
+        }
+        return params.name+"<br/>库存金额      "+params.data.value
+        +"<br/><br/>本年采购单数  "+buyInfo[0].order_count+"<br/>本年采购金额  "+buyInfo[0].value
+        +"<br/><br/>本年出库单数  "+outInfo[0].order_count+"<br/>本年出库金额  "+outInfo[0].value;
     }
   },
   components:{
@@ -199,7 +254,30 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.menu-item{
+    padding-left:20px;
+    float:left;
+}
+.menu-item::before{
+    padding-right:20px;
+    content: "|";
+}
+.order-list{
+    .title{
 
-
+    }
+    .amount{
+        float:right;
+    }
+    ul{
+        padding-left: 1em;
+        li{
+            list-style: none;
+            text-align: left;
+            padding-right: 1em;
+        }
+    }
+    
+}
 
 </style>
