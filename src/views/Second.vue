@@ -13,9 +13,13 @@
     <div class="container">
         <div class="row">
         	<div class="col-md-12 banner">
-        		<div class="title">物资分布分析</div>
-        		<div class="total"></div>
-        	</div>
+                <div class="row">
+                    <div class="title col-sm-4">物资分布分析</div>
+                    <div class="total col-sm-offset-6 col-sm-2">
+                        总量：58246      
+                    </div>
+                </div>
+            </div>
         	
             <div class="col-md-12 content">             
                 <table class="table">
@@ -50,9 +54,13 @@
     <div class="container">
         <div class="row">
         	<div class="col-md-12 banner">
-        		<div class="title">采购量、使用量</div>
-        		<div class="total"></div>
-        	</div>
+                <div class="row">
+                    <div class="title col-sm-4">采购量、使用量</div>
+                    <div class="total col-sm-offset-6 col-sm-2">
+                        总量：58246      
+                    </div>
+                </div>
+            </div>
         	
             <div class="col-md-12 content">             
                 <Chart width="100%" height="300px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
@@ -62,8 +70,12 @@
     <div class="container">
         <div class="row">
         	<div class="col-md-12 banner">
-        		<div class="title">项目物资分析</div>
-        		<div class="total"></div>
+                <div class="row">
+            		<div class="title col-sm-4">项目物资分析</div>
+            		<div class="total col-sm-offset-6 col-sm-2">
+                        总量：58246      
+                    </div>
+                </div>
         	</div>
         	
             <div class="col-md-12 content">             
@@ -90,9 +102,6 @@ export default {
     
   },
   mounted(){
-    
-  	
-    
 
     this.$store.dispatch("main_goodsType").then((resp)=>{
         this.optionType={
@@ -210,13 +219,24 @@ export default {
     padding-right:20px;
     content: "|";
 }
-
+.banner{
+    border-bottom: 0.2em solid #CC0226;   
+    line-height:2.8em;
+}
 .title{
+    background:url(../assets/hong.png) no-repeat;
+    // background-size: cover;
+    color:white;
+}
+.title,.total{
+    font-size: 1.2em;
+}
+.content{
+    padding: 2em;
+    border: 1px solid #ddd;
+    margin-bottom: 2em;
+}
 
-}
-.total{
-    float:right;
-}
     
 
 

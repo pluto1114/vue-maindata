@@ -12,36 +12,36 @@
     <div class="container">
         <div class="row">
             <div class="col-md-7">
-                <Chart width="100%" height="500px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="600px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
             <div class="col-md-5">
                 <Chart width="100%" height="300px" :option="optionType" theme='shine' @chartClick="handleMapClick" loading></Chart>
-                <Chart width="100%" height="200px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="280px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
             </div>
         </div>
     </div>
     <div class="container order-list">
         <div class="row">
-            <div class="col-md-3">
-                <div class="title">库存排名</div>
+            <div class="col-md-3 order-1">
+                <div class="title"><img src="static/img/t-icon-1.fw.png"/>库存排名</div>
                 <ul>
                     <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
                 </ul>
             </div>
-            <div class="col-md-3">
-                <div class="title">项目建设排名</div>
+            <div class="col-md-3 order-2">
+                <div class="title"><img src="static/img/t-icon-2.fw.png"/>项目建设排名</div>
                 <ul>
                     <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
                 </ul>
             </div>
-            <div class="col-md-3">
-                <div class="title">装机排名</div>
+            <div class="col-md-3 order-3">
+                <div class="title"><img src="static/img/t-icon-3.fw.png"/>装机排名</div>
                 <ul>
                     <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
                 </ul>
             </div>
-            <div class="col-md-3">
-                <div class="title">物资使用排名</div>
+            <div class="col-md-3 order-4">
+                <div class="title"><img src="static/img/t-icon-4.fw.png"/>物资使用排名</div>
                 <ul>
                     <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
                 </ul>
@@ -71,12 +71,7 @@ export default {
     
   },
   mounted(){
-    var users = [
-      { 'user': 'barney', 'age': 36, 'active': false, 'pets': ['hoppy'] },
-      { 'user': 'fred',   'age': 40, 'active': true, 'pets': ['baby puss', 'dino'] }
-    ];
-
-    // console.log(_.where(users, { 'age': 36, 'active': false }));
+    
   	this.$store.dispatch("main_map").then((resp)=>{
         this.optionMap = {
             title: {
@@ -90,30 +85,16 @@ export default {
                     return this.toHTML(params,resp);
                 }.bind(this)
             },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                data:['当前量']
-            },
+            
             visualMap: {
                 min: 0,
                 max: 30000000,
                 left: 'left',
-                top: 'bottom',
+                top: 'top',
                 text: ['高','低'],           // 文本，默认为数值文本
                 calculable: true
             },
-            toolbox: {
-                show: true,
-                orient: 'vertical',
-                left: 'left',
-                top: 'center',
-                feature: {
-                    dataView: {readOnly: false},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
+            
             series: [
                 {
                     name: '当前量',
@@ -147,7 +128,7 @@ export default {
                 trigger: 'item',
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
-            roseType: 'radius',
+            // roseType: 'radius',
             avoidLabelOverlap: true,
             label: {
                 normal: {
@@ -171,7 +152,7 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: ['40%','55%'],
+                    radius: ['20%','55%'],
                     data:resp.body.items
                 }
             ]
@@ -254,27 +235,46 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.menu-item{
-    padding-left:20px;
-    float:left;
-}
-.menu-item::before{
-    padding-right:20px;
-    content: "|";
-}
+
 .order-list{
     .title{
-
+        font-size:1.25em;
+        img{
+            margin-right: 0.3em;
+        }
+        margin: 0.5em 0;
     }
     .amount{
         float:right;
     }
     ul{
-        padding-left: 1em;
+        padding-left: 0;
         li{
             list-style: none;
             text-align: left;
+            padding-left: 1.5em;
             padding-right: 1em;
+            line-height:2.4em;
+        }
+    }
+    .order-1{
+        li:nth-child(2n-1){
+            background-color:#D4999F;
+        }
+    }
+    .order-2{
+        li:nth-child(2n-1){
+            background-color:#EBCF26;
+        }
+    }
+    .order-3{
+        li:nth-child(2n-1){
+            background-color:#8ECFC7;
+        }
+    }
+    .order-4{
+        li:nth-child(2n-1){
+            background-color:#BBC9A6;
         }
     }
     

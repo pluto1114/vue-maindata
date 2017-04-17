@@ -2,8 +2,10 @@
   <div class="app">
     <div class="container banner">
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-11">内蒙古联通全物资全生命周期信息管理平台</div>
+        <div class="col-md-1"><img src="./assets/logo.png" class="logo-img" /></div>
+        <div class="col-md-11">
+          <div class="logo-title">内蒙古联通全物资全生命周期信息管理平台</div>
+        </div>
       </div>
     </div>
     <transition name="fade"  mode="out-in">
@@ -39,8 +41,36 @@ function isDesktop () {
 </script>
 
 <style lang="less">
+.logo-img{
+
+}
+.logo-title{
+  padding-left:30px;
+  padding-top:30px;
+  font-size:1.5em;
+}
+.menu{
+  background:url(assets/red-line.png);
+  background-size:cover;
+  line-height:3.5em;
+  color:white;
+  margin-bottom:2em;
+}
+.menu-item{
+    padding-left:20px;
+    float:left;
+}
+.menu-item::before{
+    padding-right:20px;
+    content: "|";
+}
 .footer{
   text-align: center;
+  background:url(assets/bottom-line.png);
+  background-size:cover;
+  line-height:3em;
+  color:white;
+  margin-bottom:2em;
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -90,6 +90,6 @@ function isDesktop () {
 }
 
 .main-content{
-  padding: 1.8em;
+  padding: 1.8em 0;
 }
 </style>
