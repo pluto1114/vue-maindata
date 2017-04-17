@@ -7,6 +7,7 @@ import NotFound from '@/views/404.vue'
 
 import Index from '@/views/Index.vue'
 import Second from '@/views/Second.vue'
+import Third from '@/views/Third.vue'
 
 Vue.use(Router)
 
@@ -26,12 +27,16 @@ export default new Router({
                 component: Index,
                 name: 'Index',
                 description: '首页'
-            },
-            {
+            },{
                 path: 'second',
                 component: Second,
                 name: 'Second',
-                description: '首页'
+                description: '二级'
+            },{
+                path: 'third',
+                component: Third,
+                name: 'Third',
+                description: '三级'
             }
         ]
     },

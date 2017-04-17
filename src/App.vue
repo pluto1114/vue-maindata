@@ -60,6 +60,9 @@ function isDesktop () {
     padding-left:20px;
     float:left;
 }
+.menu-item a{
+  color:white;
+}
 .menu-item::before{
     padding-right:20px;
     content: "|";

@@ -4,7 +4,7 @@
         <div class="container">
             <div style="float:right;">
                 <div v-for="x of menus" class="menu-item">
-                    {{x.name}}
+                    <router-link :to="x.to">{{x.name}}</router-link>
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@ export default {
   name: 'index',
   data () {
     return {
-        menus:[{name:"终端设备分析"},{name:"线上资源分析"}],
+        menus:[{name:"终端设备分析",to:"/third"},{name:"线上资源分析",to:"/third"}],
         optionType:{},
         optionLine:{},
  		optionBar:{}
@@ -211,14 +211,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.menu-item{
-    padding-left:20px;
-    float:left;
-}
-.menu-item::before{
-    padding-right:20px;
-    content: "|";
-}
+
 .banner{
     border-bottom: 0.2em solid #CC0226;   
     line-height:2.8em;
