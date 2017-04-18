@@ -47,7 +47,10 @@ const city = {
   mutations: {
   },
   actions: {
-    
+    city_index(context,payload){
+      let mock={};
+      return remote?api('/api/city/index/'+payload.comp_id):Promise.resolve(mock);
+    },
     city_buyGoods(context,payload){
       let mock={};
       return remote?api('/api/city/buyGoods/3'):Promise.resolve(mock);

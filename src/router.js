@@ -28,7 +28,7 @@ export default new Router({
                 name: 'Index',
                 description: '首页'
             },{
-                path: 'second',
+                path: 'second/:comp_id',
                 component: Second,
                 name: 'Second',
                 description: '二级'

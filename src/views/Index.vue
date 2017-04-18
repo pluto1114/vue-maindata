@@ -206,12 +206,7 @@ export default {
   },
   methods:{
   	handleMapClick(params){
-        console.log("push")
-        this.$router.push('/second') 
-        if (params.componentType === 'series') {
-            this.comp_id=params.data.id; 
-            this.$router.push('/second')   
-        }
+        this.$router.push({name:'Second', params: { comp_id: params.data.id }})
     },
     toHTML(params,resp){
         var buyInfo=_.where(resp.body.itemMap.buyInfo,{id:params.data.id});

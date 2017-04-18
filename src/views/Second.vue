@@ -25,7 +25,7 @@
                 <table class="table">
                 	<thead>
                 		<tr>
-                			<th>地域</th>
+                			<th style="width:12em;">地域</th>
                 			<th>采购量</th>
                 			<th>库存量</th>
                 			<th>在建项目</th>
@@ -36,10 +36,20 @@
                 		</tr>
                 	</thead>
                 	<tbody>
-                		<tr>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
+                        <tr>
+                            <td>{{cityAmount.name}}</td>
+                            <td>{{cityAmount.inValue}}</td>
+                            <td>{{cityAmount.storeValue}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                		<tr v-for="x of downAmount">
+                			<td>{{x.name}}</td>
+                			<td>{{x.inValue}}</td>
+                			<td>{{x.storeValue}}</td>
                 			<td>0</td>
                 			<td>0</td>
                 			<td>0</td>
@@ -95,30 +105,21 @@ export default {
   data () {
     return {
         menus:[{name:"终端设备分析",to:"/third"},{name:"线上资源分析",to:"/third"}],
-        optionType:{},
+        comp_id:0,
+        downAmount:{},
+        cityAmount:{},
         optionLine:{},
  		optionBar:{}
     }
     
   },
   mounted(){
-
-    this.$store.dispatch("main_goodsType").then((resp)=>{
-        this.optionType={
-            title: { 
-                // text: '全区物资类型分布',
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: '55%',
-                    data:resp.body.items
-                }
-            ]
-        }        
+    console.log(this.$route.params)
+    this.comp_id=this.$route.params["comp_id"];
+    console.log("comp_id",this.comp_id)
+    this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
+         this.downAmount=resp.body.itemMap.downAmount;    
+         this.cityAmount=resp.body.itemMap.cityAmount;    
     });
 
     this.$store.dispatch("city_buyGoods").then((resp)=>{
@@ -158,7 +159,7 @@ export default {
 
     this.$store.dispatch("main_orderInfo").then((resp)=>{
         this.optionBar = {
-		    color: ['#3398DB'],
+		    // color: ['#3398DB'],
 		    tooltip : {
 		        trigger: 'axis',
 		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -230,7 +231,11 @@ export default {
     margin-bottom: 2em;
 }
 
-    
+.table{
+    td:not(:first-child),th:not(:first-child){
+        text-align: right;
+    }
+}   
 
 
 </style>
