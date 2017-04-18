@@ -29,16 +29,17 @@ export default {
     return {
         comp_id:this.$route.params["comp_id"],
         menus:[],
-        
-       
+        year:this.$route.query["year"],
+        month:this.$route.query["month"],
         optionLine:{}
     }
     
   },
   mounted(){
     console.log(this.$route.params)
+    console.log(this.$route)
 
-    this.$store.dispatch("trace_buyGoods",{comp_id:this.comp_id}).then((resp)=>{
+    this.$store.dispatch("trace_buyGoods",{comp_id:this.comp_id,year:this.year,month:this.month}).then((resp)=>{
         
     });
 

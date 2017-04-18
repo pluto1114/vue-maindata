@@ -12,15 +12,28 @@
     
 
     <div class="container">
-        <div class="row">
-        	
-        	
+        <div class="row">    	
             <div class="col-md-12">             
-                <Chart width="100%" height="600px" :option="optionLine" theme='shine' @chartClick="handleClick" loading></Chart>
+                <Chart width="100%" height="300px" :option="optionLine" theme='shine' @chartClick="handleClick" loading></Chart>
+            </div>
+            <div class="col-md-12">
+                <div class="alert alert-info" role="alert">请点击采购单对应月份</div>
+            
             </div>
         </div>
     </div>
-    
+    <div id="panels" class="container">
+        <div v-for="x of buyorders" class="panel panel-default">
+            <div class="panel-heading">{{x.buyorder_code}}<span style="margin-left:2em;">{{x.buy_user}}</span><span style="float:right;">{{x.importtime}}</span></div>
+            <div class="panel-body">
+                <div class="list-group">
+                  <a :href="'/traceTimeLine?buygoods_id='+y.id" v-for="y of x.buygoods" class="list-group-item">
+                    <span>{{y.goodstype_code}}</span><span style="margin-left:2em;">{{y.goodstype_descp}}</span><span style="float:right;">{{y.buy_count}}{{y.unit}}</span>
+                  </a>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -33,8 +46,9 @@ export default {
     return {
         comp_id:this.$route.params["comp_id"],
         menus:[],
-        
-       
+        buyorders:[],
+        year:'2017',
+        month:'01',
         optionLine:{}
     }
     
@@ -88,7 +102,13 @@ export default {
   methods:{
   	handleClick(params){
         console.log(params)
-        this.$router.push({name:"TraceBuyGoods",params:{comp_id:this.comp_id},query:{year:params.seriesName,month:params.name}})
+        // this.$router.push({name:"TraceBuyGoods",params:{comp_id:this.comp_id},query:{year:params.seriesName,month:params.name}})
+        this.year=params.seriesName
+        this.month=params.name
+        this.$store.dispatch("trace_buyGoods",{comp_id:this.comp_id,year:this.year,month:this.month}).then(resp=>{
+            console.log(resp.body.items)
+            this.buyorders = resp.body.items;
+        });
     }
   },
   components:{

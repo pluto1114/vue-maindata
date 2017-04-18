@@ -65,7 +65,7 @@ const trace = {
     },
     trace_buyGoods(context,payload){
       let mock={};
-      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`):Promise.resolve(mock);
+      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`,{params:{year:payload.year,month:payload.month}}):Promise.resolve(mock);
     }
   }
 }
