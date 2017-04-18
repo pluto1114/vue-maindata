@@ -101,11 +101,12 @@
 import Chart from '@/components/Chart'
 
 export default {
-  name: 'index',
+
   data () {
     return {
-        menus:[{name:"终端设备分析",to:"/third"},{name:"线上资源分析",to:"/third"}],
-        comp_id:0,
+        comp_id:this.$route.params["comp_id"],
+        menus:[],
+        
         downAmount:{},
         cityAmount:{},
         optionLine:{},
@@ -114,15 +115,13 @@ export default {
     
   },
   mounted(){
-    console.log(this.$route.params)
-    this.comp_id=this.$route.params["comp_id"];
-    console.log("comp_id",this.comp_id)
+    this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
     this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
          this.downAmount=resp.body.itemMap.downAmount;    
          this.cityAmount=resp.body.itemMap.cityAmount;    
     });
 
-    this.$store.dispatch("city_buyGoods").then((resp)=>{
+    this.$store.dispatch("city_buyGoods",{comp_id:this.comp_id}).then((resp)=>{
         this.optionLine={
             title: {
                 // text: '全区采购变化趋势(万元)',

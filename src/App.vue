@@ -53,6 +53,7 @@ function isDesktop () {
   background:url(assets/red-line.png);
   background-size:cover;
   line-height:3.5em;
+  min-height:48px;
   color:white;
   margin-bottom:2em;
 }

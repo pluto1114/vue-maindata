@@ -9,6 +9,9 @@ import Index from '@/views/Index.vue'
 import Second from '@/views/Second.vue'
 import Third from '@/views/Third.vue'
 
+import TraceMonth from '@/views/trace/TraceMonth.vue'
+import TraceBuyGoods from '@/views/trace/TraceBuyGoods.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -33,7 +36,30 @@ export default new Router({
                 name: 'Second',
                 description: '二级'
             },{
-                path: 'third',
+                path: 'third/:comp_id',
+                component: Third,
+                name: 'Third',
+                description: '三级'
+            }
+        ]
+    },{
+        path: '/trace',
+        component: Main,
+        description: '跟踪',
+        auth: true,
+        children: [
+            {
+                path: 'month/:comp_id',
+                component: TraceMonth,
+                name: 'TraceMonth',
+                description: '跟踪月份'
+            },{
+                path: 'buyGoods/:comp_id',
+                component: TraceBuyGoods,
+                name: 'TraceBuyGoods',
+                description: '二级'
+            },{
+                path: 'third/:comp_id',
                 component: Third,
                 name: 'Third',
                 description: '三级'

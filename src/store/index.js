@@ -18,7 +18,7 @@ const moduleA = {
 }
 
 const main = {
-  state: {
+  state: { 
   },
   mutations: {
   },
@@ -42,10 +42,8 @@ const main = {
   }
 }
 const city = {
-  state: {
-  },
-  mutations: {
-  },
+  state: {},
+  mutations: {},
   actions: {
     city_index(context,payload){
       let mock={};
@@ -53,7 +51,21 @@ const city = {
     },
     city_buyGoods(context,payload){
       let mock={};
-      return remote?api('/api/city/buyGoods/3'):Promise.resolve(mock);
+      return remote?api(`/api/city/buyGoods/${payload.comp_id}`):Promise.resolve(mock);
+    }
+  }
+}
+const trace = {
+  state: {},
+  mutations: {},
+  actions: {
+    trace_index(context,payload){
+      let mock={};
+      return remote?api(`/api/trace/buyOrders/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    trace_buyGoods(context,payload){
+      let mock={};
+      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`):Promise.resolve(mock);
     }
   }
 }
@@ -62,7 +74,8 @@ const store = new Vuex.Store({
   modules: {
     moduleA,
     main,
-    city
+    city,
+    trace
   }
 })
 
