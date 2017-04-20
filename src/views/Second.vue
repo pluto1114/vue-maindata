@@ -1,14 +1,6 @@
 <template>
   <div class="index">
-    <div class="menu">
-        <div class="container">
-            <div style="float:right;">
-                <div v-for="x of menus" class="menu-item">
-                    <router-link :to="x.to">{{x.name}}</router-link>
-                </div>
-            </div>
-        </div>
-    </div>
+    <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
         <div class="row">
@@ -107,13 +99,14 @@
 <script>
 
 import Chart from '@/components/Chart'
+import MyMenu from '@/components/MyMenu'
 
 export default {
 
   data () {
     return {
         comp_id:this.$route.params["comp_id"],
-        menus:[],
+        menus:[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}],
         year:'2016',
         downAmount:{},
         cityAmount:{},
@@ -127,11 +120,11 @@ export default {
     }
   },
   mounted(){
-    this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
-    this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
-         this.downAmount=resp.body.itemMap.downAmount;    
-         this.cityAmount=resp.body.itemMap.cityAmount;    
-    });
+    // this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
+    // this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
+    //      this.downAmount=resp.body.itemMap.downAmount;    
+    //      this.cityAmount=resp.body.itemMap.cityAmount;    
+    // });
 
     this.showBuyAmountAndUseAmount();
 
@@ -219,7 +212,7 @@ export default {
     }
   },
   components:{
-  	Chart
+  	Chart,MyMenu
   }
 }
 </script>

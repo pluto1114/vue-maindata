@@ -1,19 +1,7 @@
 <template>
   <div class="index">
-    <div class="menu">
-        <div class="container">
-            <div style="float:right;">
-                <div v-for="x of menus" class="menu-item">
-                    <router-link :to="x.to">{{x.name}}</router-link>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-    	<button type="button" class="btn btn-default btn-lg">
-		  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
-		</button>
-    </div>
+    <MyMenu :items="menus" back=true></MyMenu>
+    
     <div class="container">
     	<div class="row">
     		<div class="col-md-12 banner">
@@ -38,6 +26,7 @@
 
 <script>
 
+import MyMenu from '@/components/MyMenu'
 import Chart from '@/components/Chart'
 
 export default {
@@ -85,7 +74,7 @@ export default {
     }
   },
   components:{
-  	Chart
+  	Chart,MyMenu
   }
 }
 </script>

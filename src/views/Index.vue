@@ -1,14 +1,6 @@
 <template>
   <div class="index">
-    <div class="menu">
-        <div class="container">
-            <div style="float:right;">
-                <div v-for="x of menus" class="menu-item">
-                    <router-link :to="x.to">{{x.name}}</router-link>
-                </div>
-            </div>
-        </div>
-    </div>
+    <MyMenu :items="menus"></MyMenu>
     <div class="container">
         <div class="row">
             <div class="col-md-7">
@@ -53,7 +45,7 @@
 </template>
 
 <script>
-
+import MyMenu from '@/components/MyMenu'
 import Chart from '@/components/Chart'
 export default {
   name: 'index',
@@ -229,7 +221,7 @@ export default {
     }
   },
   components:{
-  	Chart
+  	Chart,MyMenu
   }
 }
 </script>
