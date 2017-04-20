@@ -72,8 +72,16 @@
                 </div>
             </div>
         	
-            <div class="col-md-12 content">             
-                <Chart width="100%" height="300px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
+            <div class="col-md-12 content">
+                <div class="row">
+                    <mu-radio label="2015" name="group" nativeValue="2015" v-model="year" class="demo-radio"/> 
+                    <mu-radio label="2016" name="group" nativeValue="2016" v-model="year"  class="demo-radio"/> 
+                    <mu-radio label="2017" name="group" nativeValue="2017" v-model="year"  class="demo-radio"/> 
+                </div>
+                <br/>
+                <div class="row">             
+                    <Chart width="100%" height="300px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
+                </div>
             </div>
         </div>
     </div>
@@ -106,13 +114,17 @@ export default {
     return {
         comp_id:this.$route.params["comp_id"],
         menus:[],
-        
+        year:'2016',
         downAmount:{},
         cityAmount:{},
         optionLine:{},
  		optionBar:{}
+    }    
+  },
+  watch:{
+    year(val,oldVal){
+        this.showBuyAmountAndUseAmount()
     }
-    
   },
   mounted(){
     this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
@@ -121,40 +133,7 @@ export default {
          this.cityAmount=resp.body.itemMap.cityAmount;    
     });
 
-    this.$store.dispatch("city_buyGoods",{comp_id:this.comp_id}).then((resp)=>{
-        this.optionLine={
-            title: {
-                // text: '全区采购变化趋势(万元)',
-                left:'right'
-            },
-            tooltip: {},
-            legend: {
-                left:'left',
-                data:['采购量','使用量']
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    boundaryGap : false,
-                    data : resp.body.itemMap.months
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value'
-                }
-            ],
-            series: [{
-                name: '采购量',
-                type: 'line',
-                data: resp.body.itemMap["buyInfo"]
-            },{
-                name: '使用量',
-                type: 'line',
-                data: resp.body.itemMap["outInfo"]
-            }]
-        }       
-    });
+    this.showBuyAmountAndUseAmount();
 
     this.$store.dispatch("main_orderInfo").then((resp)=>{
         this.optionBar = {
@@ -201,6 +180,42 @@ export default {
         if (params.componentType === 'series') {
             this.comp_id=params.data.id;    
         }
+    },
+    showBuyAmountAndUseAmount(){
+        this.$store.dispatch("city_buyGoods",{comp_id:this.comp_id,year:this.year}).then((resp)=>{
+            this.optionLine={
+                title: {
+                    text: '金额变化情况(万元)',
+                    left:'center'
+                },
+                tooltip: {},
+                legend: {
+                    left:'left',
+                    data:['采购量','使用量']
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : resp.body.itemMap.months
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series: [{
+                    name: '采购量',
+                    type: 'line',
+                    data: resp.body.itemMap["buyInfo"]
+                },{
+                    name: '使用量',
+                    type: 'line',
+                    data: resp.body.itemMap["outInfo"]
+                }]
+            }       
+        });
     }
   },
   components:{
