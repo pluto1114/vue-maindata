@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="title col-sm-4">物资分布分析</div>
                     <div class="total col-sm-offset-6 col-sm-2">
-                        总量：58246      
+                             
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="title col-sm-4">采购量、使用量</div>
                     <div class="total col-sm-offset-6 col-sm-2">
-                        总量：58246      
+                            
                     </div>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                 <div class="row">
             		<div class="title col-sm-4">项目物资分析</div>
             		<div class="total col-sm-offset-6 col-sm-2">
-                        总量：58246      
+                              
                     </div>
                 </div>
         	</div>

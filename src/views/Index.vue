@@ -4,7 +4,7 @@
         <div class="container">
             <div style="float:right;">
                 <div v-for="x of menus" class="menu-item">
-                    {{x.name}}
+                    <router-link :to="x.to">{{x.name}}</router-link>
                 </div>
             </div>
         </div>
@@ -59,7 +59,13 @@ export default {
   name: 'index',
   data () {
     return {
-        menus:[{name:"物资分布分析"},{name:"项目建设分析"},{name:"闲置物资分析"},{name:"终端设备分析"},{name:"线上资源分析"}],
+        menus:[
+            {name:"物资分布分析",to:"/"},
+            {name:"项目建设分析",to:"/"},
+            {name:"闲置物资分析",to:"/resource"},
+            {name:"终端设备分析",to:"/"},
+            {name:"线上资源分析",to:"/resource"}
+        ],
         optionMap:{},
         optionType:{},
         optionLine:{},

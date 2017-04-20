@@ -1,4 +1,4 @@
-Main.vue<template>
+<template>
   <div class="main">
   
         <transition name="fade"  mode="out-in">
@@ -10,7 +10,7 @@ Main.vue<template>
 </template>
 
 <script>
-import appSide from '@/components/AppSide'
+
 
 export default {
   data () {
@@ -34,9 +34,6 @@ export default {
   },
   destroyed () {
     
-  },
-  components:{
-    appSide
   }
 }
 
@@ -46,31 +43,7 @@ function isDesktop () {
 </script>
 
 <style lang="less">
-@import "../../src/styles/import.less";
 
-
-
-
-@media (min-width: 480px) {
-  .example-content{
-    padding: 10px;
-  }
-}
-
-@media (max-width: 993px) {
-  .example-appbar {
-    left: 0;
-  }
-  .example-content{
-    padding-left: 0;
-  }
-  .content-wrapper {
-    padding: 24px 36px;
-  }
-  .app-right{
-    margin-left: 0px;
-  }
-}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;

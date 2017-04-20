@@ -12,6 +12,8 @@ import Third from '@/views/Third.vue'
 import TraceMonth from '@/views/trace/TraceMonth.vue'
 import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 
+import RescIndex from '@/views/resource/RescIndex.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -58,6 +60,19 @@ export default new Router({
                 component: TraceTimeLine,
                 name: 'TraceTimeLine',
                 description: '二级'
+            }
+        ]
+    },{
+        path: '/resource',
+        component: Main,
+        description: '资源',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: RescIndex,
+                name: 'RescIndex',
+                description: '资源'
             }
         ]
     },
