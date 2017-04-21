@@ -15,27 +15,35 @@
     <div class="container order-list">
         <div class="row">
             <div class="col-md-3 order-1">
-                <div class="title"><img src="static/img/t-icon-1.fw.png"/>库存排名</div>
+                <div class="title"><img src="static/img/t-icon-1.fw.png"/>全区ERP物资</div>
                 <ul>
-                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                    <li v-for="x of orderInfo1">
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3 order-2">
-                <div class="title"><img src="static/img/t-icon-2.fw.png"/>项目建设排名</div>
+                <div class="title"><img src="static/img/t-icon-2.fw.png"/>全区商城物资</div>
                 <ul>
-                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                    <li v-for="x of orderInfo2">
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3 order-3">
-                <div class="title"><img src="static/img/t-icon-3.fw.png"/>装机排名</div>
+                <div class="title"><img src="static/img/t-icon-3.fw.png"/>全区工程项目</div>
                 <ul>
-                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                    <li v-for="x of orderInfo3">
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3 order-4">
-                <div class="title"><img src="static/img/t-icon-4.fw.png"/>物资使用排名</div>
+                <div class="title"><img src="static/img/t-icon-4.fw.png"/>全区固网终端</div>
                 <ul>
-                    <li v-for="x of orderInfo1"><span class="amount">{{x.value}}</span>{{x.name}}</li>
+                    <li v-for="x of orderInfo4">
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                    </li>
                 </ul>
             </div>
 
@@ -52,11 +60,13 @@ export default {
   data () {
     return {
         menus:[
-            {name:"物资分布分析",to:"/"},
-            {name:"项目建设分析",to:"/"},
-            {name:"闲置物资分析",to:"/resource"},
-            {name:"终端设备分析",to:"/"},
-            {name:"线上资源分析",to:"/resource"}
+            {name:"库存物资分析",to:"/"},
+            {name:"工程项目分析",to:"/"},
+            {name:"营销物资分析",to:"/resource"},
+            {name:"固网终端分析",to:"/"},
+            {name:"运维物资分析",to:"/resource"},
+            {name:"网络资源分析",to:"/resource"},
+            {name:"综合查询",to:"/resource"},
         ],
         optionMap:{},
         optionType:{},
@@ -198,9 +208,33 @@ export default {
         }       
     });
 
-    this.$store.dispatch("main_orderInfo").then((resp)=>{
-        this.orderInfo1=resp.body.itemMap.storeGoods;
-    });
+    // this.$store.dispatch("main_orderInfo").then((resp)=>{
+    //     this.orderInfo1=resp.body.itemMap.storeGoods;
+    // });
+    this.orderInfo1=[
+        {name:"正常库存",value:0,to:""},
+        {name:"非正常库存",value:0,to:""},
+        {name:"工程物资总额",value:0,to:""},
+        {name:"闲置物资数量",value:0,to:""},
+    ]
+    this.orderInfo2=[
+        {name:"工程物资总额",value:0,to:""},
+        {name:"运维物资总额",value:0,to:""},
+        {name:"营销物资总额",value:0,to:""},
+       
+    ]
+    this.orderInfo3=[
+        {name:"工程项目总数",value:0,to:""},
+        {name:"工程物资总额",value:0,to:""},
+        {name:"在建项目总数",value:0,to:""},
+        {name:"在建项目总额",value:0,to:""},
+    ]
+    this.orderInfo4=[
+        {name:"光猫入库量",value:0,to:""},
+        {name:"光猫装机量",value:0,to:""},
+        {name:"机顶盒在库量",value:0,to:""},
+        {name:"机顶盒装机量",value:0,to:""},
+    ]
   },
   methods:{
   	handleMapClick(params){
@@ -215,9 +249,13 @@ export default {
         if(outInfo.length==0){
             outInfo[0]={order_count:0,value:0};
         }
-        return params.name+"<br/>库存金额      "+params.data.value
-        +"<br/><br/>本年采购单数  "+buyInfo[0].order_count+"<br/>本年采购金额  "+buyInfo[0].value
-        +"<br/><br/>本年出库单数  "+outInfo[0].order_count+"<br/>本年出库金额  "+outInfo[0].value;
+        return params.name
+        +"<br/>ERP库存总额      "+params.data.value
+        +"<br/>商城库存总额      "+0
+        +"<br/>在建项目总额  "+0
+        +"<br/>光猫总数  "+0
+        +"<br/>机顶盒总数  "+0
+        ;
     }
   },
   components:{
@@ -230,6 +268,9 @@ export default {
 <style lang="less" scoped>
 
 .order-list{
+    a{
+        color:#333;
+    }
     .title{
         font-size:1.25em;
         img{
