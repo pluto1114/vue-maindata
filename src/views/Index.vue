@@ -18,7 +18,7 @@
                 <div class="title"><img src="static/img/t-icon-1.fw.png"/>全区ERP物资</div>
                 <ul>
                     <li v-for="x of orderInfo1">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
@@ -26,7 +26,7 @@
                 <div class="title"><img src="static/img/t-icon-2.fw.png"/>全区商城物资</div>
                 <ul>
                     <li v-for="x of orderInfo2">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
                     </li>
                 </ul>
             </div>
@@ -34,7 +34,7 @@
                 <div class="title"><img src="static/img/t-icon-3.fw.png"/>全区工程项目</div>
                 <ul>
                     <li v-for="x of orderInfo3">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
                     </li>
                 </ul>
             </div>
@@ -42,7 +42,7 @@
                 <div class="title"><img src="static/img/t-icon-4.fw.png"/>全区固网终端</div>
                 <ul>
                     <li v-for="x of orderInfo4">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.name}}</router-link>
+                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
                     </li>
                 </ul>
             </div>
@@ -90,7 +90,7 @@ export default {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params, ticket, callback) {
-                    return this.toHTML(params,resp);
+                    return this.toHTML(params,resp.body.items);
                 }.bind(this)
             },
             
@@ -118,7 +118,7 @@ export default {
                             show: true
                         }
                     },
-                    data:resp.body.itemMap.curValues
+                    data:resp.body.items
                 }
             ]
         };
@@ -208,54 +208,49 @@ export default {
         }       
     });
 
-    // this.$store.dispatch("main_orderInfo").then((resp)=>{
-    //     this.orderInfo1=resp.body.itemMap.storeGoods;
-    // });
-    this.orderInfo1=[
-        {name:"正常库存",value:0,to:""},
-        {name:"非正常库存",value:0,to:""},
-        {name:"工程物资总额",value:0,to:""},
-        {name:"闲置物资数量",value:0,to:""},
-    ]
-    this.orderInfo2=[
-        {name:"工程物资总额",value:0,to:""},
-        {name:"运维物资总额",value:0,to:""},
-        {name:"营销物资总额",value:0,to:""},
+    this.$store.dispatch("main_orderInfo").then((resp)=>{
+        this.orderInfo1=_.where(resp.body.items,{group_index:1});
+        this.orderInfo2=_.where(resp.body.items,{group_index:2});
+        this.orderInfo3=_.where(resp.body.items,{group_index:3});
+        this.orderInfo4=_.where(resp.body.items,{group_index:4});
+    });
+    // this.orderInfo1=[
+    //     {name:"正常库存",value:0,to:""},
+    //     {name:"非正常库存",value:0,to:""},
+    //     {name:"工程物资总额",value:0,to:""},
+    //     {name:"闲置物资数量",value:0,to:""},
+    // ]
+    // this.orderInfo2=[
+    //     {name:"工程物资总额",value:0,to:""},
+    //     {name:"运维物资总额",value:0,to:""},
+    //     {name:"营销物资总额",value:0,to:""},
        
-    ]
-    this.orderInfo3=[
-        {name:"工程项目总数",value:0,to:""},
-        {name:"工程物资总额",value:0,to:""},
-        {name:"在建项目总数",value:0,to:""},
-        {name:"在建项目总额",value:0,to:""},
-    ]
-    this.orderInfo4=[
-        {name:"光猫入库量",value:0,to:""},
-        {name:"光猫装机量",value:0,to:""},
-        {name:"机顶盒在库量",value:0,to:""},
-        {name:"机顶盒装机量",value:0,to:""},
-    ]
+    // ]
+    // this.orderInfo3=[
+    //     {name:"工程项目总数",value:0,to:""},
+    //     {name:"工程物资总额",value:0,to:""},
+    //     {name:"在建项目总数",value:0,to:""},
+    //     {name:"在建项目总额",value:0,to:""},
+    // ]
+    // this.orderInfo4=[
+    //     {name:"光猫入库量",value:0,to:""},
+    //     {name:"光猫装机量",value:0,to:""},
+    //     {name:"机顶盒在库量",value:0,to:""},
+    //     {name:"机顶盒装机量",value:0,to:""},
+    // ]
   },
   methods:{
   	handleMapClick(params){
-        this.$router.push({name:'Second', params: { comp_id: params.data.id }})
+        this.$router.push({name:'IndexCity', params: { comp_id: params.data.comp_id }})
     },
-    toHTML(params,resp){
-        var buyInfo=_.where(resp.body.itemMap.buyInfo,{id:params.data.id});
-        var outInfo=_.where(resp.body.itemMap.outInfo,{id:params.data.id});
-        if(buyInfo.length==0){
-            buyInfo[0]={order_count:0,value:0};
+    toHTML(params,items){
+        var arr=_.where(items,{comp_id:params.data.comp_id});
+        var str="";
+        for (var i = 0;i<arr.length;i++){
+            str+="<br />"+arr[i].d_name+":"+arr[i].value
         }
-        if(outInfo.length==0){
-            outInfo[0]={order_count:0,value:0};
-        }
-        return params.name
-        +"<br/>ERP库存总额      "+params.data.value
-        +"<br/>商城库存总额      "+0
-        +"<br/>在建项目总额  "+0
-        +"<br/>光猫总数  "+0
-        +"<br/>机顶盒总数  "+0
-        ;
+        return params.name+str;
+        // return params.data.comp_id;
     }
   },
   components:{

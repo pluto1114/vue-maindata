@@ -6,7 +6,7 @@ import Login from '@/views/Login.vue'
 import NotFound from '@/views/404.vue'
 
 import Index from '@/views/Index.vue'
-import Second from '@/views/Second.vue'
+import IndexCity from '@/views/city/IndexCity.vue'
 import Third from '@/views/Third.vue'
 
 import TraceMonth from '@/views/trace/TraceMonth.vue'
@@ -33,9 +33,9 @@ export default new Router({
                 name: 'Index',
                 description: '首页'
             },{
-                path: 'second/:comp_id',
-                component: Second,
-                name: 'Second',
+                path: 'city/:comp_id',
+                component: IndexCity,
+                name: 'IndexCity',
                 description: '二级'
             },{
                 path: 'third/:comp_id',

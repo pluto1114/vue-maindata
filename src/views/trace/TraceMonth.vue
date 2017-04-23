@@ -191,13 +191,14 @@ export default {
     handleItemClick(id){
         this.$store.dispatch("trace_buyGoodsInfo",{id:id}).then(resp=>{
             this.inInfo=resp.body.itemMap.inInfo
+            $('#myModal').modal()
             // this.outInfo=resp.body.itemMap.outInfo
             // this.requireInfo=resp.body.itemMap.requireInfo
             // if (this.requireInfo.length>0) {
 
             // }
         });
-        $('#myModal').modal()
+        
     }
   },
   components:{

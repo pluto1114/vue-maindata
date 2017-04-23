@@ -25,7 +25,7 @@ const main = {
   actions: {
     main_map(context,payload){
       let mock={};
-      return remote?api('/api/storeGoods/map'):Promise.resolve(mock);
+      return remote?api('/api/indexInfo/map'):Promise.resolve(mock);
     },
     main_buyGoods(context,payload){
       let mock={};
@@ -37,7 +37,7 @@ const main = {
     },
     main_orderInfo(context,payload){
       let mock={};
-      return remote?api('/api/orderInfo'):Promise.resolve(mock);
+      return remote?api('/api/indexInfo/indexShow'):Promise.resolve(mock);
     }
   }
 }

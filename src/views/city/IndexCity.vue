@@ -121,10 +121,10 @@ export default {
   },
   mounted(){
     // this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
-    // this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
-    //      this.downAmount=resp.body.itemMap.downAmount;    
-    //      this.cityAmount=resp.body.itemMap.cityAmount;    
-    // });
+    this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
+         this.downAmount=resp.body.itemMap.downAmount;    
+         this.cityAmount=resp.body.itemMap.cityAmount;    
+    });
 
     this.showBuyAmountAndUseAmount();
 
@@ -225,7 +225,7 @@ export default {
     line-height:2.8em;
 }
 .title{
-    background:url(../assets/hong.png) no-repeat;
+    background:url(../../assets/hong.png) no-repeat;
     // background-size: cover;
     color:white;
 }
