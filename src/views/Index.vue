@@ -62,8 +62,8 @@ export default {
         menus:[
             {name:"库存物资分析",to:"/"},
             {name:"工程项目分析",to:"/"},
-            {name:"营销物资分析",to:"/resource"},
-            {name:"固网终端分析",to:"/"},
+            {name:"营销物资分析",to:"/"},
+            {name:"固网终端分析",to:"/resource/terminalIndex"},
             {name:"运维物资分析",to:"/resource"},
             {name:"网络资源分析",to:"/resource"},
             {name:"综合查询",to:"/resource"},

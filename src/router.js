@@ -13,6 +13,7 @@ import TraceMonth from '@/views/trace/TraceMonth.vue'
 import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 
 import RescIndex from '@/views/resource/RescIndex.vue'
+import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
 Vue.use(Router)
 
@@ -72,6 +73,11 @@ export default new Router({
                 path: '',
                 component: RescIndex,
                 name: 'RescIndex',
+                description: '资源'
+            },{
+                path: 'terminalIndex',
+                component: TerminalIndex,
+                name: 'TerminalIndex',
                 description: '资源'
             }
         ]
