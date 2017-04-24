@@ -7,7 +7,7 @@
                 <Chart width="100%" height="600px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
             <div class="col-md-5">
-                <Chart width="100%" height="300px" :option="optionType" theme='shine' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="300px" :option="optionType" theme='infographic' @chartClick="handleMapClick" loading></Chart>
                 <Chart width="100%" height="280px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
             </div>
         </div>
@@ -26,7 +26,7 @@
                 <div class="title"><img src="static/img/t-icon-2.fw.png"/>全区商城物资</div>
                 <ul>
                     <li v-for="x of orderInfo2">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
+                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
@@ -34,7 +34,7 @@
                 <div class="title"><img src="static/img/t-icon-3.fw.png"/>全区工程项目</div>
                 <ul>
                     <li v-for="x of orderInfo3">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
+                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
@@ -42,7 +42,7 @@
                 <div class="title"><img src="static/img/t-icon-4.fw.png"/>全区固网终端</div>
                 <ul>
                     <li v-for="x of orderInfo4">
-                        <router-link :to="x.to"><span class="amount">{{x.value}}</span>{{x.d_name}}</router-link>
+                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
@@ -247,7 +247,7 @@ export default {
         var arr=_.where(items,{comp_id:params.data.comp_id});
         var str="";
         for (var i = 0;i<arr.length;i++){
-            str+="<br />"+arr[i].d_name+":"+arr[i].value
+            str+="<br />"+arr[i].d_name+"  "+arr[i].value
         }
         return params.name+str;
         // return params.data.comp_id;

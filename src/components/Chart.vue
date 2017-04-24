@@ -27,6 +27,7 @@ export default {
     'option':'fresh'
   },
   mounted(){
+    
   	this.fresh()
   },
   methods:{
@@ -50,6 +51,14 @@ export default {
       }
       myChart.on("click",this.handleClick)
       
+     
+    },
+    highlight(){
+      myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          // dataIndex: this.currentIndex
+      });
     },
     handleClick(params){
       // console.log(params)

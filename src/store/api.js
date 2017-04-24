@@ -20,7 +20,11 @@ export function api(url,options) {
     var opt = Object.assign(defaultOptions, options);
     // console.log("opt",opt)
     if(opt.type==="get"){
-    	p=Vue.http.get(url+"?"+querystring.stringify(opt.params));
+        if (options && options.params){
+    	    p=Vue.http.get(url+"?"+querystring.stringify(opt.params));
+        }else{
+            p=Vue.http.get(url);
+        }
 	}else if(opt.type==="post"){
 		p=Vue.http.post(url,opt.params);
 	}

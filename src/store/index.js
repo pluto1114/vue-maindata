@@ -55,6 +55,25 @@ const city = {
     }
   }
 }
+
+const resource = {
+  state: {},
+  mutations: {},
+  actions: {
+    resource_status_pro(context,payload){
+      let mock={};
+      return remote?api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getinfolist&type1=1&source=${payload.source}`):Promise.resolve(mock);
+    },
+    trace_buyGoods(context,payload){
+      let mock={};
+      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`,{params:{year:payload.year,month:payload.month}}):Promise.resolve(mock);
+    },
+    trace_buyGoodsInfo(context,payload){
+      let mock={};
+      return remote?api(`/api/trace/buyOrders/traceInfo/${payload.id}`):Promise.resolve(mock);
+    }
+  }
+}
 const trace = {
   state: {},
   mutations: {},
@@ -79,6 +98,7 @@ const store = new Vuex.Store({
     moduleA,
     main,
     city,
+    resource,
     trace
   }
 })
