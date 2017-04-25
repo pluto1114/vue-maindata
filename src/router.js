@@ -12,6 +12,8 @@ import Third from '@/views/Third.vue'
 import TraceMonth from '@/views/trace/TraceMonth.vue'
 import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 
+import StoreIndex from '@/views/store/StoreIndex.vue'
+
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
@@ -61,6 +63,19 @@ export default new Router({
                 component: TraceTimeLine,
                 name: 'TraceTimeLine',
                 description: '二级'
+            }
+        ]
+    },{
+        path: '/store',
+        component: Main,
+        description: '库存',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: StoreIndex,
+                name: 'StoreIndex',
+                description: '库存'
             }
         ]
     },{

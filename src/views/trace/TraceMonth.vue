@@ -174,7 +174,9 @@ export default {
         }       
     });
 
-    
+    $('#myModal').on('hidden.bs.modal', e=>{
+        this.inInfo=[]
+    })
   },
   methods:{
   	handleChartClick(params){
@@ -192,11 +194,7 @@ export default {
         this.$store.dispatch("trace_buyGoodsInfo",{id:id}).then(resp=>{
             this.inInfo=resp.body.itemMap.inInfo
             $('#myModal').modal()
-            // this.outInfo=resp.body.itemMap.outInfo
-            // this.requireInfo=resp.body.itemMap.requireInfo
-            // if (this.requireInfo.length>0) {
-
-            // }
+            
         });
         
     }

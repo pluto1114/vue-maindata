@@ -60,7 +60,7 @@ export default {
   data () {
     return {
         menus:[
-            {name:"库存物资分析",to:"/"},
+            {name:"库存物资分析",to:"/store"},
             {name:"工程项目分析",to:"/"},
             {name:"营销物资分析",to:"/"},
             {name:"固网终端分析",to:"/resource/terminalIndex"},

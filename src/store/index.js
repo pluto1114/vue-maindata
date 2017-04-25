@@ -64,13 +64,13 @@ const resource = {
       let mock={};
       return remote?api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getinfolist&type1=1&source=${payload.source}`):Promise.resolve(mock);
     },
-    trace_buyGoods(context,payload){
+    terminal_index(context,payload){
       let mock={};
-      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`,{params:{year:payload.year,month:payload.month}}):Promise.resolve(mock);
+      return remote?api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalCount`):Promise.resolve(mock);
     },
-    trace_buyGoodsInfo(context,payload){
+    terminal_index_comp(context,payload){
       let mock={};
-      return remote?api(`/api/trace/buyOrders/traceInfo/${payload.id}`):Promise.resolve(mock);
+      return remote?api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalCountByLocal&comp_id=${payload.comp_id}`):Promise.resolve(mock);
     }
   }
 }

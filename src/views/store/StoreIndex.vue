@@ -3,43 +3,46 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
+        
         <div class="row">
-        	<div class="col-md-12 banner">
+            <div class="col-md-3">
+                <Chart width="100%" height="400px" :option="optionNormal" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+            </div>
+            <div class="col-md-3">
+                <Chart width="100%" height="400px" :option="optionProject" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+            </div>
+            <div class="col-md-6">
+                <Chart width="100%" height="300px" :option="optionBar" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
                 <div class="row">
-                    <div class="title col-sm-4">物资分布分析</div>
-                    <div class="total col-sm-offset-6 col-sm-2">
-                             
+                    <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
+                    <div class="col-md-9 total">
+                        <div class="title">全区库存物资总额</div>
+                        <div class="number">243026</div>
                     </div>
                 </div>
+                <div class="row store-year">
+                    <div class="col-md-4">
+                        <div class="percent">33%</div>
+                        <div class="">2015</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="percent">35%</div>
+                        <div class="">2016</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="percent">32%</div>
+                        <div class="">2017</div>
+                    </div>
+                    
+                </div>
             </div>
-        	
-            <div class="col-md-12 content">             
-                <table class="table">
-                	<thead>
-                		<tr>
-                			<th style="width:12em;">地域</th>
-                			<th>采购量</th>
-                			<th>库存量</th>
-                			<th>在建项目</th>
-                			<th>完成项目</th>
-                			<th>闲置物资</th>
-                			<th>运维物资</th>
-                			<th>营销物资</th>
-                		</tr>
-                	</thead>
-                	<tbody>
-                		<tr v-for="x of cityItems" @click="handleTrClick(x.comp_id)">
-                			<td>{{x.comp_name}}</td>
-                			<td>{{x.ont_count}}</td>
-                			<td>{{x.zy_count}}</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                		</tr>
-                	</tbody>
-                </table>
+            
+            <div class="col-md-9">
+                <Chart width="100%" height="300px" :option="optionBarCity" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
             </div>
         </div>
     </div>
@@ -76,140 +79,186 @@ export default {
   data () {
     return {
         menus:[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}],
-        year:'2016',
-        cityItems:[],
-        comp_id:2
+        optionNormal:{},
+        optionProject:{},
+        optionBar:{},
+        optionBarCity:{}
     }    
   },
   watch:{
-    year(val,oldVal){
-       
-    }
+    
   },
   mounted(){
     // this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
     this.$store.dispatch("city_index",{comp_id:2}).then((resp)=>{ 
-         this.cityItems=[{
-            "comp_id": "10",
-            "comp_name": "乌市分公司",
-            "hs_count": "217",
-            "kc_name": "",
-            "kx_count": "2641",
-            "ont_count": "13900",
-            "qt_count": "69",
-            "zy_count": "10973"
-        }, {
-            "comp_id": "11",
-            "comp_name": "兴安分公司",
-            "hs_count": "7",
-            "kc_name": "",
-            "kx_count": "4062",
-            "ont_count": "6497",
-            "qt_count": "29",
-            "zy_count": "2399"
-        }, {
-            "comp_id": "12",
-            "comp_name": "锡盟分公司",
-            "hs_count": "309",
-            "kc_name": "",
-            "kx_count": "7490",
-            "ont_count": "19809",
-            "qt_count": "95",
-            "zy_count": "11915"
-        }, {
-            "comp_id": "13",
-            "comp_name": "阿盟分公司",
-            "hs_count": "19",
-            "kc_name": "",
-            "kx_count": "830",
-            "ont_count": "3395",
-            "qt_count": "172",
-            "zy_count": "2374"
-        }, {
-            "comp_id": "2",
-            "comp_name": "呼市分公司",
-            "hs_count": "712",
-            "kc_name": "",
-            "kx_count": "13495",
-            "ont_count": "52662",
-            "qt_count": "97",
-            "zy_count": "38358"
-        }, {
-            "comp_id": "3",
-            "comp_name": "包头分公司",
-            "hs_count": "145",
-            "kc_name": "",
-            "kx_count": "10512",
-            "ont_count": "25101",
-            "qt_count": "106",
-            "zy_count": "14338"
-        }, {
-            "comp_id": "4",
-            "comp_name": "乌海分公司",
-            "hs_count": "0",
-            "kc_name": "",
-            "kx_count": "4432",
-            "ont_count": "4646",
-            "qt_count": "6",
-            "zy_count": "208"
-        }, {
-            "comp_id": "5",
-            "comp_name": "赤峰分公司",
-            "hs_count": "221",
-            "kc_name": "",
-            "kx_count": "12583",
-            "ont_count": "44474",
-            "qt_count": "147",
-            "zy_count": "31523"
-        }, {
-            "comp_id": "6",
-            "comp_name": "通辽分公司",
-            "hs_count": "4",
-            "kc_name": "",
-            "kx_count": "0",
-            "ont_count": "27",
-            "qt_count": "0",
-            "zy_count": "23"
-        }, {
-            "comp_id": "7",
-            "comp_name": "鄂市分公司",
-            "hs_count": "48",
-            "kc_name": "",
-            "kx_count": "7632",
-            "ont_count": "8514",
-            "qt_count": "7",
-            "zy_count": "827"
-        }, {
-            "comp_id": "8",
-            "comp_name": "呼伦分公司",
-            "hs_count": "1128",
-            "kc_name": "",
-            "kx_count": "14624",
-            "ont_count": "34981",
-            "qt_count": "255",
-            "zy_count": "18974"
-        }, {
-            "comp_id": "9",
-            "comp_name": "巴市分公司",
-            "hs_count": "230",
-            "kc_name": "",
-            "kx_count": "6948",
-            "ont_count": "26720",
-            "qt_count": "90",
-            "zy_count": "19452"
-        }]
-    
+        this.optionNormal = {
+            title:{
+                text:"账龄180天内",
+                left:"center"
+            },
+            tooltip : {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            
+            series: [
+                {
+                    name: '业务指标',
+                    type: 'gauge',
+                    detail: {formatter:'{value}%'},
+                    data: [{value: 50, name: '正常率'}]
+                }
+            ]
+        };
+        this.optionProject = {
+            title:{
+                text:"工程物资占比",
+                left:"center"
+            },
+            tooltip : {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            
+            series: [
+                {
+                    name: '业务指标',
+                    type: 'gauge',
+                    detail: {formatter:'{value}%'},
+                    data: [{value: 50, name: '工程'}]
+                }
+            ]
+        };
     });
 
-    
+    this.optionBar = {
+        // color: ['#3398DB'],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:[10, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+    };
+
+  
+
+    this.optionBarCity = {
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis:  {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+        },
+        series: [
+            {
+                name: '直接访问',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [320, 302, 301, 334, 390, 330, 320]
+            },
+            {
+                name: '邮件营销',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '联盟广告',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '视频广告',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [150, 212, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '搜索引擎',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [820, 832, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };    
   },
   methods:{
-  	handleTrClick(comp_id){
-        this.comp_id=comp_id
-        $('#myModal').modal()
-    },
-    showBuyAmountAndUseAmount(){
-        
+  	handleNormalClick(){
+
     }
   },
   components:{
@@ -225,13 +274,21 @@ export default {
     border-bottom: 0.2em solid #CC0226;   
     line-height:2.8em;
 }
-.title{
-    background:url(../../assets/hong.png) no-repeat;
-    // background-size: cover;
-    color:white;
+
+.total{ 
+    .title{
+
+    }
+    .number{
+        font-size: 2em;
+        line-height: 1.8em;
+    }
 }
-.title,.total{
-    font-size: 1.2em;
+.store-year{
+    .percent{
+        font-size: 1.6em;
+        line-height: 1.8em;
+    }
 }
 .content{
     padding: 2em;
