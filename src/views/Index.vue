@@ -241,6 +241,7 @@ export default {
   },
   methods:{
   	handleMapClick(params){
+        console.log(params)
         this.$router.push({name:'IndexCity', params: { comp_id: params.data.comp_id }})
     },
     toHTML(params,items){

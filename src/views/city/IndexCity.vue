@@ -106,7 +106,7 @@ export default {
   data () {
     return {
         comp_id:this.$route.params["comp_id"],
-        menus:[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}],
+        menus:[],
         year:'2016',
         downAmount:{},
         cityAmount:{},
@@ -120,7 +120,8 @@ export default {
     }
   },
   mounted(){
-    // this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
+    this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
+    console.log("comp_id:"+this.$route.params["comp_id"])
     this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
          this.downAmount=resp.body.itemMap.downAmount;    
          this.cityAmount=resp.body.itemMap.cityAmount;    

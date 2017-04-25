@@ -1,14 +1,6 @@
 <template>
   <div class="index">
-    <div class="menu">
-        <div class="container">
-            <div style="float:right;">
-                <div v-for="x of menus" class="menu-item">
-                    <router-link :to="x.to">{{x.name}}</router-link>
-                </div>
-            </div>
-        </div>
-    </div>
+    <MyMenu :items="menus" back=true></MyMenu>
     
 
     <div class="container">
@@ -116,7 +108,7 @@
 <script>
 
 import Chart from '@/components/Chart'
-
+import MyMenu from '@/components/MyMenu'
 export default {
   data () {
     return {
@@ -131,7 +123,6 @@ export default {
     
   },
   mounted(){
-   
 
     this.$store.dispatch("trace_index",{comp_id:this.comp_id}).then((resp)=>{
         this.optionLine={
@@ -200,7 +191,7 @@ export default {
     }
   },
   components:{
-  	Chart
+  	Chart,MyMenu
   }
 }
 </script>
