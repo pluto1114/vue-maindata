@@ -1,7 +1,7 @@
 <template>
 <div class="menu">
     <div class="container">
-        <span v-if="back" @click="handleRetClick"><i class="fa fa-arrow-left"></i> 返回</span>
+        <span v-if="back" @click="handleRetClick" class="myback"><i class="fa fa-arrow-left"></i> 返回</span>
         <div style="float:right;">
             <div v-for="x of items" class="menu-item">
                 <router-link :to="x.to">{{x.name}}</router-link>
@@ -30,5 +30,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-
+.myback{
+  transition: all .5s ease;
+  &:hover{
+    color:#CCFFFF;
+    font-size: 1.1em;
+  }
+}
 </style>

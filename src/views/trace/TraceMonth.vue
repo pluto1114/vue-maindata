@@ -40,8 +40,8 @@
             <h4 class="modal-title" id="myModalLabel">物资详情</h4>
           </div>
           <div class="modal-body">
-         
-            <div v-if="inInfo.length==0" class="row">         
+            <div v-if="loading" class="row center-block"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+            <div v-if="inInfo.length==0 && !loading" class="row">         
                 <div class="col-md-12">
                   <div class="alert alert-danger" role="alert">此物资目前未入库</div>
                 </div>
@@ -82,8 +82,8 @@
                             <span>{{z.realname}}</span>
                           </time>
                           <aside>
-                            <p class="things">{{z.realname}}在 {{z.createtime}} 收到出库单</p>
-                            <p class="things" v-if="z.order_status=='over'">{{z.realname}}在 {{z.endtime}} 扫码出库</p>
+                            <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单</p>
+                            <p class="things" v-if="z.order_status=='over'">{{z.storer}}在 {{z.endtime}} 扫码出库</p>
                             <p class="brief"><span class="text-blue">物资出库</span></p>
                           </aside>
                         </section>
@@ -118,7 +118,8 @@ export default {
         year:'2017',
         month:'01',
         optionLine:{},
-        inInfo:[]
+        inInfo:[],
+        loading:true
     }
     
   },
@@ -182,10 +183,11 @@ export default {
         });
     },
     handleItemClick(id){
+        $('#myModal').modal()
+        this.loading=true
         this.$store.dispatch("trace_buyGoodsInfo",{id:id}).then(resp=>{
             this.inInfo=resp.body.itemMap.inInfo
-            $('#myModal').modal()
-            
+            this.loading=false;         
         });
         
     }
