@@ -21,29 +21,37 @@
                     <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
                     <div class="col-md-9 total">
                         <div class="title">全区库存物资总额</div>
-                        <div class="number">243026</div>
+                        <div class="number">{{infoMap.totalValue}}</div>
                     </div>
                 </div>
                 <div class="row store-year">
-                    <div class="col-md-4">
-                        <div class="percent">33%</div>
-                        <div class="">2015</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="percent">35%</div>
-                        <div class="">2016</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="percent">32%</div>
-                        <div class="">2017</div>
-                    </div>
-                    
+                    <div v-for="(x,index) of infoMap.yearValues" class="col-md-3">
+                        <div class="percent">{{parseInt(x*100/infoMap.totalValue)}}%</div>
+                        <div class="">{{2014+index}}</div>
+                    </div>  
+                </div>
+                <div class="row store-amount" style="margin-top:2em;">
+                    <div class="col-md-6">入库年份</div>
+                    <div class="col-md-6">当前余量</div>
+                </div>
+                <div v-for="(x,index) of infoMap.yearValues" class="row store-amount">
+                    <div class="col-md-6">{{2014+index}}</div>
+                    <div class="col-md-6">￥{{(x/10000).toFixed()}}万元</div>                 
                 </div>
             </div>
-            
-            <div class="col-md-9">
-                <Chart width="100%" height="300px" :option="optionBarCity" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+
+            <div class="col-md-6">
+                <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
             </div>
+
+            <div class="col-md-3 goodstype-order">                
+                <h3>物资类型排行</h3>
+                <ol>
+                    <li v-for="x of goodstypeOrderBy">{{x.name}}<span>{{parseInt(x.value/10000)}}万</span></li>
+                </ol>                
+            </div>
+            
+            
         </div>
     </div>
     
@@ -57,7 +65,7 @@
           </div>
           <div class="modal-body">
          
-            {{comp_id}}
+           
  
           </div>
           <div class="modal-footer">
@@ -78,19 +86,21 @@ export default {
 
   data () {
     return {
-        menus:[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}],
+        menus:[{name:"线上资源分析",to:"/third"}],
+        infoMap:{},
         optionNormal:{},
         optionProject:{},
         optionBar:{},
-        optionBarCity:{}
+        optionPie:[],
+        goodstypeOrderBy:[]
     }    
   },
   watch:{
     
   },
   mounted(){
-    // this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
-    this.$store.dispatch("city_index",{comp_id:2}).then((resp)=>{ 
+    this.$store.dispatch("store_index").then((resp)=>{
+        this.infoMap=resp.body.itemMap;
         this.optionNormal = {
             title:{
                 text:"账龄180天内",
@@ -102,10 +112,10 @@ export default {
             
             series: [
                 {
-                    name: '业务指标',
+                    name: '正常库存',
                     type: 'gauge',
                     detail: {formatter:'{value}%'},
-                    data: [{value: 50, name: '正常率'}]
+                    data: [{value: parseInt(this.infoMap.normalValue*100/this.infoMap.totalValue), name: '正常率'}]
                 }
             ]
         };
@@ -120,141 +130,101 @@ export default {
             
             series: [
                 {
-                    name: '业务指标',
+                    name: '工程物资',
                     type: 'gauge',
                     detail: {formatter:'{value}%'},
-                    data: [{value: 50, name: '工程'}]
+                    data: [{value: parseInt(this.infoMap.projectValue*100/this.infoMap.totalValue), name: '工程'}]
+                }
+            ]
+        };
+
+        this.optionBar = {
+            // color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : _.pluck(this.infoMap.cityValues,'name'),
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'库存金额',
+                    type:'bar',
+                    barWidth: '60%',
+                    data:_.pluck(this.infoMap.cityValues,'value')
                 }
             ]
         };
     });
 
-    this.optionBar = {
-        // color: ['#3398DB'],
-        tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis : [
-            {
-                type : 'category',
-                data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                axisTick: {
-                    alignWithLabel: true
+    this.$store.dispatch("store_index_goodstype").then((resp)=>{
+        this.goodstypeOrderBy=resp.body.items;
+    });
+
+    this.$store.dispatch("store_index_logic").then((resp)=>{
+        this.optionPie={
+            title: { 
+                text: '各逻辑库占比(万元)',
+                left:'right'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            // roseType: 'radius',
+            avoidLabelOverlap: true,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
                 }
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value'
-            }
-        ],
-        series : [
-            {
-                name:'直接访问',
-                type:'bar',
-                barWidth: '60%',
-                data:[10, 52, 200, 334, 390, 330, 220]
-            }
-        ]
-    };
+            },
+            labelLine: {
+                normal: {
+                    show: true
+                }
+            },
+            series : [
+                {
+                    name: '物资类型',
+                    type: 'pie',
+                    radius: [0,'60%'],
+                    data:resp.body.items
+                }
+            ]
+        }        
+    });
 
   
 
-    this.optionBarCity = {
-        tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        legend: {
-            data: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis:  {
-            type: 'value'
-        },
-        yAxis: {
-            type: 'category',
-            data: ['周一','周二','周三','周四','周五','周六','周日']
-        },
-        series: [
-            {
-                name: '直接访问',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: [320, 302, 301, 334, 390, 330, 320]
-            },
-            {
-                name: '邮件营销',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: '联盟广告',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: '视频广告',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: [150, 212, 201, 154, 190, 330, 410]
-            },
-            {
-                name: '搜索引擎',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: [820, 832, 901, 934, 1290, 1330, 1320]
-            }
-        ]
-    };    
+    
   },
   methods:{
   	handleNormalClick(){
@@ -288,6 +258,26 @@ export default {
     .percent{
         font-size: 1.6em;
         line-height: 1.8em;
+    }
+}
+.store-amount{
+    line-height: 2em;
+    font-size: 1.2em;
+}
+.goodstype-order{
+    h3{
+        margin-top: 0;
+    }
+    ol{
+        margin-top:1.5em;
+        margin-left: 1em;
+        li{
+            line-height: 2em;
+            font-size: 1.12em;
+            span{
+                float:right;
+            }
+        }
     }
 }
 .content{

@@ -55,7 +55,24 @@ const city = {
     }
   }
 }
-
+const myStore = {
+  state: {},
+  mutations: {},
+  actions: {
+    store_index(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index`):Promise.resolve(mock);
+    },
+    store_index_goodstype(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/goodstypeOrderBy`):Promise.resolve(mock);
+    },
+    store_index_logic(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/logicStore`):Promise.resolve(mock);
+    },
+  }
+}
 const resource = {
   state: {},
   mutations: {},
@@ -98,6 +115,7 @@ const store = new Vuex.Store({
     moduleA,
     main,
     city,
+    myStore,
     resource,
     trace
   }
