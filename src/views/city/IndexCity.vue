@@ -4,52 +4,49 @@
     
     <div class="container">
         <div class="row">
-        	<div class="col-md-12 banner">
-                <div class="row">
-                    <div class="title col-sm-4">物资分布分析</div>
-                    <div class="total col-sm-offset-6 col-sm-2">
-                             
+        	<div class="col-md-12" style="padding:0;">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#storegoods1" role="tab" data-toggle="tab">物资平台库存</a></li>
+                    <li role="presentation"><a href="#storegoods2" role="tab" data-toggle="tab">商城库存分析</a></li> 
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="storegoods1">
+                        <div class="content">             
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:12em;">地域</th>
+                                        <th>0-90天</th>
+                                        <th>91-180天</th>
+                                        <th>180天以上</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if="city">
+                                        <td>{{city.name}}</td>
+                                        <td>{{city.storegoods.lt90}}</td>
+                                        <td>{{city.storegoods.lt180}}</td>
+                                        <td>{{city.storegoods.gt180}}</td>
+                                      
+                                    </tr>
+                                    <tr v-if="counties" v-for="x of counties">
+                                        <td>{{x.name}}</td>
+                                        <td>{{x.storegoods.lt90}}</td>
+                                        <td>{{x.storegoods.lt180}}</td>
+                                        <td>{{x.storegoods.gt180}}</td>
+                                       
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="storegoods2">
+                        <div class="content">             
+                           商城数据 
+                        </div>
                     </div>
                 </div>
-            </div>
-        	
-            <div class="col-md-12 content">             
-                <table class="table">
-                	<thead>
-                		<tr>
-                			<th style="width:12em;">地域</th>
-                			<th>采购量</th>
-                			<th>库存量</th>
-                			<th>在建项目</th>
-                			<th>完成项目</th>
-                			<th>闲置物资</th>
-                			<th>运维物资</th>
-                			<th>营销物资</th>
-                		</tr>
-                	</thead>
-                	<tbody>
-                        <tr>
-                            <td>{{cityAmount.name}}</td>
-                            <td>{{cityAmount.inValue}}</td>
-                            <td>{{cityAmount.storeValue}}</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                		<tr v-for="x of downAmount">
-                			<td>{{x.name}}</td>
-                			<td>{{x.inValue}}</td>
-                			<td>{{x.storeValue}}</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                			<td>0</td>
-                		</tr>
-                	</tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -57,39 +54,178 @@
         <div class="row">
         	<div class="col-md-12 banner">
                 <div class="row">
-                    <div class="title col-sm-4">采购量、使用量</div>
+                    <div class="title col-sm-4">在建项目分析</div>
                     <div class="total col-sm-offset-6 col-sm-2">
                             
                     </div>
                 </div>
             </div>
         	
-            <div class="col-md-12 content">
-                <div class="row">
-                    <mu-radio label="2015" name="group" nativeValue="2015" v-model="year" class="demo-radio"/> 
-                    <mu-radio label="2016" name="group" nativeValue="2016" v-model="year"  class="demo-radio"/> 
-                    <mu-radio label="2017" name="group" nativeValue="2017" v-model="year"  class="demo-radio"/> 
-                </div>
-                <br/>
-                <div class="row">             
-                    <Chart width="100%" height="300px" :option="optionLine" theme='shine' @chartClick="handleMapClick" loading></Chart>
+            <div class="col-md-12 content">            
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:12em;">地域</th>
+                            <th>库存量</th>
+                            <th>使用量</th>
+                            <th>损坏量</th>
+                            <th>维修量</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="city">
+                            <td>{{city.name}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                          
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="padding:0;">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#modem1" role="tab" data-toggle="tab">光猫</a></li>
+                    <li role="presentation"><a href="#modem2" role="tab" data-toggle="tab">机顶盒</a></li> 
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="modem1">
+                        <div class="content">             
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:12em;">地域</th>
+                                        <th>物资平台</th>
+                                        <th>商城</th>
+                                       
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if="city">
+                                        <td>{{city.name}}</td>
+                                        <td>{{city.storegoods.lt90}}</td>
+                                        <td>{{city.storegoods.lt180}}</td>
+                                      
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="modem2">
+                        <div class="content">             
+                           商城数据 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
-        	<div class="col-md-12 banner">
+            <div class="col-md-12 banner">
                 <div class="row">
-            		<div class="title col-sm-4">项目物资分析</div>
-            		<div class="total col-sm-offset-6 col-sm-2">
-                              
+                    <div class="title col-sm-4">运维物资使用情况</div>
+                    <div class="total col-sm-offset-6 col-sm-2">
+                            
                     </div>
                 </div>
-        	</div>
-        	
-            <div class="col-md-12 content">             
-                <Chart width="100%" height="300px" :option="optionBar" theme='shine' @chartClick="handleMapClick" loading></Chart>
+            </div>
+            
+            <div class="col-md-12 content">            
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:12em;">地域</th>
+                            <th>物资平台</th>
+                            <th>商城</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="city">
+                            <td>{{city.name}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                          
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 banner">
+                <div class="row">
+                    <div class="title col-sm-4">营销物资使用情况</div>
+                    <div class="total col-sm-offset-6 col-sm-2">
+                            
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-12 content">            
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:12em;">地域</th>
+                            <th>物资平台</th>
+                            <th>商城</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="city">
+                            <td>{{city.name}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                          
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="padding:0;">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#resource1" role="tab" data-toggle="tab">大唐资源</a></li>
+                    <li role="presentation"><a href="#resource2" role="tab" data-toggle="tab">中兴资源</a></li> 
+                    <li role="presentation"><a href="#resource3" role="tab" data-toggle="tab">新大陆资源</a></li> 
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="resource1">
+                        <div class="content">             
+                            大唐资源
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="resource2">
+                        <div class="content">             
+                           中兴资源 
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="resource3">
+                        <div class="content">             
+                           新大陆资源 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -108,8 +244,8 @@ export default {
         comp_id:this.$route.params["comp_id"],
         menus:[],
         year:'2016',
-        downAmount:{},
-        cityAmount:{},
+        counties:null,
+        city:null,
         optionLine:{},
  		optionBar:{}
     }    
@@ -123,51 +259,11 @@ export default {
     this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
     console.log("comp_id:"+this.$route.params["comp_id"])
     this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
-         this.downAmount=resp.body.itemMap.downAmount;    
-         this.cityAmount=resp.body.itemMap.cityAmount;    
+        this.counties=resp.body.itemMap.counties;    
+        this.city=resp.body.itemMap.city;    
     });
 
-    this.showBuyAmountAndUseAmount();
 
-    this.$store.dispatch("main_orderInfo").then((resp)=>{
-        this.optionBar = {
-		    // color: ['#3398DB'],
-		    tooltip : {
-		        trigger: 'axis',
-		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-		        }
-		    },
-		    grid: {
-		        left: '3%',
-		        right: '4%',
-		        bottom: '3%',
-		        containLabel: true
-		    },
-		    xAxis : [
-		        {
-		            type : 'category',
-		            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-		            axisTick: {
-		                alignWithLabel: true
-		            }
-		        }
-		    ],
-		    yAxis : [
-		        {
-		            type : 'value'
-		        }
-		    ],
-		    series : [
-		        {
-		            name:'直接访问',
-		            type:'bar',
-		            barWidth: '60%',
-		            data:[10, 52, 200, 334, 390, 330, 220]
-		        }
-		    ]
-		};
-    });
   },
   methods:{
   	handleMapClick(params){
@@ -240,10 +336,21 @@ export default {
 }
 
 .table{
+
     td:not(:first-child),th:not(:first-child){
-        text-align: right;
+        text-align: right; 
+    }
+    td{
+         padding: 0.8em 0.4em;
     }
 }   
 
+[role=tab]{
+    font-size: 1.2em;
+}
 
+.nav-tabs > li.active > a{
+     background-color: #CC0226;
+     color: white;
+}
 </style>
