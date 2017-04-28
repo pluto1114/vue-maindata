@@ -41,7 +41,7 @@
             </div>
 
             <div class="col-md-6">
-                <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                <Chart width="100%" height="400px" :option="optionPie" theme='shine' @chartClick="handleNormalClick" loading></Chart>
             </div>
 
             <div class="col-md-3 goodstype-order">                
@@ -52,6 +52,21 @@
             </div>
             
             
+        </div>
+
+        <div class="row compare">
+            <div class="col-md-2">
+                <div class="list-group">
+                  <button type="button" class="list-group-item active">
+                    <i class="fa fa-map-o" aria-hidden="true"></i>全区库存
+                  </button>
+                  <button type="button" v-for="x of cities" class="list-group-item"><i class="fa fa-info-circle" aria-hidden="true"></i>{{x.name}}库存</button>
+                 
+                </div>
+            </div>
+            <div class="col-md-10">
+                <Chart width="100%" height="500px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+            </div>
         </div>
     </div>
     
@@ -88,17 +103,25 @@ export default {
     return {
         menus:[{name:"线上资源分析",to:"/third"}],
         infoMap:{},
+        cities:[],
         optionNormal:{},
         optionProject:{},
         optionBar:{},
-        optionPie:[],
-        goodstypeOrderBy:[]
+        optionPie:{},
+        goodstypeOrderBy:[],
+        optionYear:{},
     }    
+  },
+  computed:{
+    comp_id(){
+        return this.$store.state.myStore.comp_id
+    }
   },
   watch:{
     
   },
   mounted(){
+    console.log("comp",this.comp_id)
     this.$store.dispatch("store_index").then((resp)=>{
         this.infoMap=resp.body.itemMap;
         this.optionNormal = {
@@ -138,6 +161,8 @@ export default {
             ]
         };
 
+        this.cities=this.infoMap.cityValues;
+
         this.optionBar = {
             // color: ['#3398DB'],
             tooltip : {
@@ -155,7 +180,7 @@ export default {
             xAxis : [
                 {
                     type : 'category',
-                    data : _.pluck(this.infoMap.cityValues,'name'),
+                    data : _.pluck(this.cities,'name'),
                     axisTick: {
                         alignWithLabel: true
                     }
@@ -171,10 +196,13 @@ export default {
                     name:'库存金额',
                     type:'bar',
                     barWidth: '60%',
-                    data:_.pluck(this.infoMap.cityValues,'value')
+                    data:_.pluck(this.cities,'value')
                 }
             ]
         };
+
+
+        
     });
 
     this.$store.dispatch("store_index_goodstype").then((resp)=>{
@@ -220,6 +248,41 @@ export default {
                 }
             ]
         }        
+    });
+
+    this.$store.dispatch("store_index_compareHis").then((resp)=>{
+        this.optionYear = {
+            title: {
+                text: '库存去年同期比较'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['2016','2017']
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : _.pluck(resp.body.itemMap.lastYear,'month')
+                }
+            ],
+            yAxis: [
+                {
+                    type : 'value'
+                }
+            ],
+            series: [{
+                name: '2016',
+                type: 'line',
+                data: _.pluck(resp.body.itemMap.lastYear,'value')
+            },{
+                name: '2017',
+                type: 'line',
+                data: _.pluck(resp.body.itemMap.thisYear,'value')
+            }]
+        }
     });
 
   
@@ -277,7 +340,13 @@ export default {
             span{
                 float:right;
             }
+
         }
+    }
+}
+.compare{
+    .fa{
+        margin-right: 1.5em;
     }
 }
 .content{

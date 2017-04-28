@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'my-menu',
   props:['items','back'],
@@ -30,11 +31,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+@import '../assets/animate.less';
 .myback{
-  transition: all .5s ease;
+  .animated;
   &:hover{
-    color:#CCFFFF;
-    font-size: 1.1em;
+    .rollIn;
+    color: #9999cc;
   }
 }
 </style>

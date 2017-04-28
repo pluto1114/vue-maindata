@@ -56,7 +56,9 @@ const city = {
   }
 }
 const myStore = {
-  state: {},
+  state: {
+    comp_id:1
+  },
   mutations: {},
   actions: {
     store_index(context,payload){
@@ -70,6 +72,10 @@ const myStore = {
     store_index_logic(context,payload){
       let mock={};
       return remote?api(`/api/store/index/logicStore`):Promise.resolve(mock);
+    },
+    store_index_compareHis(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/compareHis`):Promise.resolve(mock);
     },
   }
 }
