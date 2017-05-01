@@ -35,8 +35,8 @@ export default {
 .myback{
   .animated;
   &:hover{
-    .rollIn;
-    color: #9999cc;
+    .flash;
+    
   }
 }
 </style>

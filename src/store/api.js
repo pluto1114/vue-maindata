@@ -16,9 +16,13 @@ export function api(url,options) {
         'type':'get',
         'params':{}
     };
-    
+    // window.location.href="http://www.baidu.com"
     var opt = Object.assign(defaultOptions, options);
     // console.log("opt",opt)
+
+    // if(window.localStorage.token){
+    //     Vue.http.headers.common['auth'] = window.localStorage.token;
+    // }
     if(opt.type==="get"){
         if (options && options.params){
     	    p=Vue.http.get(url+"?"+querystring.stringify(opt.params));
@@ -35,7 +39,11 @@ export function api(url,options) {
     	if(showStr){
     		console.log(JSON.stringify(resp));
     	}
+
     },resp=>{
+        if (resp.status=='401') {
+            window.location.href="/#/login"
+        }
       console.log("request error");
     });
     return p;

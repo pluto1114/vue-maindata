@@ -13,6 +13,7 @@ import TraceMonth from '@/views/trace/TraceMonth.vue'
 import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 
 import StoreIndex from '@/views/store/StoreIndex.vue'
+import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
 
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
@@ -76,7 +77,13 @@ export default new Router({
                 component: StoreIndex,
                 name: 'StoreIndex',
                 description: '库存'
+            },{
+                path: 'city/:comp_id',
+                component: StoreCityIndex,
+                name: 'StoreCityIndex',
+                description: '库存'
             }
+
         ]
     },{
         path: '/resource',

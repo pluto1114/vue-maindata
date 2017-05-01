@@ -2,7 +2,6 @@
   <div class="container container-table">
       <div class="row vertical-10p">
         <div class="container">
-          <img src="/static/img/logo.png" class="center-block logo">
           <div class="text-center col-md-4 col-sm-offset-4">
             <!-- errors -->
             <div v-if=response class="text-red"><p>{{response}}</p></div>
@@ -43,62 +42,33 @@ export default {
     checkCreds: function () {
       //  Change submit button
       var self = this
-      var store = this.$store
-
-      this.toggleLoading()
-      this.resetResponse()
-      store.dispatch('TOGGLE_LOADING')
-
+      
+    
+      
       //  Login
-      this.$parent.callAPI('POST', '/login', { username: this.username, password: this.password }).then(function (response) {
-        store.dispatch('TOGGLE_LOADING')
+      this.$store.dispatch("login",{ username: this.username, password: this.password }).then((resp)=>{ 
+        var data=resp.body.itemMap
 
-        if (response.data) {
-          var data = response.data
-
-          if (data.error) {
-            if (data.error.name) { //  Object from LDAP at this point
-              switch (data.error.name) {
-                case 'InvalidCredentialsError' : self.response = 'Username/Password incorrect. Please try again.'; break
-                default: self.response = data.error.name
-              }
-            } else {
-              self.response = data.error
-            }
-          } else {
-            //  success. Let's load up the dashboard
-            if (data.user) {
-              store.dispatch('SET_USER', data.user)
-              var token = 'Bearer ' + data.token
-              store.dispatch('SET_TOKEN', token)
-
-              // Save to local storage as well
-              if (window.localStorage) {
-                window.localStorage.setItem('user', JSON.stringify(data.user))
-                window.localStorage.setItem('token', token)
-              }
-
-              this.$router.push(data.redirect)
-            }
-          }
+        
+        if (resp.body.errCode=='001') {
+          alert("password error")
         } else {
-          self.response = 'Did not receive a response. Please try again in a few minutes'
-        }
+          //  success. Let's load up the dashboard
+          console.log(data.token)
+          document.cookie="token="+data.token
 
-        self.toggleLoading()
-      }, function (response) {
-        // error
-        store.dispatch('TOGGLE_LOADING')
-        console.log('Error', response)
-        self.response = 'Server appears to be offline'
-        self.toggleLoading()
+          // if (window.localStorage) {
+          //   window.localStorage.setItem('user', JSON.stringify(data.user))
+          //   window.localStorage.setItem('token', data.token) 
+          // }
+
+          this.$router.push("/")
+        }
+        
       })
     },
     toggleLoading: function () {
       this.loading = (this.loading === '') ? 'loading' : ''
-    },
-    resetResponse: function () {
-      this.response = ''
     }
   }
 }

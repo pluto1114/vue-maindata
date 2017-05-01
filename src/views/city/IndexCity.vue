@@ -23,12 +23,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-if="city">
+                                    <tr v-if="city" @click='$router.push({name:"StoreCityIndex",params:{comp_id:city.id}})'>
                                         <td>{{city.name}}</td>
                                         <td>{{city.storegoods.lt90}}</td>
                                         <td>{{city.storegoods.lt180}}</td>
                                         <td>{{city.storegoods.gt180}}</td>
-                                      
                                     </tr>
                                     <tr v-if="counties" v-for="x of counties">
                                         <td>{{x.name}}</td>

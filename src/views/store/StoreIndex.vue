@@ -6,13 +6,13 @@
         
         <div class="row">
             <div class="col-md-3">
-                <Chart width="100%" height="400px" :option="optionNormal" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                <Chart width="100%" height="400px" :option="optionNormal" theme='macarons' loading></Chart>
             </div>
             <div class="col-md-3">
-                <Chart width="100%" height="400px" :option="optionProject" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                <Chart width="100%" height="400px" :option="optionProject" theme='macarons' loading></Chart>
             </div>
             <div class="col-md-6">
-                <Chart width="100%" height="300px" :option="optionBar" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                <Chart width="100%" height="300px" :option="optionBar" theme='macarons' @chartClick="handleCityClick" loading></Chart>
             </div>
         </div>
         <div class="row">
@@ -57,10 +57,10 @@
         <div class="row compare">
             <div class="col-md-2">
                 <div class="list-group">
-                  <button type="button" class="list-group-item active">
+                  <button type="button"  @click="handleCompSel(1)" class="list-group-item" :class="{active:1==comp_id}">
                     <i class="fa fa-map-o" aria-hidden="true"></i>全区库存
                   </button>
-                  <button type="button" v-for="x of cities" class="list-group-item"><i class="fa fa-info-circle" aria-hidden="true"></i>{{x.name}}库存</button>
+                  <button type="button" v-for="x of cities" @click="handleCompSel(x.id)" class="list-group-item" :class="{active:x.id==comp_id}"><i class="fa fa-info-circle" aria-hidden="true"></i>{{x.name}}库存</button>
                  
                 </div>
             </div>
@@ -162,9 +162,15 @@ export default {
         };
 
         this.cities=this.infoMap.cityValues;
+        for (var i = this.cities.length - 1; i >= 0; i--) {
+            this.cities[i].to={name:"StoreCityIndex",params:{comp_id:this.cities[i].id}};
+        }
 
+        this.menus=this.cities;
         this.optionBar = {
-            // color: ['#3398DB'],
+            title:{
+                text:'全区库存分布'
+            },
             tooltip : {
                 trigger: 'axis',
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -250,7 +256,29 @@ export default {
         }        
     });
 
-    this.$store.dispatch("store_index_compareHis").then((resp)=>{
+    this.showCompareHis(1)
+
+    
+
+    
+  },
+  methods:{
+    handleCityClick(params){
+        console.log(params)
+        let city=_.find(this.cities,{name:params.name});
+        console.log(city)
+        this.$store.commit("setCompId",city.id);
+        this.$router.push({name:"StoreCityIndex",params:{comp_id:city.id}});
+    },
+  	handleNormalClick(){
+
+    },
+    handleCompSel(comp_id){
+        this.$store.commit("setCompId",comp_id);
+        this.showCompareHis(comp_id);
+    },
+    showCompareHis(comp_id){
+        this.$store.dispatch("store_index_compareHis",{comp_id:comp_id}).then((resp)=>{
         this.optionYear = {
             title: {
                 text: '库存去年同期比较'
@@ -284,14 +312,6 @@ export default {
             }]
         }
     });
-
-  
-
-    
-  },
-  methods:{
-  	handleNormalClick(){
-
     }
   },
   components:{

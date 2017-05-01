@@ -23,6 +23,9 @@ const main = {
   mutations: {
   },
   actions: {
+    login(context,payload){
+      return Vue.http.post('/api/login',payload)
+    },
     main_map(context,payload){
       let mock={};
       return remote?api('/api/indexInfo/map'):Promise.resolve(mock);
@@ -59,7 +62,11 @@ const myStore = {
   state: {
     comp_id:1
   },
-  mutations: {},
+  mutations: {
+    setCompId(state, n){
+      state.comp_id=n;
+    }
+  },
   actions: {
     store_index(context,payload){
       let mock={};
@@ -75,7 +82,23 @@ const myStore = {
     },
     store_index_compareHis(context,payload){
       let mock={};
-      return remote?api(`/api/store/index/compareHis`):Promise.resolve(mock);
+      return remote?api(`/api/store/index/compareHis/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    store_city_index(context,payload){
+      let mock={};
+      return remote?api(`/api/store/city/index/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    store_city_index_logicStore(context,payload){
+      let mock={};
+      return remote?api(`/api/store/city/index/logicStore/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    store_city_index_goodstype(context,payload){
+      let mock={};
+      return remote?api(`/api/store/city/index/goodstype/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    store_city_index_storegoods(context,payload){
+      let mock={};
+      return remote?api(`/api/store/city/index/storegoods`,{params:payload}):Promise.resolve(mock);
     },
   }
 }
