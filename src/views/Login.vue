@@ -55,12 +55,12 @@ export default {
         } else {
           //  success. Let's load up the dashboard
           console.log(data.token)
-          document.cookie="token="+data.token
+          // document.cookie="token="+data.token
 
-          // if (window.localStorage) {
-          //   window.localStorage.setItem('user', JSON.stringify(data.user))
-          //   window.localStorage.setItem('token', data.token) 
-          // }
+          if (window.localStorage) {
+            // window.localStorage.setItem('user', JSON.stringify(data.user))
+            window.localStorage.setItem('token', data.token) 
+          }
 
           this.$router.push("/")
         }

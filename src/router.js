@@ -8,6 +8,7 @@ import NotFound from '@/views/404.vue'
 import Index from '@/views/Index.vue'
 import IndexCity from '@/views/city/IndexCity.vue'
 import Third from '@/views/Third.vue'
+import StoreMap from '@/views/StoreMap.vue'
 
 import TraceMonth from '@/views/trace/TraceMonth.vue'
 import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
@@ -101,6 +102,19 @@ export default new Router({
                 component: TerminalIndex,
                 name: 'TerminalIndex',
                 description: '资源'
+            }
+        ]
+    },{
+        path: '/storeMap',
+        component: Main,
+        description: '库存',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: StoreMap,
+                name: 'StoreMap',
+                description: '库存'
             }
         ]
     },

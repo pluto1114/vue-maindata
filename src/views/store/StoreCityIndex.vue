@@ -3,14 +3,14 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
-        
-        
+        <h2>{{infoMap.comp.name}}</h2>    
+        <br/>
         <div class="row">
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
                     <div class="col-md-9 total">
-                        <div class="title">全区库存物资总额</div>
+                        <div class="title">库存物资总额</div>
                         <div class="number">{{infoMap.totalValue}}</div>
                     </div>
                 </div>

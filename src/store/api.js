@@ -20,9 +20,9 @@ export function api(url,options) {
     var opt = Object.assign(defaultOptions, options);
     // console.log("opt",opt)
 
-    // if(window.localStorage.token){
-    //     Vue.http.headers.common['auth'] = window.localStorage.token;
-    // }
+    if(window.localStorage.token){
+        Vue.http.headers.common['auth'] = window.localStorage.token;
+    }
     if(opt.type==="get"){
         if (options && options.params){
     	    p=Vue.http.get(url+"?"+querystring.stringify(opt.params));

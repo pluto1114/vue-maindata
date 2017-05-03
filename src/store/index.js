@@ -138,7 +138,16 @@ const trace = {
     }
   }
 }
-
+const storeMap = {
+  state: {},
+  mutations: {},
+  actions: {
+    store_map_index(context,payload){
+      let mock={};
+      return remote?api(`/api/storeMap`):Promise.resolve(mock);
+    }
+  }
+}
 const store = new Vuex.Store({
   modules: {
     moduleA,
@@ -146,7 +155,8 @@ const store = new Vuex.Store({
     city,
     myStore,
     resource,
-    trace
+    trace,
+    storeMap
   }
 })
 
