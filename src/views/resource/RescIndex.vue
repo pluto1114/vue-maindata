@@ -22,7 +22,7 @@
                 <div style="margin-top:150px;">{{statusNameXDL}}</div>
             </div>
             <div class="col-md-4"> 
-                <Chart width="100%" height="300px" :option="optionSubPieXDL" theme="shine" @chartClick="handleSubPieXDLClick" loading></Chart>
+               
             </div>
         </div>
     </div>
