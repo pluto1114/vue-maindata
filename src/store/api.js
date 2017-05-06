@@ -50,3 +50,39 @@ export function api(url,options) {
     });
     return p;
 }
+
+export function $api(url,options) {
+    var p={};
+    if(!url) url='/api'
+    var defaultOptions ={
+        'type':'get',
+        'params':{}
+    };
+    // window.location.href="http://www.baidu.com"
+    var opt = Object.assign(defaultOptions, options);
+    // console.log("opt",opt)
+
+    
+    if(opt.type==="get"){
+       
+        p=$.get(url,opt.params);
+        
+    }else if(opt.type==="post"){
+        p=$.post(url,opt.params);
+    }
+    p.then(resp=>{
+        if(debug){
+            console.log(`resp.data from ${url}`,resp);
+        }
+        if(showStr){
+            console.log(JSON.stringify(resp));
+        }
+
+    },resp=>{
+        if (resp.status=='401') {
+            //window.location.href="/#/login"
+        }
+      console.log("request error");
+    });
+    return p;
+}
