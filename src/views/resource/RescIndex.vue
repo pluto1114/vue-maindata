@@ -3,77 +3,132 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
-    	<div class="row">
-    		<div class="col-md-12 banner">
-                <div class="row">
-                    <div class="title col-sm-2">电子运维资源</div>
-                    <div class="total col-sm-offset-8 col-sm-2">
-                          
+    	
+    	
+        <div class="row"> 
+            <div class="col-md-4">
+                <div class="p3">
+                    <h4>路由导航</h4>             
+                    <Chart width="100%" height="300px" :option="optionPieZX" theme="macarons" loading></Chart>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-group" id="accordion" role="tablist">
+                                <div v-for="(x,index) of pieDataZX" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul class="menu-1">
+                                            <li v-for="y of x.list1">
+                                            <h3 class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></h3>
+                                                <ul>
+                                            
+                                                    <li v-for="z of y.list1">
+                                                    <div class="box"><a href="#" class="box-cell-1">{{z.name}}</a><span class="value">{{z.value}}</span>
+                                                    </div>
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>
+                  
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>     	
+            <div class="col-md-4">
+                <div class="p3">
+                    <h4>电子运维资源</h4>             
+                    <Chart width="100%" height="300px" :option="optionPieXDL" theme="macarons" loading></Chart>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div v-for="(x,index) of pieDataXDL" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul class="menu-1">
+                                            <li v-for="y of x.list1">
+                                            <h3 class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></h3>
+                                                <ul>
+                                            
+                                                    <li v-for="z of y.list1">
+                                                    <div class="box"><a href="#" class="box-cell-1">{{z.name}}</a><span class="value">{{z.value}}</span>
+                                                    </div>
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>
+                  
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-    	</div>
-    	
-        <div class="row">      	
-            <div class="col-md-5">             
-                <Chart width="100%" height="400px" :option="optionPieXDL" theme="shine" @chartClick="handlePieXDLClick" loading></Chart>
-            </div>
-            <div class="col-md-2">
-                <div style="margin-top:150px;">{{statusNameXDL}}</div>
-            </div>
-            <div class="col-md-4"> 
-               
-            </div>
-        </div>
-    </div>
-    <div class="container">
-    	<div class="row">
-    		<div class="col-md-12 banner">
-                <div class="row">
-                    <div class="title col-sm-2">号线资源</div>
-                    <div class="total col-sm-offset-8 col-sm-2">
-                          
+            
+            <div class="col-md-4">
+                <div class="p3">
+                    <h4>号线资源</h4>             
+                    <Chart width="100%" height="300px" :option="optionPieDT" theme="macarons" loading></Chart>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div v-for="(x,index) of pieDataDT" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul>
+                                            <li v-for="y of x.list1">
+                                            <div class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></div>
+                                                
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>
+                  
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-    	</div>
-    	
-        <div class="row">      	
-            <div class="col-md-5">             
-                <Chart width="100%" height="400px" :option="optionPieDT" theme="shine" @chartClick="handlePieDTClick" loading></Chart>
-            </div>
-            <div class="col-md-2">
-                <div style="margin-top:150px;">{{statusNameDT}}</div>
-            </div>
-            <div class="col-md-4"> 
-                <Chart width="100%" height="300px" :option="optionSubPieDT" theme="shine" @chartClick="handleSubPieDTClick" loading></Chart>
-            </div>
         </div>
     </div>
-    <div class="container">
-    	<div class="row">
-    		<div class="col-md-12 banner">
-                <div class="row">
-                    <div class="title col-sm-2">路由导航</div>
-                    <div class="total col-sm-offset-8 col-sm-2">
-                          
-                    </div>
-                </div>
-            </div>
-    	</div>
-    	
-        <div class="row">      	
-            <div class="col-md-5">             
-                <Chart width="100%" height="400px" :option="optionPieZX" theme="shine" @chartClick="handlePieZXClick" loading></Chart>
-            </div>
-            <div class="col-md-2">
-                <div style="margin-top:150px;">{{statusNameZX}}</div>
-            </div>
-            <div class="col-md-4"> 
-                <Chart width="100%" height="300px" :option="optionSubPieZX" theme="shine" @chartClick="handleSubPieZXClick" loading></Chart>
-            </div>
-        </div>
-    </div>
+   
     
     
   </div>
@@ -114,69 +169,49 @@ export default {
   },
   mounted(){
 
-  	var data={"flag":"Y","total":"7","data":[{"list1":[{"name":"备品备件","value":"426.0"},{"name":"仪器仪表","value":"1073.0"},{"name":"2G基站","value":"12081.0"},{"name":"3G基站","value":"18100.0"},{"name":"4G基站","value":"13631.0"}],
-        "name":"占用","value":"45311.0",selected:true},{"list1":[{"name":"备品备件","value":"1.0"},{"name":"2G基站","value":"1.0"},{"name":"3G基站","value":"3.0"}],"name":"出租","value":"5.0"},{"list1":[{"name":"2G基站","value":"1.0"},{"name":"3G基站","value":"4.0"}],"name":"闲置不可用","value":"5.0"},{"list1":[{"name":"3G基站","value":"1.0"},{"name":"4G基站","value":"2.0"},{"name":"2G基站","value":"3.0"}],"name":"闲置机房待报废","value":"6.0"},{"list1":[{"name":"3G基站","value":"134.0"},{"name":"2G基站","value":"9.0"},{"name":"4G基站","value":"2070.0"}],"name":"空闲","value":"2213.0"},{"list1":[{"name":"仪器仪表","value":"42.0"},{"name":"备品备件","value":"1174.0"}],"name":"闲置待报废","value":"1216.0"},{"list1":[{"name":"3G基站","value":"49.0"},{"name":"备品备件","value":"7500.0"},{"name":"2G基站","value":"40.0"},{"name":"4G基站","value":"10.0"},{"name":"仪器仪表","value":"71.0"}],"name":"闲置可利用","value":"7670.0"}]};
+  	
   	
     this.$store.dispatch("resource_status_pro",{source:"XDL"}).then((resp)=>{
-    	var items=resp.body.data
+    	var items=resp.data
     	for (var i = items.length - 1; i >= 0; i--) {
     	    items[i].selected=false;
     	}    
         this.pieDataXDL=items;        
 
         setTimeout(()=>{
-        	this.handlePieXDLClick(items[0]);
+        	$('.menu-1').lazeemenu();
         },1000)    
     });
 
     this.$store.dispatch("resource_status_pro",{source:"DT"}).then((resp)=>{
-    	var items=resp.body.data
+    	var items=resp.data
     	for (var i = items.length - 1; i >= 0; i--) {
     	    items[i].selected=false;
     	}    
         this.pieDataDT=items;        
 
         setTimeout(()=>{
-        	this.handlePieDTClick(items[0]);
+        	$('.menu-1').lazeemenu();
         },1000)    
     });
     this.$store.dispatch("resource_status_pro",{source:"ZX"}).then((resp)=>{
-    	var items=resp.body.data
-    	for (var i = items.length - 1; i >= 0; i--) {
-    	    items[i].selected=false;
-    	}    
+    	var items=resp.data
+    	items.forEach((item,i)=>{
+            if(item.name==""){
+                items.splice(i,1)
+            }
+        }) 
         this.pieDataZX=items;        
 
         setTimeout(()=>{
-        	this.handlePieZXClick(items[0]);
+            $('.menu-1').lazeemenu();
         },1000)    
     });
 
     
   },
   methods:{
-  	handlePieXDLClick(params){
-        // console.log(params)
-        this.statusNameXDL=params.name;
-        var selectedObj=_.where(this.pieDataXDL,{name:params.name});
-        this.optionSubPieXDL={
-            title: { 
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: '55%',
-                    data:selectedObj[0].list1
-                }
-            ]
-        }  
-    },
-    handleSubPieXDLClick(params){
-        console.log(params)
-    },
+  	
     drawPieXDL(){    	
         this.optionPieXDL={
             title: { 
@@ -188,34 +223,13 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: '75%',
+                    radius: '55%',
                     data:this.pieDataXDL
                 }
             ]
         }         
     },
-    handlePieDTClick(params){
-        // console.log(params)
-        this.statusNameDT=params.name;
-        var selectedObj=_.where(this.pieDataDT,{name:params.name});
-        this.optionSubPieDT={
-            title: { 
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: '55%',
-                    data:selectedObj[0].list1
-                }
-            ]
-        }  
-    },
-    handleSubPieDTClick(params){
-        console.log(params)
-    },
+    
     drawPieDT(){    	
         this.optionPieDT={
             title: { 
@@ -227,34 +241,13 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: '75%',
+                    radius: '55%',
                     data:this.pieDataDT
                 }
             ]
         }         
     },
-    handlePieZXClick(params){
-        // console.log(params)
-        this.statusNameZX=params.name;
-        var selectedObj=_.where(this.pieDataZX,{name:params.name});
-        this.optionSubPieZX={
-            title: { 
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: '55%',
-                    data:selectedObj[0].list1
-                }
-            ]
-        }  
-    },
-    handleSubPieZXClick(params){
-        console.log(params)
-    },
+    
     drawPieZX(){    	
         this.optionPieZX={
             title: { 
@@ -266,7 +259,7 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: '75%',
+                    radius: '55%',
                     data:this.pieDataZX
                 }
             ]
@@ -303,6 +296,83 @@ export default {
 }
 
     
+a:hover,a:focus{
+    text-decoration: none;
+    outline: none;
+}
+#accordion .panel{
+    border: none;
+    border-top: 1px solid #e8e8e8;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+}
+#accordion .panel:last-child{
+    border-bottom: 1px solid #e8e8e8;
+}
+#accordion .panel-heading{
+    padding: 0 1em;
+}
+#accordion .panel-title{
+    a{
+        display: block;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 24px;
+        color: #635858;
+        background: #fff;
+        padding: 15px 20px 15px 47px;
+        position: relative;
+        transition: all 0.5s ease 0s;
+    }
+    .value{
+        padding-top: 1.5em;
+    }
+}
+#accordion .panel-title a:before{
+    content: "\f068";
+    font-family: 'FontAwesome';
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 32px;
+    border-radius: 50%;
+    background: #888bc2;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 0;
+    transition: all 0.3s ease 0s;
+}
+#accordion .panel-title a.collapsed:before{
+    content: "\f067";
+}
+#accordion .panel-body{
+    font-size: 15px;
+    color: #635858;
+    line-height: 25px;
+    border: none;
+    padding: 14px 20px 14px 47px;
+}    
 
-
+.p3{
+    border: 1px solid #d5d5d5;
+    border-radius: 1em;
+    > h4{
+        padding: 0.3em 1em 0.8em;
+        border-bottom: 1px solid #dfdfdf;
+    }
+}
+.menu-1 {
+    padding: 0.3em 0.5em;
+    li{
+        padding: 0.5em 0.2em;
+        .value{
+            padding: 0.5em;
+            color: #112266;
+        }
+    }
+}
 </style>

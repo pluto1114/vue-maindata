@@ -72,5 +72,10 @@ function isDesktop () {
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
-
+.box {
+  display: flex;
+}
+.box-cell-1{
+ flex:1;
+}
 </style>

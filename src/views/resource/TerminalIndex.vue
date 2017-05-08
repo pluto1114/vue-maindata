@@ -111,7 +111,7 @@ export default {
   mounted(){
     
     this.$store.dispatch("terminal_index",{comp_id:2}).then((resp)=>{ 
-        this.cityItems=resp.body.data; 
+        this.cityItems=resp.data; 
     });
 
     $('#myModal').on('hidden.bs.modal', e=>{
@@ -123,7 +123,7 @@ export default {
         this.comp_id=comp_id
         $('#myModal').modal()
         this.$store.dispatch("terminal_index_comp",{comp_id:comp_id}).then((resp)=>{ 
-            this.countyItems=resp.body.data; 
+            this.countyItems=resp.data; 
         });
     },
     showBuyAmountAndUseAmount(){
