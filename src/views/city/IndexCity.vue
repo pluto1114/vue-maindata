@@ -204,24 +204,90 @@
         <div class="row">
             <div class="col-md-12" style="padding:0;">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#resource1" role="tab" data-toggle="tab">大唐资源</a></li>
-                    <li role="presentation"><a href="#resource2" role="tab" data-toggle="tab">中兴资源</a></li> 
-                    <li role="presentation"><a href="#resource3" role="tab" data-toggle="tab">新大陆资源</a></li> 
+                    <li role="presentation" class="active"><a href="#resource1" role="tab" data-toggle="tab">路由导航</a></li>
+                    <li role="presentation"><a href="#resource2" role="tab" data-toggle="tab">电子运维资源</a></li> 
+                    <li role="presentation"><a href="#resource3" role="tab" data-toggle="tab">号线资源</a></li> 
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="resource1">
                         <div class="content">             
-                            大唐资源
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div v-for="(x,index) of resource1" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul class="dt-ul">
+                                            <li v-for="y of x.list1">
+                                            <a class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></a>
+                                                
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>             
+                            </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="resource2">
                         <div class="content">             
-                           中兴资源 
+                           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div v-for="(x,index) of resource2" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul class="dt-ul">
+                                            <li v-for="y of x.list1">
+                                            <a class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></a>
+                                                
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>             
+                            </div>   
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="resource3">
                         <div class="content">             
-                           新大陆资源 
+                           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div v-for="(x,index) of resource3" class="panel panel-default">
+                                    <div class="panel-heading" role="tab">
+                                        <h4 class="panel-title box">
+                                            <a class="collapsed box-cell-1" role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code">
+                                                {{x.name}}
+                                            </a>
+                                            <span class="value">{{x.value}}</span>
+                                        </h4>
+                                    </div>
+                                    <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
+                                        
+                                        <ul class="dt-ul">
+                                            <li v-for="y of x.list1">
+                                            <a class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></a>
+                                                
+                                            </li>
+                                           
+                                        </ul>
+                                       
+                                    </div>
+                                </div>             
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -242,17 +308,15 @@ export default {
     return {
         comp_id:this.$route.params["comp_id"],
         menus:[],
-        year:'2016',
         counties:null,
         city:null,
-        optionLine:{},
- 		optionBar:{}
+        resource1:[],
+        resource2:[],
+        resource3:[],
     }    
   },
   watch:{
-    year(val,oldVal){
-        this.showBuyAmountAndUseAmount()
-    }
+   
   },
   mounted(){
     this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
@@ -261,51 +325,21 @@ export default {
         this.counties=resp.body.itemMap.counties;    
         this.city=resp.body.itemMap.city;    
     });
+    this.$store.dispatch("city_index_resource",{source:'ZX',comp_id:this.comp_id}).then((resp)=>{
+         this.resource1=resp.data;
+    });
+    this.$store.dispatch("city_index_resource",{source:'XDL',comp_id:this.comp_id}).then((resp)=>{
+         this.resource2=resp.data;
+    });
+    this.$store.dispatch("city_index_resource",{source:'DT',comp_id:this.comp_id}).then((resp)=>{
+         this.resource3=resp.data;
+    });
 
 
   },
   methods:{
-  	handleMapClick(params){
-        if (params.componentType === 'series') {
-            this.comp_id=params.data.id;    
-        }
-    },
-    showBuyAmountAndUseAmount(){
-        this.$store.dispatch("city_buyGoods",{comp_id:this.comp_id,year:this.year}).then((resp)=>{
-            this.optionLine={
-                title: {
-                    text: '金额变化情况(万元)',
-                    left:'center'
-                },
-                tooltip: {},
-                legend: {
-                    left:'left',
-                    data:['采购量','使用量']
-                },
-                xAxis : [
-                    {
-                        type : 'category',
-                        boundaryGap : false,
-                        data : resp.body.itemMap.months
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value'
-                    }
-                ],
-                series: [{
-                    name: '采购量',
-                    type: 'line',
-                    data: resp.body.itemMap["buyInfo"]
-                },{
-                    name: '使用量',
-                    type: 'line',
-                    data: resp.body.itemMap["outInfo"]
-                }]
-            }       
-        });
-    }
+  	
+    
   },
   components:{
   	Chart,MyMenu
@@ -352,4 +386,72 @@ export default {
      background-color: #CC0226;
      color: white;
 }
+
+#accordion {
+    .panel{
+        border: none;
+        border-top: 1px solid #e8e8e8;
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        &:last-child{
+            border-bottom: 1px solid #e8e8e8;
+        }
+    }
+    .panel-heading{
+        padding: 0 1em;
+    }
+    .panel-title{
+        a{
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 24px;
+            background: #fff;
+            padding: 15px 20px 15px 47px;
+            position: relative;
+            transition: all 0.5s ease 0s;
+        }
+        .value{
+            padding-top: 1.5em;
+        }
+    }
+    .panel-title{
+
+        a:before{
+            content: "\f068";
+            font-family: 'FontAwesome';
+            display: block;
+            width: 30px;
+            height: 30px;
+            line-height: 32px;
+            border-radius: 50%;
+            background: #888bc2;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            position: absolute;
+            top: 25%;
+            left: 0;
+            transition: all 0.3s ease 0s;
+        }
+        a.collapsed:before{
+            content: "\f067";
+        }
+    }
+
+    .panel-body{
+        font-size: 15px;
+        color: #635858;
+        line-height: 25px;
+        border: none;
+        padding: 14px 20px 14px 47px;
+    } 
+    .dt-ul{
+        li{
+            padding:0.8em 1.5em;
+        } 
+    }
+}
+
 </style>

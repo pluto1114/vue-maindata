@@ -52,9 +52,14 @@ const city = {
       let mock={};
       return remote?api('/api/city/index/'+payload.comp_id):Promise.resolve(mock);
     },
-    city_buyGoods(context,payload){
+    city_index_resource(context,payload){
       let mock={};
-      return remote?api(`/api/city/buyGoods/${payload.comp_id}---${payload.year}`):Promise.resolve(mock);
+      if (payload.source=='DT') {
+        return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistDt&type1=4&source=${payload.source}&comp_id=${payload.comp_id}`):Promise.resolve(mock);
+      }else{
+        return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistZxXdl&type1=4&source=${payload.source}&comp_id=${payload.comp_id}`):Promise.resolve(mock);
+      }
+      
     }
   }
 }
@@ -110,6 +115,15 @@ const resource = {
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getinfolist&type1=1&source=${payload.source}`):Promise.resolve(mock);
     },
+    resource_status_pro_detail(context,payload){
+      let mock={};
+      if (payload.source=='DT') {
+        return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceListDt&code1=${payload.code1}&code2=${payload.code2}&source=${payload.source}`):Promise.resolve(mock);
+      }else{
+        return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceList&code1=${payload.code1}&code2=${payload.code2}&code3=${payload.code3}&source=${payload.source}`):Promise.resolve(mock);
+      }
+      
+    },
     terminal_index(context,payload){
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalCount`):Promise.resolve(mock);
@@ -117,6 +131,10 @@ const resource = {
     terminal_index_comp(context,payload){
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalCountByLocal&comp_id=${payload.comp_id}`):Promise.resolve(mock);
+    },
+    terminal_index_detail(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalList&kc_id=${payload.kc_id}`):Promise.resolve(mock);
     }
   }
 }

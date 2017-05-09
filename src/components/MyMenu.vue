@@ -39,4 +39,23 @@ export default {
     
   }
 }
+.menu{
+  background:url(../assets/red-line.png);
+  background-size:cover;
+  line-height:3.5em;
+  min-height:48px;
+  color:white;
+  margin-bottom:2em;
+}
+.menu-item{
+    padding-left:20px;
+    float:left;
+}
+.menu-item a{
+  color:white;
+}
+.menu-item::before{
+    padding-right:20px;
+    content: "|";
+}
 </style>
