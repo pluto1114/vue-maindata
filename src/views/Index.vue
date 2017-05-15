@@ -15,7 +15,7 @@
     <div class="container order-list">
         <div class="row">
             <div class="col-md-3 order-1">
-                <div class="title"><img src="static/img/t-icon-1.fw.png"/>全区ERP物资</div>
+                <div class="title"><img src="static/img/t-icon-1.fw.png"/>全区物资平台</div>
                 <ul>
                     <li v-for="x of orderInfo1">
                         <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>

@@ -105,7 +105,8 @@
                             <th>条码信息</th>
                             <th>批次号</th>
                             <th>设备型号</th>
-                            <th>供应商名称</th>
+                            <th>供应商</th>
+                            <th>领用人</th>
                             <th>设备状态</th>
                             
                         </tr>
@@ -117,6 +118,7 @@
                             <td>{{x.batch_code}}</td>
                             <td>{{x.model}}</td>
                             <td>{{x.name}}</td>
+                            <td>{{x.staff_name}}</td>
                             <td>{{x.sts}}</td>                         
                         </tr>
                     </tbody>

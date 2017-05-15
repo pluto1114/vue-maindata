@@ -223,10 +223,18 @@
                                     </div>
                                     <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
                                         
-                                        <ul class="dt-ul">
+                                        <ul class="menu-1">
                                             <li v-for="y of x.list1">
-                                            <a class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></a>
-                                                
+                                            <h3 class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></h3>
+                                                <ul>
+                                            
+                                                    <li v-for="z of y.list1">
+                                                        <div class="box">
+                                                            <a class="box-cell-1" @click="handleTrClick(x.code,y.code,z.code,'ZX')">{{z.name}}</a><span class="value">{{z.value}}</span>
+                                                        </div>
+                                                    </li>
+                                                   
+                                                </ul>
                                             </li>
                                            
                                         </ul>
@@ -250,10 +258,18 @@
                                     </div>
                                     <div :id="x.code" class="panel-collapse collapse" role="tabpanel">
                                         
-                                        <ul class="dt-ul">
+                                        <ul class="menu-1">
                                             <li v-for="y of x.list1">
-                                            <a class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></a>
-                                                
+                                            <h3 class="box"><span class="box-cell-1">{{y.name}}</span><span class="value">{{y.value}}</span></h3>
+                                                <ul>
+                                            
+                                                    <li v-for="z of y.list1">
+                                                        <div class="box">
+                                                            <a class="box-cell-1" @click="handleTrClick(x.code,y.code,z.code,'ZX')">{{z.name}}</a><span class="value">{{z.value}}</span>
+                                                        </div>
+                                                    </li>
+                                                   
+                                                </ul>
                                             </li>
                                            
                                         </ul>
@@ -327,9 +343,15 @@ export default {
     });
     this.$store.dispatch("city_index_resource",{source:'ZX',comp_id:this.comp_id}).then((resp)=>{
          this.resource1=resp.data;
+         setTimeout(()=>{
+            $('.menu-1').lazeemenu();
+        },1000) 
     });
     this.$store.dispatch("city_index_resource",{source:'XDL',comp_id:this.comp_id}).then((resp)=>{
          this.resource2=resp.data;
+         setTimeout(()=>{
+            $('.menu-1').lazeemenu();
+        },1000) 
     });
     this.$store.dispatch("city_index_resource",{source:'DT',comp_id:this.comp_id}).then((resp)=>{
          this.resource3=resp.data;
@@ -388,6 +410,11 @@ export default {
 }
 
 #accordion {
+    a:hover,a:focus{
+        text-decoration: none;
+        outline: none;
+        border-bottom: none;
+    }
     .panel{
         border: none;
         border-top: 1px solid #e8e8e8;
@@ -451,6 +478,16 @@ export default {
         li{
             padding:0.8em 1.5em;
         } 
+    }
+    .menu-1 {
+        padding: 0.3em 0.5em;
+        li{
+            padding: 0.5em 0.2em;
+            .value{
+                padding: 0.5em;
+                color: #112266;
+            }
+        }
     }
 }
 

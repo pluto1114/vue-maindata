@@ -2,7 +2,7 @@
   <div class="main">
     <div class="container banner">
       <div class="row">
-        <div class="col-md-1"><img src="../assets/logo.png" class="logo-img" /></div>
+        <div class="col-md-1"><a href="/"><img src="../assets/logo.png" class="logo-img" /></a></div>
         <div class="col-md-11">
           <div class="logo-title">内蒙古联通全物资全生命周期信息管理平台</div>
         </div>
@@ -53,9 +53,15 @@ function isDesktop () {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 
-
+a{ 
+  
+  &:hover{
+    padding-bottom:0.28em; 
+    border-bottom: 0px solid;
+  }
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
 }

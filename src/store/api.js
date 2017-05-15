@@ -41,12 +41,14 @@ export function api(url,options) {
     	if(showStr){
     		console.log(JSON.stringify(resp));
     	}
-
+        if (resp.headers.map.refresh_token) {
+            window.localStorage.token=resp.headers.map.refresh_token;
+        }
     },resp=>{
         if (resp.status=='401') {
             window.location.href="/#/login"
         }
-      console.log("request error");
+        console.log("request error");
     });
     return p;
 }

@@ -59,7 +59,7 @@
         <div class="row">
             <div class="col-sm-1">可用物资</div>
             <div class="col-sm-11">         
-                <mu-checkbox name="group2" v-model="useable" label="去除全部占用物资" class="type-checkbox" @change="handleUseableChange"/> 
+                <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
             </div>   
         </div>
     </div>

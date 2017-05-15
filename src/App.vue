@@ -49,6 +49,14 @@ ul li{
   color:white;
   margin-bottom:2em;
 }
+a{
+  
+  transition: all .1s;
+  &:hover{
+    padding-bottom:0.28em; 
+    border-bottom: 2px solid;
+  }
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
