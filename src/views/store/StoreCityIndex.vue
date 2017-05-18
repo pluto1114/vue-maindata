@@ -3,7 +3,7 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
-        <h2>{{infoMap.comp.name}}</h2>    
+        <h2 v-if="infoMap.comp">{{infoMap.comp.name}}</h2>    
         <br/>
         <div class="row">
             <div class="col-md-3">
@@ -31,7 +31,7 @@
             </div>
 
             <div class="col-md-6">
-                <Chart width="100%" height="400px" :option="optionPie" theme='shine' @chartClick="handlePieClick" loading></Chart>
+                <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handlePieClick" loading></Chart>
             </div>
 
             <div class="col-md-3 goodstype-order">                
@@ -47,6 +47,8 @@
         
     </div>
     
+   
+
     <div class="container">
         <transition  name="fade"  mode="out-in">
         <div v-if="goodstypeOrderBy.length > 0" class="row">
@@ -62,33 +64,61 @@
                 <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
             </div>   
         </div>
+        
+    </div>
+
+    <div v-if="logicStores.length>0" class="container">
+        <hr />
+        
+        <div class="row">
+            <div class="col-sm-1">逻辑库</div>
+            <div class="col-sm-11">         
+                <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x"  v-model="selLogicStore"/>
+            </div>   
+        </div>
+        <div class="row">
+            <div class="col-sm-1">实体库</div>
+            <div class="col-sm-11">         
+                <mu-radio :label="x" name="store" v-for="x of stores" :nativeValue="x" :key="x"  v-model="selStore"/>
+            </div>   
+        </div>
+        <br/>
+         <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-11">         
+               <button class="btn btn-default" type="button" @click="handleAllStore">所有库</button>
+            </div>   
+        </div>
+        <hr />
     </div>
     <div class="container">
         <div class="row">
             <transition  name="fade"  mode="out-in">
-            <table v-if="items.length > 0" class="table table-striped table-hover">
+            <table v-if="results.length > 0" class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
                         
                         <th>物资编号</th>
-                        <th style="width:20em;">物资名称</th>
+                        <th style="width:15em;">物资名称</th>
                         <th>供应商</th>
                     
                         <th>逻辑库</th>
-     
-                        <th style="width:4em;">单位</th>
+                        <th>实体库</th>
+                        
+                        <th>单位</th>
                         <th>入库数量</th>                  
                         <th>当前数量</th>  
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(x,index) of items">
+                    <tr v-for="(x,index) of results">
                         <td>{{index+1}}</td>
                         <td>{{x.goodstype_code}}</td>
                         <td>{{x.goodstype_name}}</td>
                         <td>{{x.factory}}</td>
                         <td>{{x.logic_store_name}}</td>
+                        <td>{{x.store_name}}</td>
                         <td>{{x.unit}}</td>
                         <td>{{x.in_count}}</td>
                         <td>{{x.cur_count}}</td>
@@ -113,15 +143,19 @@ export default {
         menus:[],
         infoMap:{},
         comp_id:this.$route.params["comp_id"] || 2,
-        optionNormal:{},
-        optionProject:{},
-        optionBar:{},
+       
         optionPie:{},
         goodstypeOrderBy:[],
-        logicStores:[],
+        
         items:{},
+        results:{},
+       
         selTypes:[],
-        useable:false
+        useable:false,
+        stores:[],
+        logicStores:[],
+        selStore:"",
+        selLogicStore:"",
     }    
   },
   computed:{
@@ -130,7 +164,20 @@ export default {
     }
   },
   watch:{
-    
+    selStore(newVal, oldVal){
+        if (newVal=="") {
+            this.results=this.items;
+        }else{
+            this.results=_.where(this.items,{store_name:newVal});
+        }
+    },
+    selLogicStore(newVal, oldVal){
+         if (newVal=="") {
+            this.results=this.items;
+        }else{
+            this.results=_.where(this.items,{logic_store_name:newVal});
+        }
+    },
   },
   mounted(){
 
@@ -140,68 +187,85 @@ export default {
     this.$store.dispatch("store_city_index_goodstype",{comp_id:this.comp_id}).then((resp)=>{
         this.goodstypeOrderBy=resp.body.items;
     });
-    this.$store.dispatch("store_city_index_logicStore",{comp_id:this.comp_id}).then((resp)=>{
-        this.logicStores=resp.body.items;
-        this.optionPie={
-            title: { 
-                text: '各逻辑库占比(万元)',
-                left:'right'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            // roseType: 'radius',
-            avoidLabelOverlap: true,
-            label: {
-                normal: {
-                    show: true,
-                    position: 'center'
-                },
-                emphasis: {
-                    show: true,
-                    textStyle: {
-                        fontSize: '20',
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-            labelLine: {
-                normal: {
-                    show: true
-                }
-            },
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: [0,'60%'],
-                    data:this.logicStores
-                }
-            ]
-        }        
-    
-    });
+    this.showPie();
 
     // this.showItems();
   },
   methods:{
   	handlePieClick(params){
         console.log(params)
+       
+        // this.showItems();
+       
     },
-    handleTypeChange(value){
-        console.log(value)
+    handleTypeChange(value){      
         this.selTypes=value;
         this.showItems();
+        this.handleAllStore();
     },
     handleUseableChange(value){
-        console.log(value)
+
         this.useable=value;
         this.showItems();
+        this.handleAllStore();
+    },
+    handleAllStore(){
+        this.selStore="";
+        this.selLogicStore="";
+        console.log("allStore")
+    },
+    showPie(){
+        this.$store.dispatch("store_city_index_logicStore",{comp_id:this.comp_id}).then((resp)=>{
+            this.optionPie={
+                title: { 
+                    text: '各逻辑库占比(万元)',
+                    left:'right'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                // roseType: 'radius',
+                avoidLabelOverlap: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true
+                    }
+                },
+                series : [
+                    {
+                        name: '物资类型',
+                        type: 'pie',
+                        radius: [0,'60%'],
+                        data:resp.body.items
+                    }
+                ]
+            }        
+        
+        });
+
     },
     showItems(){
+
         this.$store.dispatch("store_city_index_storegoods",{comp_id:this.comp_id,selTypes:this.selTypes,useable:this.useable}).then((resp)=>{
             this.items=resp.body.items;
+            this.results=resp.body.items;
+            this.stores=_.uniq(_.pluck(this.items, 'store_name'));
+            this.logicStores=_.uniq(_.pluck(this.items, 'logic_store_name'));
+            
         });
 
     },
@@ -263,7 +327,9 @@ export default {
     border: 1px solid #ddd;
     margin-bottom: 2em;
 }
-
+th{
+    min-width:6em;
+}
  
 
 

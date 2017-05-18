@@ -49,12 +49,12 @@ ul li{
   color:white;
   margin-bottom:2em;
 }
-a{
-  
+a{ 
   transition: all .1s;
   &:hover{
     padding-bottom:0.28em; 
     border-bottom: 2px solid;
+    cursor:pointer;
   }
 }
 

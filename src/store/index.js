@@ -95,7 +95,7 @@ const myStore = {
     },
     store_city_index_logicStore(context,payload){
       let mock={};
-      return remote?api(`/api/store/city/index/logicStore/${payload.comp_id}`):Promise.resolve(mock);
+      return remote?api(`/api/store/city/index/logicStore`,{params:payload}):Promise.resolve(mock);
     },
     store_city_index_goodstype(context,payload){
       let mock={};

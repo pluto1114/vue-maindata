@@ -35,12 +35,7 @@ export default {
 a{
   //.animated;
   color:white;
-  transition: all .1s;
-  &:hover{
-    padding-bottom:0.28em; 
-    border-color: white;
-    
-  }
+  
 }
 .menu{
   background:url(../assets/red-line.png);

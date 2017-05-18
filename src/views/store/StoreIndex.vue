@@ -41,7 +41,7 @@
             </div>
 
             <div class="col-md-6">
-                <Chart width="100%" height="400px" :option="optionPie" theme='shine' @chartClick="handleNormalClick" loading></Chart>
+                <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
             </div>
 
             <div class="col-md-3 goodstype-order">                
