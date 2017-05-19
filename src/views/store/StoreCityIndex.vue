@@ -73,7 +73,7 @@
         <div class="row">
             <div class="col-sm-1">逻辑库</div>
             <div class="col-sm-11">         
-                <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x"  v-model="selLogicStore"/>
+                <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x"  v-model="selLogicStore" labelClass="my-label"/>
             </div>   
         </div>
         <div class="row">
@@ -330,7 +330,13 @@ export default {
 th{
     min-width:6em;
 }
- 
 
+.mu-radio{
+    min-width:180px;
+
+    .mu-radio-label{
+        font-size: 12px;
+    }
+}
 
 </style>

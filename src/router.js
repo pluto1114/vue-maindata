@@ -16,6 +16,8 @@ import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 import StoreIndex from '@/views/store/StoreIndex.vue'
 import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
 
+import ProjectOne from '@/views/project/ProjectOne.vue'
+
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
@@ -83,6 +85,20 @@ export default new Router({
                 component: StoreCityIndex,
                 name: 'StoreCityIndex',
                 description: '库存'
+            }
+
+        ]
+    },{
+        path: '/project',
+        component: Main,
+        description: '项目',
+        auth: true,
+        children: [
+            {
+                path: 'one/:comp_id/:project_code',
+                component: ProjectOne,
+                name: 'ProjectOne',
+                description: '项目'
             }
 
         ]
