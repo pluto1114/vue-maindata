@@ -31,17 +31,25 @@ projectOne.vue
 			    	<div class="col-sm-6">
 		                <div class="p3">
 		                	<h4>采购物资</h4>             
-		                    <Chart width="100%" height="300px" :option="optionPieZX" theme="macarons" loading></Chart>
+		                    <Chart width="99%" height="300px" :option="optionPieBuy" theme="macarons" loading></Chart>
 		                    <div class="row">
-		                        <div class="col-md-12">
-		                        </div>
-		                    </div>
+                          <div class="col-md-12">
+                            <ul class="list-group">
+                              <li class="list-group-item" v-for="(x,index) of pieDataBuy">
+                                <span class="pull-right">{{x.value}}</span>
+                                <span v-html="x.name"></span>
+                              </li>
+                            </ul>
+                            
+                          </div>
+                    
+                      </div>
 		                </div>
 		            </div>
 		            <div class="col-sm-6">
 		                <div class="p3">
 		                	<h4>出库物资</h4>             
-		                    <Chart width="100%" height="300px" :option="optionPieZX" theme="macarons" loading></Chart>
+		                    <Chart width="100%" height="300px" :option="optionPieOut" theme="macarons" loading></Chart>
 		                    <div class="row">
 		                        <div class="col-md-12">
 		                        </div>
@@ -79,35 +87,43 @@ export default {
   data () {
     return {
         menus:[],
-        optionScatter:{},
-        comp_id:this.$route.params["comp_id"] || 2,
-        project_code:this.$route.params["project_code"] || 2,
-      	pieDataZX:{},
-      	optionPieZX:{},
+        
+      	pieDataBuy:{},
+      	optionPieBuy:{},
+        pieDataOut:{},
+        optionPieOut:{},
     }    
   },
   computed:{
-    
+    comp_id(){
+      return this.$store.state.project.comp_id;
+    },
+    project_code(){
+      return this.$store.state.project.project_code;
+    }
   },
   watch:{
-    'pieDataZX':'drawPieZX',
+    'pieDataBuy':'drawPieBuy',
+    'pieDataOut':'drawPieOut',
   },
   mounted(){
-  	this.$store.dispatch("resource_status_pro",{source:"ZX"}).then((resp)=>{
-    	var items=resp.data
-    	items.forEach((item,i)=>{
-            if(item.name==""){
-                items.splice(i,1)
-            }
-        }) 
-        this.pieDataZX=items;        
+    
+  	this.$store.dispatch("project_info_buy",{comp_id:this.comp_id,project_code:this.project_code}).then((resp)=>{
+    	var items=resp.body.items
+    	
+      this.pieDataBuy=items;        
   
     });
-    
+    // $('#accordion').on('shown.bs.collapse', (e)=>{
+    //   this.$store.dispatch("project_info_buylist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code:e.target.id}).then((resp)=>{
+    //     var items=resp.body.items
+               
+    //   });
+    // })
   },
   methods:{
-  	drawPieZX(){    	
-        this.optionPieZX={
+  	drawPieBuy(){    	
+        this.optionPieBuy={
             title: { 
                 // text: '全区物资类型分布',
                 left:'right'
@@ -117,8 +133,8 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: '55%',
-                    data:this.pieDataZX
+                    radius: ['20%','55%'],
+                    data:this.pieDataBuy
                 }
             ]
         }         
@@ -143,7 +159,78 @@ export default {
 		}
 	}
 }
+.accordion {
+    a:hover,a:focus{
+        text-decoration: none;
+        outline: none;
+        border-bottom: none;
+    }
+    .panel{
+        border: none;
+        border-top: 1px solid #e8e8e8;
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        &:last-child{
+            border-bottom: 1px solid #e8e8e8;
+        }
+    }
+    .panel-heading{
+        padding: 0 1em;
+    }
+    .panel-title{
+        a{
+            display: block;
+            font-size: 14px;
+            //font-weight: bold;
+            line-height: 24px;
+            background: #fff;
+            padding: 15px 20px 15px 47px;
+            position: relative;
+            transition: all 0.5s ease 0s;
+        }
+        .value{
+            padding-top: 1.2em;
+        }
+    }
+    .panel-title{
 
+        a:before{
+            content: "\f068";
+            font-family: 'FontAwesome';
+            display: block;
+            width: 30px;
+            height: 30px;
+            line-height: 32px;
+            border-radius: 50%;
+            background: #888bc2;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            position: absolute;
+            top: 25%;
+            left: 0;
+            transition: all 0.3s ease 0s;
+        }
+        a.collapsed:before{
+            content: "\f067";
+        }
+    }
+
+    .panel-body{
+        font-size: 15px;
+        color: #635858;
+        line-height: 25px;
+        border: none;
+        padding: 14px 10px 14px 20px;
+    } 
+
+    .dt-ul{
+        li{
+            padding:0.8em 1.5em;
+        } 
+    }
+}
 .p3{
     border: 1px solid #d5d5d5;
     border-radius: 1em;

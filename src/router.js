@@ -95,7 +95,7 @@ export default new Router({
         auth: true,
         children: [
             {
-                path: 'one/:comp_id/:project_code',
+                path: 'one',
                 component: ProjectOne,
                 name: 'ProjectOne',
                 description: '项目'

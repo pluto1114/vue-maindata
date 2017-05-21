@@ -107,6 +107,30 @@ const myStore = {
     },
   }
 }
+const project = {
+  state: {
+    comp_id:11,
+    project_code:'4B013CA0B01001'
+  },
+  mutations: {
+    setCompId(state, n){
+      state.comp_id=n;
+    },
+    setProjectCode(state, n){
+      state.project_code=n;
+    },
+  },
+  actions: {
+    project_info_buy(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/buy`,{params:payload}):Promise.resolve(mock);
+    },
+    project_info_buylist(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/buylist`,{params:payload}):Promise.resolve(mock);
+    },
+  }
+}
 const resource = {
   state: {},
   mutations: {},
@@ -172,6 +196,7 @@ const store = new Vuex.Store({
     main,
     city,
     myStore,
+    project,
     resource,
     trace,
     storeMap

@@ -7,6 +7,13 @@ import store from './store'
 import MuseUI from 'muse-ui'
 
 import FastClick from 'fastclick'
+import { domain, count, prettyDate, pluralize } from './filters'
+
+
+Vue.filter('count', count)
+Vue.filter('domain', domain)
+Vue.filter('prettyDate', prettyDate)
+Vue.filter('pluralize', pluralize)
 
 Vue.use(MuseUI)
 
