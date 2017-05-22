@@ -121,6 +121,10 @@ const project = {
     },
   },
   actions: {
+    project_info_index(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one`,{params:{comp_id:context.state.comp_id,project_code:context.state.project_code}}):Promise.resolve(mock);
+    },
     project_info_buy(context,payload){
       let mock={};
       return remote?api(`/api/project/one/buy`,{params:payload}):Promise.resolve(mock);
@@ -128,6 +132,14 @@ const project = {
     project_info_buylist(context,payload){
       let mock={};
       return remote?api(`/api/project/one/buylist`,{params:payload}):Promise.resolve(mock);
+    },
+    project_info_out(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/out`,{params:payload}):Promise.resolve(mock);
+    },
+    project_info_outlist(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/outlist`,{params:payload}):Promise.resolve(mock);
     },
   }
 }

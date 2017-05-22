@@ -58,12 +58,12 @@
             </div>    
         </div> 
         </transition>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-sm-1">可用物资</div>
             <div class="col-sm-11">         
                 <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
             </div>   
-        </div>
+        </div> -->
         
     </div>
 
@@ -167,15 +167,28 @@ export default {
     selStore(newVal, oldVal){
         if (newVal=="") {
             this.results=this.items;
-        }else{
-            this.results=_.where(this.items,{store_name:newVal});
+        }else{  
+            if(this.selLogicStore==""){    
+                this.results=_.where(this.items,{store_name:newVal});
+            }else{
+                this.results=_.where(this.items,{store_name:newVal,logic_store_name:this.selLogicStore});
+            }
+            console.log(this.selLogicStore,this.results)
+            this.logicStores=_.uniq(_.pluck(this.results, 'logic_store_name'));
+            // this.selLogicStore=0;
         }
     },
     selLogicStore(newVal, oldVal){
          if (newVal=="") {
             this.results=this.items;
         }else{
-            this.results=_.where(this.items,{logic_store_name:newVal});
+            if(this.selStore==""){
+                this.results=_.where(this.items,{logic_store_name:newVal});
+            }else{
+                this.results=_.where(this.items,{logic_store_name:newVal,store_name:this.selStore});
+            }
+            this.stores=_.uniq(_.pluck(this.results, 'store_name'));
+            // this.selStore=0;
         }
     },
   },
@@ -212,6 +225,8 @@ export default {
     handleAllStore(){
         this.selStore="";
         this.selLogicStore="";
+        this.stores=_.uniq(_.pluck(this.items, 'store_name'));
+        this.logicStores=_.uniq(_.pluck(this.items, 'logic_store_name'));
         console.log("allStore")
     },
     showPie(){
