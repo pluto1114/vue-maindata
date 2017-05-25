@@ -21,6 +21,35 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script type="text/javascript">
+    (function validBrowser(){ 
+        var u_agent = navigator.userAgent; 
+        console.log(u_agent)
+        var browser_name='Failed to identify the browser'; 
+        if(u_agent.indexOf('Firefox')>-1){ 
+            browser_name='Firefox'; 
+        }else if(u_agent.indexOf('Chrome')>-1){ 
+            browser_name='Chrome'; 
+        }else if(u_agent.indexOf('Edge')>-1){ 
+            browser_name='Edge'; 
+        }else if(u_agent.indexOf('Trident')>-1&&(u_agent.indexOf('rv:11')>-1 || u_agent.indexOf('rv:10')>-1)){ 
+            browser_name='IE11(10)'; 
+        }else if(u_agent.indexOf('MSIE')>-1&&u_agent.indexOf('Trident')>-1){ 
+            browser_name='IE(8-10)'; 
+        }else if(u_agent.indexOf('MSIE')>-1){ 
+            browser_name='IE(6-7)'; 
+        }else if(u_agent.indexOf('Opera')>-1){ 
+            browser_name='Opera'; 
+        }else{ 
+            browser_name+=',info:'+u_agent; 
+        } 
+        console.log(browser_name)
+        if(browser_name=='IE(8-10)' || browser_name=='IE(6-7)'){
+            alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
+        }
+        
+    })() 
+    </script>
     <script type="text/javascript" src="./static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="./static/js/lodash.js"></script>
     <script type="text/javascript" src="./static/js/echarts.min.js"></script>

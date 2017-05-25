@@ -16,6 +16,7 @@ import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 import StoreIndex from '@/views/store/StoreIndex.vue'
 import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
 
+import ProjectIndex from '@/views/project/ProjectIndex.vue'
 import ProjectOne from '@/views/project/ProjectOne.vue'
 
 import RescIndex from '@/views/resource/RescIndex.vue'
@@ -95,6 +96,11 @@ export default new Router({
         auth: true,
         children: [
             {
+                path: '',
+                component: ProjectIndex,
+                name: 'ProjectIndex',
+                description: '项目'
+            },{
                 path: 'one',
                 component: ProjectOne,
                 name: 'ProjectOne',

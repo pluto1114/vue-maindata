@@ -21,7 +21,7 @@
                     <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
                     <div class="col-md-9 total">
                         <div class="title">全区库存物资总额</div>
-                        <div class="number">{{infoMap.totalValue}}</div>
+                        <div class="number">{{infoMap.totalValue|money}}</div>
                     </div>
                 </div>
                 <div class="row store-year">
@@ -46,26 +46,142 @@
 
             <div class="col-md-3 goodstype-order">                
                 <h3>物资类型排行</h3>
-                <ol>
+                <transition name="fade"  mode="out-in">
+                <ol v-if="goodstypeOrderBy.length>0">
                     <li v-for="x of goodstypeOrderBy">{{x.name}}<span>{{parseInt(x.value/10000)}}万</span></li>
                 </ol>                
-            </div>
-            
-            
+                </transition>
+            </div>    
         </div>
 
-        <div class="row compare">
-            <div class="col-md-2">
-                <div class="list-group">
-                  <button type="button"  @click="handleCompSel(1)" class="list-group-item" :class="{active:1==comp_id}">
-                    <i class="fa fa-map-o" aria-hidden="true"></i>全区库存
-                  </button>
-                  <button type="button" v-for="x of cities" @click="handleCompSel(x.id)" class="list-group-item" :class="{active:x.id==comp_id}"><i class="fa fa-info-circle" aria-hidden="true"></i>{{x.name}}库存</button>
-                 
+        <div class="row age">
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <i class="fa fa-anchor fa-2x pull-left"></i>
+                    <div class="pull-left">
+                        <div class="title">库龄90天以内</div>
+                        <div class="total">{{totals[0]|money}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" :style="{width: percents[0]+'%'}">
+                            {{percents[0]|fix(1)}}%
+                        </div>
+                    </div>
+                  </div>
                 </div>
+                <ul class="list-group" v-show="showD">
+                  <li class="list-group-item" v-for="(x,index) of d90">
+                    <span class="pull-right">{{x.value|money}}</span>
+                    <span>{{x.name}}</span>
+                  </li>
+                </ul>
             </div>
-            <div class="col-md-10">
-                <Chart width="100%" height="500px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <i class="fa fa-anchor fa-2x pull-left"></i>
+                    <div class="pull-left">
+                        <div class="title">库龄90到180天</div>
+                        <div class="total">{{totals[1]|money}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" :style="{width: percents[1]+'%'}">
+                            {{percents[1]|fix(1)}}%
+                        </div>
+                    </div>
+                  </div> 
+                </div>
+                <ul class="list-group" v-show="showD">
+                  <li class="list-group-item" v-for="(x,index) of d180">
+                    <span class="pull-right">{{x.value | money}}</span>
+                    <span>{{x.name}}</span>
+                  </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <i class="fa fa-anchor fa-2x pull-left"></i>
+                    <div class="pull-left">
+                        <div class="title">库龄180到360天</div>
+                        <div class="total">{{totals[2]|money}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" :style="{width: percents[2]+'%'}">
+                            {{percents[2]|fix(1)}}%
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <ul class="list-group" v-show="showD">
+                  <li class="list-group-item" v-for="(x,index) of d360">
+                    <span class="pull-right">{{x.value | money}}</span>
+                    <span>{{x.name}}</span>
+                  </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <i class="fa fa-anchor fa-2x pull-left"></i>
+                    <div class="pull-left">
+                        <div class="title">库龄360天以上</div>
+                        <div class="total">{{totals[3]|money}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" :style="{width: percents[3]+'%'}">
+                            {{percents[3]|fix(1)}}%
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <ul class="list-group" v-show="showD">
+                  <li class="list-group-item" v-for="(x,index) of d360up">
+                    <span class="pull-right">{{x.value | money}}</span>
+                    <span>{{x.name}}</span>
+                  </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-default btn-block" v-if="!showD" @click="showD=true">查看库龄详情</button>
+            </div>
+        </div>
+        
+        <div class="panel panel-default compare">
+            <div class="panel-body">
+            body
+            </div>
+        </div>
+
+        <div class="panel panel-default compare">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="list-group">
+                          <button type="button"  @click="handleCompSel(1)" class="list-group-item" :class="{active:1==comp_id}">
+                            <i class="fa fa-map-o" aria-hidden="true"></i>全区库存
+                          </button>
+                          <button type="button" v-for="x of cities" @click="handleCompSel(x.id)" class="list-group-item" :class="{active:x.id==comp_id}"><i class="fa fa-info-circle" aria-hidden="true"></i>{{x.name}}库存</button>
+                         
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <Chart width="100%" height="550px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -109,6 +225,13 @@ export default {
         optionBar:{},
         optionPie:{},
         goodstypeOrderBy:[],
+        d90:[],
+        d180:[],
+        d360:[],
+        d360up:[],
+        totals:[],
+        percents:[],
+        showD:false,
         optionYear:{},
     }    
   },
@@ -249,11 +372,27 @@ export default {
                 {
                     name: '物资类型',
                     type: 'pie',
-                    radius: [0,'60%'],
+                    radius: ['20%','60%'],
                     data:resp.body.items
                 }
             ]
         }        
+    });
+
+    this.$store.dispatch("store_index_age").then((resp)=>{
+        this.d90=_.sortByOrder(resp.body.itemMap.d90,['value'],['desc']);
+        this.d180=_.sortByOrder(resp.body.itemMap.d180,['value'],['desc']);
+        this.d360=_.sortByOrder(resp.body.itemMap.d360,['value'],['desc']);
+        this.d360up=_.sortByOrder(resp.body.itemMap.d360up,['value'],['desc']);
+
+        this.totals[0]=_.reduce(_.pluck(this.d90,'value'), (total, next)=>total+=next)
+        this.totals[1]=_.reduce(_.pluck(this.d180,'value'), (total, next)=>total+=next)
+        this.totals[2]=_.reduce(_.pluck(this.d360,'value'), (total, next)=>total+=next)
+        this.totals[3]=_.reduce(_.pluck(this.d360up,'value'), (total, next)=>total+=next)
+
+        let total=_.reduce(this.totals,(total,n)=>total+=n)
+        this.totals.forEach((item,i)=>{this.percents[i]=this.totals[i]/total*100});
+
     });
 
     this.showCompareHis(1)
@@ -322,7 +461,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-
+@import '../../assets/animate.less';
 .banner{
     border-bottom: 0.2em solid #CC0226;   
     line-height:2.8em;
@@ -364,7 +503,33 @@ export default {
         }
     }
 }
+
+.age{
+    .panel{
+        i{
+            font-size: 2.5em;
+            line-height: 1.8em;
+            margin-right: 0.5em;
+        }
+        .title{
+            opacity: 0.8;
+        }
+        .total{
+            padding: 0.2em 0;
+            font-size: 1.8em;
+        }
+        .progress{
+            margin-top: 0.8em;
+        }
+    }
+    .list-group{
+        .animated; // Initiate animation library
+        .bounceInUp;
+    }
+}
+
 .compare{
+    margin-top: 2em;
     .fa{
         margin-right: 1.5em;
     }

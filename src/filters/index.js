@@ -11,9 +11,13 @@ export function count (arr) {
 export function int (num) {
   return parseInt(num)
 }
+export function fix (num,n) {
+  return parseFloat(num).toFixed(n)
+}
 export function money(s,n) {  
     n = n > 0 && n <= 20 ? n : 2;  
-    var s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";  
+    s=(s==null?0:s);
+    s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";  
     var l = s.split(".")[0].split("").reverse()
     let r = s.split(".")[1];  
     var t = "";  

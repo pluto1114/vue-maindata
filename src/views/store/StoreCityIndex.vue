@@ -264,7 +264,7 @@ export default {
                     {
                         name: '物资类型',
                         type: 'pie',
-                        radius: [0,'60%'],
+                        radius: ['20%','60%'],
                         data:resp.body.items
                     }
                 ]

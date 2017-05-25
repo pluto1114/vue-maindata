@@ -61,7 +61,7 @@ export default {
     return {
         menus:[
             {name:"库存物资分析",to:"/store"},
-            {name:"工程项目分析",to:"/project/one"},
+            {name:"工程项目分析",to:"/project"},
             {name:"营销物资分析",to:"/"},
             {name:"固网终端分析",to:"/resource/terminalIndex"},
             {name:"运维物资分析",to:"/resource"},

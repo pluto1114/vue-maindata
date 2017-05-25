@@ -56,12 +56,26 @@ function isDesktop () {
 <style lang="less" scoped>
 
 a{ 
-  
+  transition: all .1s;
   &:hover{
     padding-bottom:0.28em; 
-    border-bottom: 0px solid;
+    border-bottom: 2px solid;
+    cursor:pointer;
   }
 }
+
+
+.box {
+  display: flex;
+}
+.box-cell-1{
+ flex:1;
+}
+
+.page-info{
+  min-height:700px;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
 }

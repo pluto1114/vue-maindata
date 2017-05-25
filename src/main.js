@@ -7,7 +7,7 @@ import store from './store'
 import MuseUI from 'muse-ui'
 
 import FastClick from 'fastclick'
-import { domain, count, prettyDate,int,money} from './filters'
+import { domain, count, prettyDate,int,fix,money} from './filters'
 
 
 Vue.filter('count', count)
@@ -15,6 +15,7 @@ Vue.filter('domain', domain)
 Vue.filter('prettyDate', prettyDate)
 
 Vue.filter('int', int)
+Vue.filter('fix', fix)
 Vue.filter('money', money)
 
 Vue.use(MuseUI)

@@ -49,25 +49,5 @@ ul li{
   color:white;
   margin-bottom:2em;
 }
-a{ 
-  transition: all .1s;
-  &:hover{
-    padding-bottom:0.28em; 
-    border-bottom: 2px solid;
-    cursor:pointer;
-  }
-}
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s ease;
-}
-.fade-enter, .fade-leave-active {
-  opacity: 0
-}
-.box {
-  display: flex;
-}
-.box-cell-1{
- flex:1;
-}
 </style>

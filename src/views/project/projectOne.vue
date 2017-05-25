@@ -2,7 +2,7 @@
   <div class="index">
     <MyMenu :items="menus" back=true></MyMenu>
     
-    <div class="container" style="min-height:700px;">
+    <div class="container page-info">
 	    <div class="row" v-if="info">
 		    <div class="col-sm-3">
 		    	<div class="panel panel-default">
@@ -13,14 +13,14 @@
 				    {{info.project.name}}
 				  </div>
 				  <ul class="list-group project-info">
-				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>首次采购日期：<span class="">{{info.firstBuyDate | prettyDate}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>最后出库日期：<span class="">{{info.lastOutDate | prettyDate}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>首次采购日期：<span class="">{{info.firstBuyDate|prettyDate}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>最后出库日期：<span class="">{{info.lastOutDate|prettyDate}}</span></li>
 				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>采购单数量：<span class="">{{info.buyCount}}</span></li>
 				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>出库单数量：<span class="">{{info.outCount}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-money"></i>采购总金额：<span class="">{{info.buyAmount | money}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-money"></i>入库总金额：<span class="">{{info.inAmount | money}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-money"></i>出库总金额：<span class="">{{info.outAmount | money}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-money"></i>库存总金额：<span class="">{{info.storeAmount | money}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-money"></i>采购总金额：<span class="">{{info.buyAmount|money}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-money"></i>入库总金额：<span class="">{{info.inAmount|money}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-money"></i>出库总金额：<span class="">{{info.outAmount|money}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-money"></i>库存总金额：<span class="">{{info.storeAmount|money}}</span></li>
 				   
 				  </ul>
 				</div>

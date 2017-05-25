@@ -69,6 +69,7 @@ const myStore = {
   },
   mutations: {
     setCompId(state, n){
+      console.log("myStore")
       state.comp_id=n;
     }
   },
@@ -84,6 +85,10 @@ const myStore = {
     store_index_logic(context,payload){
       let mock={};
       return remote?api(`/api/store/index/logicStore`):Promise.resolve(mock);
+    },
+    store_index_age(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/age`):Promise.resolve(mock);
     },
     store_index_compareHis(context,payload){
       let mock={};
@@ -113,14 +118,23 @@ const project = {
     project_code:'4B013CA0B01001'
   },
   mutations: {
-    setCompId(state, n){
+    setProCompId(state, n){
+      console.log("project")
       state.comp_id=n;
     },
-    setProjectCode(state, n){
+    setProProjectCode(state, n){
       state.project_code=n;
     },
   },
   actions: {
+    project_comp_list(context,payload){
+      let mock={};
+      return remote?api(`/api/project/index`):Promise.resolve(mock);
+    },
+    project_pro_list(context,payload){
+      let mock={};
+      return remote?api(`/api/project/index/list`,{params:{comp_id:context.state.comp_id}}):Promise.resolve(mock);
+    },
     project_info_index(context,payload){
       let mock={};
       return remote?api(`/api/project/one`,{params:{comp_id:context.state.comp_id,project_code:context.state.project_code}}):Promise.resolve(mock);
