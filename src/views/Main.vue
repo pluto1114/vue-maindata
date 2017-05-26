@@ -9,7 +9,7 @@
       </div>
     </div>
     <transition name="fade"  mode="out-in">
-      <router-view class="main-content"></router-view>
+      <router-view class="main-content page-info"></router-view>
     </transition>
     
     <div class="footer">

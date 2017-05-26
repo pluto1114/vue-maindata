@@ -188,6 +188,7 @@ const resource = {
     }
   }
 }
+
 const trace = {
   state: {},
   mutations: {},
@@ -216,6 +217,45 @@ const storeMap = {
     }
   }
 }
+const shop = {
+  state: {},
+  mutations: {},
+  actions: {
+    shop_index_storegoods(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSum`):Promise.resolve(mock);
+    },
+    shop_index_buy(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallOrderSum`):Promise.resolve(mock);
+    },
+    shop_index_in(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStorageSum`):Promise.resolve(mock);
+    },
+    shop_index_out(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallDeliverySum`):Promise.resolve(mock);
+    },
+    shop_city_index_storegoods(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockList`,{params:payload}):Promise.resolve(mock);
+    },
+    shop_city_index_buy(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallOrderList`,{params:payload}):Promise.resolve(mock);
+    },
+    shop_city_index_in(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStorageList`,{params:payload}):Promise.resolve(mock);
+    },
+    shop_city_index_out(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallDeliveryList`,{params:payload}):Promise.resolve(mock);
+    },
+
+  }
+}
 const store = new Vuex.Store({
   modules: {
     moduleA,
@@ -225,7 +265,8 @@ const store = new Vuex.Store({
     project,
     resource,
     trace,
-    storeMap
+    storeMap,
+    shop
   }
 })
 

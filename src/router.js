@@ -22,6 +22,9 @@ import ProjectOne from '@/views/project/ProjectOne.vue'
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
+import ShopIndex from '@/views/shop/ShopIndex.vue'
+import ShopCityIndex from '@/views/shop/ShopCityIndex.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -125,6 +128,24 @@ export default new Router({
                 name: 'TerminalIndex',
                 description: '资源'
             }
+        ]
+    },{
+        path: '/shop',
+        component: Main,
+        description: '商城',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: ShopIndex,
+                name: 'ShopIndex',
+                description: '商城'
+            },{
+                path: 'city/:comp_id/:category_id',
+                component: ShopCityIndex,
+                name: 'ShopCityIndex',
+                description: '商城'
+            },
         ]
     },{
         path: '/storeMap',

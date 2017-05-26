@@ -61,13 +61,14 @@ export default {
     return {
         menus:[
             {name:"库存物资分析",to:"/store"},
+            {name:"商城数据分析",to:"/shop"},
             {name:"工程项目分析",to:"/project"},
             {name:"营销物资分析",to:"/"},
             {name:"固网终端分析",to:"/resource/terminalIndex"},
             {name:"运维物资分析",to:"/resource"},
             {name:"网络资源分析",to:"/resource"},
             {name:"仓库位置信息",to:"/storeMap"},
-            {name:"综合查询",to:"/resource"},
+            // {name:"综合查询",to:"/resource"},
         ],
         optionMap:{},
         optionType:{},
