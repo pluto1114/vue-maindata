@@ -149,7 +149,7 @@ export default {
             series: [{
                 name: '库存',
                 type: 'bar',
-                data: _.pluck(resp.data,'value')
+                data: resp.data
             }]
         };
     });
@@ -167,7 +167,8 @@ export default {
   },
   methods:{
   	handleCityClick(params){
-       
+        console.log(params)
+       this.$router.push({name:'ShopCityIndex','params':{comp_id:params.data.code,category_id:0}})
     },
     handleBuyClick(category_id,comp_id){
        $('#myModalBuy').modal()

@@ -176,10 +176,12 @@
                     </div>
                     <div class="col-md-10">
                         <div class="panel panel-default">
-                            <div class="panel-body">
-                                <Chart width="100%" height="550px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                            <div class="panel-body" style="line-height:2.2em;">
+                                <h4><i class="fa fa-tree"></i>本月入库金额：{{curMonthIn|money}}</h4>
+                                <h4><i class="fa fa-sign-out"></i>本月出库金额：{{curMonthOut|money}}</h4>
                             </div>
                         </div>
+                        <Chart width="100%" height="550px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
                     </div>
                 </div>
             </div>
@@ -233,6 +235,8 @@ export default {
         percents:[],
         showD:false,
         optionYear:{},
+        curMonthIn:0,
+        curMonthOut:0,
     }    
   },
   computed:{
@@ -418,39 +422,50 @@ export default {
     },
     showCompareHis(comp_id){
         this.$store.dispatch("store_index_compareHis",{comp_id:comp_id}).then((resp)=>{
-        this.optionYear = {
-            title: {
-                text: '库存去年同期比较'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['2016','2017']
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    boundaryGap : false,
-                    data : _.pluck(resp.body.itemMap.lastYear,'month')
-                }
-            ],
-            yAxis: [
-                {
-                    type : 'value'
-                }
-            ],
-            series: [{
-                name: '2016',
-                type: 'line',
-                data: _.pluck(resp.body.itemMap.lastYear,'value')
-            },{
-                name: '2017',
-                type: 'line',
-                data: _.pluck(resp.body.itemMap.thisYear,'value')
-            }]
-        }
-    });
+            let thisYear=_.pluck(resp.body.itemMap.thisYear,'value')
+            this.curMonthIn=resp.body.itemMap.curMonthIn
+            this.curMonthOut=resp.body.itemMap.curMonthOut
+            console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
+            console.log(this.curMonthOut-this.curMonthIn)
+            this.optionYear = {
+                title: {
+                    text: '库存去年同期比较'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['2016','2017']
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : _.pluck(resp.body.itemMap.lastYear,'month')
+                    }
+                ],
+                yAxis: [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series: [{
+                    name: '2016',
+                    type: 'line',
+                    data: _.pluck(resp.body.itemMap.lastYear,'value')
+                },{
+                    name: '2017',
+                    type: 'line',
+                    data: thisYear,
+                    markLine : {
+                        data : [
+                            {name:"上月库存",yAxis:thisYear[thisYear.length-2]},
+                            {name:"本月库存",yAxis:thisYear[thisYear.length-1]},
+                        ]
+                    }
+                }]
+            }
+        });
     }
   },
   components:{
@@ -505,6 +520,7 @@ export default {
 }
 
 .age{
+    
     .panel{
         i{
             font-size: 2.5em;
@@ -521,10 +537,31 @@ export default {
         .progress{
             margin-top: 0.8em;
         }
+    
     }
     .list-group{
         .animated; // Initiate animation library
         .bounceInUp;
+    }
+    .col-sm-3:nth-child(1){
+        .list-group{
+            animation-duration: 10ms;
+        }
+    }
+    .col-sm-3:nth-child(2){
+        .list-group{
+            animation-duration: 600ms;
+        }
+    }
+    .col-sm-3:nth-child(3){
+        .list-group{
+            animation-duration: 1200ms;
+        }
+    }
+    .col-sm-3:nth-child(4){
+        .list-group{
+            animation-duration: 1800ms;
+        }
     }
 }
 
