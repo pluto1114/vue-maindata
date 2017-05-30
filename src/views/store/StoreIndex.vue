@@ -389,6 +389,11 @@ export default {
         this.d360=_.sortByOrder(resp.body.itemMap.d360,['value'],['desc']);
         this.d360up=_.sortByOrder(resp.body.itemMap.d360up,['value'],['desc']);
 
+        let none={name:'无',value:0}
+        this.d90=this.d90.length==0?[none]:this.d90;
+        this.d180=this.d180.length==0?[none]:this.d180;
+        this.d360=this.d360.length==0?[none]:this.d360;
+        this.d360up=this.d360up.length==0?[none]:this.d360up;
         this.totals[0]=_.reduce(_.pluck(this.d90,'value'), (total, next)=>total+=next)
         this.totals[1]=_.reduce(_.pluck(this.d180,'value'), (total, next)=>total+=next)
         this.totals[2]=_.reduce(_.pluck(this.d360,'value'), (total, next)=>total+=next)
@@ -402,7 +407,7 @@ export default {
     this.showCompareHis(1)
 
     
-
+    this.$root.$emit("bannerHidden")
     
   },
   methods:{
@@ -427,44 +432,44 @@ export default {
             this.curMonthOut=resp.body.itemMap.curMonthOut
             console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
             console.log(this.curMonthOut-this.curMonthIn)
-            this.optionYear = {
-                title: {
-                    text: '库存去年同期比较'
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['2016','2017']
-                },
-                xAxis : [
-                    {
-                        type : 'category',
-                        boundaryGap : false,
-                        data : _.pluck(resp.body.itemMap.lastYear,'month')
-                    }
-                ],
-                yAxis: [
-                    {
-                        type : 'value'
-                    }
-                ],
-                series: [{
-                    name: '2016',
-                    type: 'line',
-                    data: _.pluck(resp.body.itemMap.lastYear,'value')
-                },{
-                    name: '2017',
-                    type: 'line',
-                    data: thisYear,
-                    markLine : {
-                        data : [
-                            {name:"上月库存",yAxis:thisYear[thisYear.length-2]},
-                            {name:"本月库存",yAxis:thisYear[thisYear.length-1]},
-                        ]
-                    }
-                }]
-            }
+            // this.optionYear = {
+            //     title: {
+            //         text: '库存去年同期比较'
+            //     },
+            //     tooltip: {
+            //         trigger: 'axis'
+            //     },
+            //     legend: {
+            //         data:['2016','2017']
+            //     },
+            //     xAxis : [
+            //         {
+            //             type : 'category',
+            //             boundaryGap : false,
+            //             data : _.pluck(resp.body.itemMap.lastYear,'month')
+            //         }
+            //     ],
+            //     yAxis: [
+            //         {
+            //             type : 'value'
+            //         }
+            //     ],
+            //     series: [{
+            //         name: '2016',
+            //         type: 'line',
+            //         data: _.pluck(resp.body.itemMap.lastYear,'value')
+            //     },{
+            //         name: '2017',
+            //         type: 'line',
+            //         data: thisYear,
+            //         markLine : {
+            //             data : [
+            //                 {name:"上月库存",yAxis:thisYear[thisYear.length-2]},
+            //                 {name:"本月库存",yAxis:thisYear[thisYear.length-1]},
+            //             ]
+            //         }
+            //     }]
+            // }
         });
     }
   },
@@ -477,9 +482,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 @import '../../assets/animate.less';
-.banner{
-    border-bottom: 0.2em solid #CC0226;   
-    line-height:2.8em;
+.index{
+    .animated;
+    scroll-top:100px;
+    // .flipOutY;
 }
 
 .total{ 

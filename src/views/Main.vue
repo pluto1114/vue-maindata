@@ -9,7 +9,7 @@
       </div>
     </div>
     <transition name="fade"  mode="out-in">
-      <router-view class="main-content page-info"></router-view>
+      <router-view class="main-content page-info" id="mainContent"></router-view>
     </transition>
     
     <div class="footer">
@@ -34,7 +34,11 @@ export default {
     }
   },
   mounted () {
-    
+    this.$root.$on("bannerHidden",p=>{
+       $('.main').animate({  
+                    scrollTop: $("#mainContent").offset().top  
+                }, 1000);
+    })
   },
   methods: {
     
@@ -64,7 +68,13 @@ a{
   }
 }
 
-
+.banner{
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+}
+.footer{
+  margin-top: 1.5em;
+}
 .box {
   display: flex;
 }
@@ -94,6 +104,6 @@ a{
 }
 
 .main-content{
-  padding: 1.8em 0;
+  
 }
 </style>
