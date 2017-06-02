@@ -3,8 +3,11 @@
     <div class="container banner">
       <div class="row">
         <div class="col-md-1"><a href="/"><img src="../assets/logo.png" class="logo-img" /></a></div>
-        <div class="col-md-11">
+        <div class="col-md-8">
           <div class="logo-title">内蒙古联通全物资全生命周期信息管理平台</div>
+        </div>
+        <div class="col-md-3">
+          <div class="welcome pull-right">欢迎您使用  {{loginname}}<span class="btn" @click="logout">[退出]</span></div>
         </div>
       </div>
     </div>
@@ -14,7 +17,7 @@
     
     <div class="footer">
       <div class="container">
-      版权所有：联通系统集成内蒙古自治区分公司
+      版权所有：内蒙古联通
       </div>
     </div> 
   </div>
@@ -27,17 +30,17 @@ export default {
   data () {
     const desktop = isDesktop()
     return {
-      open: desktop,
-      docked: desktop,
-      desktop: desktop,
-      title: ''
+      loginname:''
     }
   },
   mounted () {
+    this.$store.dispatch("user_info").then((resp)=>{
+      this.loginname=resp.body.itemMap.loginname
+    })
     this.$root.$on("bannerHidden",p=>{
-       $('.main').animate({  
-                    scrollTop: $("#mainContent").offset().top  
-                }, 1000);
+      
+      $(".banner").slideUp();
+      
     })
   },
   methods: {
@@ -45,6 +48,10 @@ export default {
     
     toIndex(){
       this.$router.push("/");
+    },
+    logout(){
+      window.localStorage.token=null
+      window.location.href="/#/login"
     }
   },
   destroyed () {
@@ -59,29 +66,23 @@ function isDesktop () {
 
 <style lang="less" scoped>
 
-a{ 
-  transition: all .1s;
-  &:hover{
-    padding-bottom:0.28em; 
-    border-bottom: 2px solid;
-    cursor:pointer;
-  }
+a{
+  border:none;
 }
 
 .banner{
   margin-top: 1em;
-  margin-bottom: 1.5em;
+  margin-bottom: 0.5em;
 }
-.footer{
-  margin-top: 1.5em;
+.logo-title{
+  padding-left:30px;
+  padding-top:30px;
+  font-size:1.5em;
 }
-.box {
-  display: flex;
-}
-.box-cell-1{
- flex:1;
-}
+.welcome{
+  padding-top:35px;
 
+}
 .page-info{
   min-height:700px;
 }

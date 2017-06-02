@@ -9,7 +9,7 @@
 				  <div class="panel-heading">
 				    <h3 class="panel-title">项目信息</h3>
 				  </div>
-				  <div class="panel-body">
+				  <div v-if="info.project" class="panel-body">
 				    {{info.project.name}}
 				  </div>
 				  <ul class="list-group project-info">
@@ -58,8 +58,12 @@
 		                                <a @click="handleClickOut(x.code)">{{x.name}}</a>
 		                              </li>
 		                            </ul>
-		                        </div>
+		                        </div> 
+                                <div class="col-sm-4 col-sm-offset-8 control">
+                                    <a class="btn btn-default" role="button" @click="handleClickCompare">交资信息比较</a>
+                                </div>
 		                    </div>
+                           
 		                </div>
 		            </div>
 			    </div>
@@ -222,6 +226,9 @@ export default {
 	    	this.outgoods=resp.body.items          
 	    });
   	},
+    handleClickCompare(){
+
+    },
   	drawPieBuy(){    	
         this.optionPieBuy={
             title: { 

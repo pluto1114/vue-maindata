@@ -26,6 +26,10 @@ const main = {
     login(context,payload){
       return Vue.http.post('/api/login',payload)
     },
+    user_info(context,payload){
+      let mock={};
+      return remote?api('/api/indexInfo/userInfo'):Promise.resolve(mock);
+    },
     main_map(context,payload){
       let mock={};
       return remote?api('/api/indexInfo/map'):Promise.resolve(mock);
@@ -94,6 +98,14 @@ const myStore = {
       let mock={};
       return remote?api(`/api/store/index/compareHis/${payload.comp_id}`):Promise.resolve(mock);
     },
+    store_index_in_amount(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/curMonthInAmount/${payload.comp_id}`):Promise.resolve(mock);
+    },
+    store_index_out_amount(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/curMonthOutAmount/${payload.comp_id}`):Promise.resolve(mock);
+    },
     store_city_index(context,payload){
       let mock={};
       return remote?api(`/api/store/city/index/${payload.comp_id}`):Promise.resolve(mock);
@@ -115,25 +127,50 @@ const myStore = {
 const project = {
   state: {
     comp_id:11,
-    project_code:'4B013CA0B01001'
+    storecomp_code:null,
+    status:null,
+    year:null,
+    project_code:null,
+    project_status_list_data:null
   },
   mutations: {
     setProCompId(state, n){
       console.log("project")
       state.comp_id=n;
     },
+    setProStoreCompCode(state, n){
+      state.storecomp_code=n;
+    },
+    setProStatus(state, n){
+      state.status=n;
+    },
+    setProYear(state, n){
+      state.year=n;
+    },
     setProProjectCode(state, n){
       state.project_code=n;
     },
+    setProStatusListData(state,n){
+      state.project_status_list_data=n
+    }
   },
   actions: {
     project_comp_list(context,payload){
       let mock={};
       return remote?api(`/api/project/index`):Promise.resolve(mock);
     },
-    project_pro_list(context,payload){
+    project_status_list(context,payload){
+      let data=context.state.project_status_list_data;
+      console.log("data",data)
+      return data==null?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectSum`,{params:payload}):Promise.resolve(data);
+    },
+    project_erp_list(context,payload){
       let mock={};
-      return remote?api(`/api/project/index/list`,{params:{comp_id:context.state.comp_id}}):Promise.resolve(mock);
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectList`,{params:payload}):Promise.resolve(mock);
+    },
+    project_erp_one(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProject`,{params:payload}):Promise.resolve(mock);
     },
     project_info_index(context,payload){
       let mock={};
@@ -155,6 +192,7 @@ const project = {
       let mock={};
       return remote?api(`/api/project/one/outlist`,{params:payload}):Promise.resolve(mock);
     },
+    
   }
 }
 const resource = {

@@ -156,11 +156,7 @@
             </div>
         </div>
         
-        <div class="panel panel-default compare">
-            <div class="panel-body">
-            body
-            </div>
-        </div>
+       
 
         <div class="panel panel-default compare">
             <div class="panel-body">
@@ -176,12 +172,12 @@
                     </div>
                     <div class="col-md-10">
                         <div class="panel panel-default">
-                            <div class="panel-body" style="line-height:2.2em;">
-                                <h4><i class="fa fa-tree"></i>本月入库金额：{{curMonthIn|money}}</h4>
-                                <h4><i class="fa fa-sign-out"></i>本月出库金额：{{curMonthOut|money}}</h4>
+                            <div class="panel-body cur-month">
+                                <h4><a @click="handleInAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-tree"></i>本月入库金额：<span class="money" v-if="curMonthIn>-1">{{curMonthIn|money}}</span></h4>
+                                <h4><a @click="handleOutAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-sign-out"></i>本月出库金额：<span class="money" v-if="curMonthIn>-1">{{curMonthOut|money}}</span></h4>
                             </div>
                         </div>
-                        <Chart width="100%" height="550px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                        <Chart width="100%" height="500px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
                     </div>
                 </div>
             </div>
@@ -190,15 +186,20 @@
     
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">物资详情</h4>
           </div>
           <div class="modal-body">
-         
-           
+                <Chart width="550px" height="400px" :option="optionPieMonth" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
+                <ul class="list-group" style="font-size:1.25em;">
+                    <li class="list-group-item" v-for="x of goodstypeMonth">
+                        <span class="pull-right">{{x.value|money}}</span>
+                        <span>{{x.name}}</span>
+                    </li>
+                </ul>
  
           </div>
           <div class="modal-footer">
@@ -237,6 +238,8 @@ export default {
         optionYear:{},
         curMonthIn:0,
         curMonthOut:0,
+        optionPieMonth:{},
+        goodstypeMonth:[]
     }    
   },
   computed:{
@@ -411,6 +414,9 @@ export default {
     
   },
   methods:{
+    handleNormalClick(){
+
+    },
     handleCityClick(params){
         console.log(params)
         let city=_.find(this.cities,{name:params.name});
@@ -418,58 +424,105 @@ export default {
         this.$store.commit("setCompId",city.id);
         this.$router.push({name:"StoreCityIndex",params:{comp_id:city.id}});
     },
-  	handleNormalClick(){
-
+  	handleInAmountClick(comp_id){
+        $('#myModal').modal()
+        this.$store.dispatch("store_index_in_amount",{comp_id}).then((resp)=>{
+            this.optionPieMonth={
+                title: { 
+                    text: '本月入库物资分布',
+                    left:'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                series : [
+                    {
+                        name: '物资类型',
+                        type: 'pie',
+                        radius: ['20%','60%'],
+                        data:resp.body.items
+                    }
+                ]
+            } 
+            this.goodstypeMonth=resp.body.items
+        });
+    },
+    handleOutAmountClick(comp_id){
+        $('#myModal').modal()
+        this.$store.dispatch("store_index_out_amount",{comp_id}).then((resp)=>{
+            this.optionPieMonth={
+                title: { 
+                    text: '本月出库物资分布',
+                    left:'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                series : [
+                    {
+                        name: '物资类型',
+                        type: 'pie',
+                        radius: ['20%','60%'],
+                        data:resp.body.items
+                    }
+                ]
+            } 
+            this.goodstypeMonth=resp.body.items                    
+        });
     },
     handleCompSel(comp_id){
         this.$store.commit("setCompId",comp_id);
         this.showCompareHis(comp_id);
     },
     showCompareHis(comp_id){
+        this.curMonthIn=-1
+        this.curMonthOut=-1
         this.$store.dispatch("store_index_compareHis",{comp_id:comp_id}).then((resp)=>{
             let thisYear=_.pluck(resp.body.itemMap.thisYear,'value')
             this.curMonthIn=resp.body.itemMap.curMonthIn
             this.curMonthOut=resp.body.itemMap.curMonthOut
             console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
             console.log(this.curMonthOut-this.curMonthIn)
-            // this.optionYear = {
-            //     title: {
-            //         text: '库存去年同期比较'
-            //     },
-            //     tooltip: {
-            //         trigger: 'axis'
-            //     },
-            //     legend: {
-            //         data:['2016','2017']
-            //     },
-            //     xAxis : [
-            //         {
-            //             type : 'category',
-            //             boundaryGap : false,
-            //             data : _.pluck(resp.body.itemMap.lastYear,'month')
-            //         }
-            //     ],
-            //     yAxis: [
-            //         {
-            //             type : 'value'
-            //         }
-            //     ],
-            //     series: [{
-            //         name: '2016',
-            //         type: 'line',
-            //         data: _.pluck(resp.body.itemMap.lastYear,'value')
-            //     },{
-            //         name: '2017',
-            //         type: 'line',
-            //         data: thisYear,
-            //         markLine : {
-            //             data : [
-            //                 {name:"上月库存",yAxis:thisYear[thisYear.length-2]},
-            //                 {name:"本月库存",yAxis:thisYear[thisYear.length-1]},
-            //             ]
-            //         }
-            //     }]
-            // }
+            this.optionYear = {
+                title: {
+                    text: '库存去年同期比较'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['2016','2017']
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : _.pluck(resp.body.itemMap.lastYear,'month')
+                    }
+                ],
+                yAxis: [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series: [{
+                    name: '2016',
+                    type: 'line',
+                    data: _.pluck(resp.body.itemMap.lastYear,'value')
+                },{
+                    name: '2017',
+                    type: 'line',
+                    data: thisYear,
+                    markLine : {
+                        data : [
+                            {name:"上月库存",yAxis:thisYear[thisYear.length-2]},
+                            {name:"本月库存",yAxis:thisYear[thisYear.length-1]},
+                        ]
+                    }
+                }]
+            }
         });
     }
   },
@@ -483,9 +536,7 @@ export default {
 <style lang="less" scoped>
 @import '../../assets/animate.less';
 .index{
-    .animated;
-    scroll-top:100px;
-    // .flipOutY;
+   
 }
 
 .total{ 
@@ -517,17 +568,29 @@ export default {
         li{
             line-height: 2em;
             font-size: 1.12em;
+            .animated;
+            .fadeOut;
+            .fadeInUp;
             span{
                 float:right;
             }
-
+            
         }
     }
+    .shown-loop(@n, @i:1) when (@i <= @n) {
+        li:nth-child(@{i}) { 
+          animation-duration: @i*600ms;
+        }
+        .shown-loop(@n, (@i + 1));
+    }
+
+    .shown-loop(10);
 }
 
 .age{
     
     .panel{
+        // background-color:#F0F8FF;
         i{
             font-size: 2.5em;
             line-height: 1.8em;
@@ -546,35 +609,44 @@ export default {
     
     }
     .list-group{
-        .animated; // Initiate animation library
+        .animated;
         .bounceInUp;
     }
-    .col-sm-3:nth-child(1){
-        .list-group{
-            animation-duration: 10ms;
+
+    //定义
+    .shown-loop(@n, @i:1) when (@i <= @n) {
+        .col-sm-3:nth-child(@{i}) {
+            .list-group{
+                animation-duration: @i*600ms;
+            }
         }
+        .shown-loop(@n, (@i + 1));
     }
-    .col-sm-3:nth-child(2){
-        .list-group{
-            animation-duration: 600ms;
-        }
-    }
-    .col-sm-3:nth-child(3){
-        .list-group{
-            animation-duration: 1200ms;
-        }
-    }
-    .col-sm-3:nth-child(4){
-        .list-group{
-            animation-duration: 1800ms;
-        }
-    }
+
+    .shown-loop(4);
+    
 }
 
 .compare{
     margin-top: 2em;
     .fa{
         margin-right: 1.5em;
+    }
+    .list-group{
+        line-height: 2em;
+        .active{
+            background-color: #4CB4A1;
+        }
+    }
+    .cur-month{
+        h4{
+            line-height: 2em;
+            width:18em;
+        }
+        .money{
+            .animated;
+            .fadeInUp;
+        }
     }
 }
 .content{

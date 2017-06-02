@@ -11,18 +11,11 @@
     <link rel="stylesheet" href="./static/css/font-awesome.min.css">
     <link rel="stylesheet" href="./static/css/lazeemenu.css">
     
-	 
-    <style type="text/css">
-      body{
-        font-family: "Microsoft YaHei" ! important;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
     <script type="text/javascript">
-    (function validBrowser(){ 
+    window.onerror=function(){
+    // alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
+    }
+    ;(function validBrowser(){ 
         var u_agent = navigator.userAgent; 
         console.log(u_agent)
         var browser_name='Failed to identify the browser'; 
@@ -42,14 +35,26 @@
             browser_name='Opera'; 
         }else{ 
             browser_name+=',info:'+u_agent; 
-        } 
-        console.log(browser_name)
+        }
+        if(console){ 
+            console.log(browser_name)
+        }
         if(browser_name=='IE(8-10)' || browser_name=='IE(6-7)'){
             alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
         }
-        
-    })() 
+    })()
+    
     </script>
+    <style type="text/css">
+      body{
+        font-family: "Microsoft YaHei" ! important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    
     <script type="text/javascript" src="./static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="./static/js/lodash.js"></script>
     <script type="text/javascript" src="./static/js/echarts.min.js"></script>
@@ -61,7 +66,7 @@
     <script type="text/javascript" src="./static/js/macarons.js"></script>
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/lazeemenu-jquery.js"></script>
-
+   
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MB73XZCnFasx1RpDQRmGFwtR4UmloIZO"></script>
   </body>
 </html>

@@ -30,14 +30,15 @@ function isDesktop () {
 </script>
 
 <style lang="less">
-.logo-img{
+a{ 
+  transition: all .1s;
+  &:hover{
+    padding-bottom:0.28em; 
+    border-bottom: 2px solid;
+    cursor:pointer;
+  }
+}
 
-}
-.logo-title{
-  padding-left:30px;
-  padding-top:30px;
-  font-size:1.5em;
-}
 ul li{
   list-style: none;
 }
@@ -47,7 +48,15 @@ ul li{
   background-size:cover;
   line-height:3em;
   color:white;
+  margin-top: 1.5em;
   margin-bottom:2em;
+}
+
+.box {
+  display: flex;
+}
+.box-cell-1{
+ flex:1;
 }
 
 </style>
