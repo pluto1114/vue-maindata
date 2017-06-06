@@ -15,7 +15,7 @@
 
 export default {
   name: 'my-menu',
-  props:['items','back'],
+  props:['items','back','step'],
   data () {
     return {
     }
@@ -24,7 +24,12 @@ export default {
   	handleRetClick(){
   		console.log('ret')
       $(".banner").slideDown()
-  		this.$router.go(-1)
+      if (this.step) {
+        this.$router.go(this.step)
+      }else{
+    		this.$router.go(-1)
+      }
+      this.$root.$emit("returnLast")
   	}
   }
 }
@@ -39,12 +44,13 @@ a{
   
 }
 .menu{
-  background:url(../assets/red-line.png);
+  //background:url(../assets/red-line.png);
   background-size:cover;
   line-height:3.5em;
-  min-height:48px;
+  //min-height:48px;
   color:white;
-  margin-bottom:2em;
+  position: relative;
+  top:-3.5em;
 }
 
 .shown-loop(@n, @i:1) when (@i <= @n) {
@@ -67,5 +73,8 @@ a{
 .menu-item::before{
     padding-right:20px;
     content: "|";
+}
+.menu-item:nth-child(1)::before{
+    content: "";
 }
 </style>

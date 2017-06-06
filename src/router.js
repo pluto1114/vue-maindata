@@ -18,6 +18,7 @@ import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
 
 import ProjectIndex from '@/views/project/ProjectIndex.vue'
 import ProjectOne from '@/views/project/ProjectOne.vue'
+import ProjectAsset from '@/views/project/asset/ProjectAsset.vue'
 
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
@@ -107,8 +108,16 @@ export default new Router({
                 path: 'one',
                 component: ProjectOne,
                 name: 'ProjectOne',
-                description: '项目'
-            }
+                description: '项目',
+                children:[
+                    {
+                        path: 'asset',
+                        component: ProjectAsset,
+                        name: 'ProjectAsset',
+                        description: '项目'
+                    }
+                ]
+            },
 
         ]
     },{

@@ -5,21 +5,25 @@
         <div class="col-md-1"><a href="/"><img src="../assets/logo.png" class="logo-img" /></a></div>
         <div class="col-md-8">
           <div class="logo-title">内蒙古联通全物资全生命周期信息管理平台</div>
+
         </div>
         <div class="col-md-3">
           <div class="welcome pull-right">欢迎您使用  {{loginname}}<span class="btn" @click="logout">[退出]</span></div>
         </div>
       </div>
     </div>
-    <transition name="fade"  mode="out-in">
+    <div class="menu"></div>
+    <transition :name="slideName"  mode="out-in" @after-enter="afterEnter">
       <router-view class="main-content page-info" id="mainContent"></router-view>
     </transition>
     
-    <div class="footer">
+    <transition name="slide-up"  mode="out-in">
+    <div v-show="footerShow" class="footer">
       <div class="container">
       版权所有：内蒙古联通
       </div>
     </div> 
+    </transition>
   </div>
 </template>
 
@@ -30,7 +34,9 @@ export default {
   data () {
     const desktop = isDesktop()
     return {
-      loginname:''
+      loginname:'',
+      slideName:'slide-1',
+      footerShow:true
     }
   },
   mounted () {
@@ -38,10 +44,16 @@ export default {
       this.loginname=resp.body.itemMap.loginname
     })
     this.$root.$on("bannerHidden",p=>{
-      
       $(".banner").slideUp();
-      
     })
+    this.$root.$on("returnLast",p=>{
+      this.slideName='slide-2'
+      setTimeout(()=>{
+        this.slideName='slide-1'
+      },2000)
+    })
+
+    
   },
   methods: {
     
@@ -52,10 +64,27 @@ export default {
     logout(){
       window.localStorage.token=null
       window.location.href="/#/login"
+    },
+    afterEnter(){
+      this.footerShow=true
     }
   },
   destroyed () {
     
+  },
+  beforeRouteEnter (to, from, next) {
+    
+    next(vm=>{
+      // console.log('before')
+      // let path = window.location.hash
+      // path=path.substring(1);
+      // console.log('routes',vm.$router.options.routes)
+      // console.log('path',path)
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.footerShow=false
+    next()
   }
 }
 
@@ -65,11 +94,25 @@ function isDesktop () {
 </script>
 
 <style lang="less" scoped>
-
+@import '../assets/animate.less';
 a{
   border:none;
 }
-
+.main{
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color:#fff;
+    border-radius:2em;
+    border:1px solid #ccc;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #F90;
+    background-image: -webkit-linear-gradient(45deg,  rgba(255, 255, 255, .4) 25%,  transparent 25%,  transparent 50%,  rgba(255, 255, 255, .4) 50%,  rgba(255, 255, 255, .4) 75%,  transparent 75%,  transparent);
+    border-radius:2em;
+  }
+}
 .banner{
   margin-top: 1em;
   margin-bottom: 0.5em;
@@ -83,6 +126,14 @@ a{
   padding-top:35px;
 
 }
+.menu{
+  background:url(../assets/red-line.png);
+  background-size:cover;
+  line-height:3.5em;
+  min-height:48px;
+  color:white;
+
+}
 .page-info{
   min-height:700px;
 }
@@ -93,17 +144,52 @@ a{
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
-.slide-fade-enter-active {
-  transition: all .5s ease;
+.fade-1-enter-active {
+  .animated;
+  .fadeInRight;
 }
-.slide-fade-leave-active {
-  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+.fade-1-leave-active {
+  .animated;
+  .fadeOutLeft;
 }
+.fade-2-enter-active {
+  .animated;
+  .fadeInLeft;
+}
+.fade-2-leave-active {
+  .animated;
+  .fadeOutRight;
+}
+.slide-1-enter-active {
+  .animated;
+  .slideInRight;
+}
+.slide-1-leave-active {
+  .animated;
+  .slideOutLeft;
+}
+.slide-2-enter-active {
+  .animated;
+  .slideInLeft;
+}
+.slide-2-leave-active {
+  .animated;
+  .slideOutRight;
+}
+.slide-up-enter-active {
+  .animated;
+  .slideInUp;
+}
+.slide-up-leave-active {
+  .animated;
+  .slideOutDown;
+}
+/*
 .slide-fade-enter, .slide-fade-leave-to{
   transform: translateX(20px);
   opacity: 0;
 }
-
+*/
 .main-content{
   
 }

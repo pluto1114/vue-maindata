@@ -72,6 +72,8 @@
                           </time>
                           <aside>
                             <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 {{y.ready_out_count}}{{x.unit}}</p>
+                            <p v-if="y.project_name" class="things">项目名称:{{y.project_name}}</p>
+                            <p v-if="y.follow_comp_name" class="things">施工单位:{{y.follow_comp_name}}</p>
                             <p class="brief"><span class="text-green">需求信息</span></p>
                           </aside>
                         </section>

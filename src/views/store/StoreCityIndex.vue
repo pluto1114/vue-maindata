@@ -3,7 +3,7 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
-        <h2 v-if="infoMap.comp">{{infoMap.comp.name}}</h2>    
+        <h2 class="comp-title" v-if="infoMap.comp">{{infoMap.comp.name}}</h2>    
         <br/>
         <div class="row">
             <div class="col-md-3">
@@ -295,9 +295,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 
-.banner{
-    border-bottom: 0.2em solid #CC0226;   
-    line-height:2.8em;
+.comp-title{
+    margin-top: 0;
 }
 
 .total{ 

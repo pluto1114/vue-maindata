@@ -7,8 +7,8 @@
                 <Chart width="100%" height="600px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
             <div class="col-md-5">
-                <Chart width="100%" height="300px" :option="optionType" theme='macarons' @chartClick="handleMapClick" loading></Chart>
-                <Chart width="100%" height="280px" :option="optionLine" theme='macarons' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="300px" :option="optionType" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="280px" :option="optionLine" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
         </div>
     </div>

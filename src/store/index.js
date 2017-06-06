@@ -131,11 +131,11 @@ const project = {
     status:null,
     year:null,
     project_code:null,
+    linked:false,
     project_status_list_data:null
   },
   mutations: {
     setProCompId(state, n){
-      console.log("project")
       state.comp_id=n;
     },
     setProStoreCompCode(state, n){
@@ -149,6 +149,9 @@ const project = {
     },
     setProProjectCode(state, n){
       state.project_code=n;
+    },
+    setProLinked(state, n){
+      state.linked=n;
     },
     setProStatusListData(state,n){
       state.project_status_list_data=n
@@ -191,6 +194,18 @@ const project = {
     project_info_outlist(context,payload){
       let mock={};
       return remote?api(`/api/project/one/outlist`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_outlist(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/outlistForAsset`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_erplist(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/outlistForAsset`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_assetlist(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAsset`,{params:payload}):Promise.resolve(mock);
     },
     
   }

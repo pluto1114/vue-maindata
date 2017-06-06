@@ -173,8 +173,16 @@
                     <div class="col-md-10">
                         <div class="panel panel-default">
                             <div class="panel-body cur-month">
-                                <h4><a @click="handleInAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-tree"></i>本月入库金额：<span class="money" v-if="curMonthIn>-1">{{curMonthIn|money}}</span></h4>
-                                <h4><a @click="handleOutAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-sign-out"></i>本月出库金额：<span class="money" v-if="curMonthIn>-1">{{curMonthOut|money}}</span></h4>
+                                <h4><a @click="handleInAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-tree"></i>本月入库金额：
+                                <transition name="fade"  mode="out-in">
+                                <span class="money" v-show="curMonthShow">{{curMonthIn|money}}</span>
+                                </transition>
+                                </h4>
+                                <h4><a @click="handleOutAmountClick(comp_id)" class="pull-right">详情</a><i class="fa fa-sign-out"></i>本月出库金额：
+                                <transition name="fade"  mode="out-in">
+                                <span class="money" v-show="curMonthShow">{{curMonthOut|money}}</span>
+                                </transition>
+                                </h4>
                             </div>
                         </div>
                         <Chart width="100%" height="500px" :option="optionYear" theme='macarons' @chartClick="handleNormalClick" loading></Chart>
@@ -238,6 +246,7 @@ export default {
         optionYear:{},
         curMonthIn:0,
         curMonthOut:0,
+        curMonthShow:true,
         optionPieMonth:{},
         goodstypeMonth:[]
     }    
@@ -477,12 +486,13 @@ export default {
         this.showCompareHis(comp_id);
     },
     showCompareHis(comp_id){
-        this.curMonthIn=-1
-        this.curMonthOut=-1
+        this.curMonthShow=false
+        
         this.$store.dispatch("store_index_compareHis",{comp_id:comp_id}).then((resp)=>{
             let thisYear=_.pluck(resp.body.itemMap.thisYear,'value')
             this.curMonthIn=resp.body.itemMap.curMonthIn
             this.curMonthOut=resp.body.itemMap.curMonthOut
+            this.curMonthShow=true
             console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
             console.log(this.curMonthOut-this.curMonthIn)
             this.optionYear = {
@@ -643,10 +653,7 @@ export default {
             line-height: 2em;
             width:18em;
         }
-        .money{
-            .animated;
-            .fadeInUp;
-        }
+        
     }
 }
 .content{
@@ -665,5 +672,11 @@ export default {
     }
 }   
 
+.fade-enter-active,.fade-leave-active {
+  transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
 
 </style>

@@ -54,9 +54,9 @@
                 </div>
               </div>
               <div v-else class="panel panel-info">
-                  <div class="panel-heading">提示信息</div>
+                  <div class="panel-heading">ERP项目分析</div>
                   <div class="panel-body">
-                      <div class="alert alert-info" role="alert">请选择项目所属公司以及项目状态</div>
+                      <Chart width="100%" height="600px" :option="optionBar1" theme='macarons' loading></Chart>
                   </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ export default {
         
         years:[],
         projects:[],
-        
+        optionBar1:{},
     }
     
   },
@@ -96,7 +96,24 @@ export default {
   mounted(){
     
     this.$store.dispatch("project_status_list").then((resp)=>{
-   
+      this.optionBar1={
+          title: {
+              text: '全区项目分布'
+          },
+          tooltip: {},
+          legend: {
+              data:['数量']
+          },
+          xAxis: {
+              data: _.map(resp.data,item=>item.name.substring(0,2))
+          },
+          yAxis: {},
+          series: [{
+              name: '数量',
+              type: 'bar',
+              data: resp.data
+          }]
+      };
       this.$store.commit("setProStatusListData",resp)
       this.$nextTick(()=>{
           $('.menu-1').lazeemenu();

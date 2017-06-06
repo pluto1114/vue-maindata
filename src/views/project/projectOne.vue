@@ -1,6 +1,6 @@
-\<template>
+<template>
   <div class="index">
-    <MyMenu :items="menus" back=true></MyMenu>
+    <MyMenu :items="menus" back=true :step="backStep"></MyMenu>
     
     <div class="container page-info">
 	    <div class="row" v-if="info">
@@ -9,14 +9,16 @@
 				  <div class="panel-heading">
 				    <h3 class="panel-title">项目信息</h3>
 				  </div>
-				  <div v-if="info.project" class="panel-body">
-				    {{info.project.name}}
+				  <div class="panel-body">
+				    {{project.project_name}}
 				  </div>
 				  <ul class="list-group project-info">
-				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>首次采购日期：<span class="">{{info.firstBuyDate|prettyDate}}</span></li>
+            <li class="list-group-item"><i class="fa fa-bell-o"></i>项目编号：<span class="">{{project.project_number}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-user-o"></i>项目经理：<span class="">{{project.pm_person_name.split(",")[0]}}</span></li>
+            <li class="list-group-item"><i class="fa fa-clock-o"></i>项目开始日期：<span class="">{{project.start_date|prettyDate}}</span></li>
 				  	<li class="list-group-item"><i class="fa fa-clock-o"></i>最后出库日期：<span class="">{{info.lastOutDate|prettyDate}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>采购单数量：<span class="">{{info.buyCount}}</span></li>
-				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>出库单数量：<span class="">{{info.outCount}}</span></li>
+				  	<!-- <li class="list-group-item"><i class="fa fa-paper-plane"></i>采购单数量：<span class="">{{info.buyCount}}</span></li>
+				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>出库单数量：<span class="">{{info.outCount}}</span></li> -->
 				  	<li class="list-group-item"><i class="fa fa-money"></i>采购总金额：<span class="">{{info.buyAmount|money}}</span></li>
 				  	<li class="list-group-item"><i class="fa fa-money"></i>入库总金额：<span class="">{{info.inAmount|money}}</span></li>
 				  	<li class="list-group-item"><i class="fa fa-money"></i>出库总金额：<span class="">{{info.outAmount|money}}</span></li>
@@ -59,17 +61,22 @@
 		                              </li>
 		                            </ul>
 		                        </div> 
-                                <div class="col-sm-4 col-sm-offset-8 control">
-                                    <a class="btn btn-default" role="button" @click="handleClickCompare">交资信息比较</a>
-                                </div>
+                                
 		                    </div>
                            
 		                </div>
+                        <div class="row" v-if="project_status=='CLOSED'">
+                            <div class="col-sm-4 col-sm-offset-8 control">
+                                <div class="btn btn-default" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
+                            </div>
+                        </div>
 		            </div>
 			    </div>
 				
 		    </div>	      
 	    </div>
+    
+        <router-view></router-view>
     </div>
     
     <!-- Modal -->
@@ -91,7 +98,7 @@
                             <th>采购单号</th>
                             <th>数量</th>
                             <th>单价</th>
-                           
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +108,7 @@
                             <td>{{x.buyorder_code}}</td>
                             <td>{{x.buy_count}}</td>
                             <td>{{x.no_tax_price}}</td>
-                                                  
+                            <td><a @click="handleItemClick(x.id)">使用详情</a></td>                      
                         </tr>
                     </tbody>
                 </table>
@@ -157,7 +164,80 @@
         </div>
       </div>
     </div>       
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">物资使用详情</h4>
+          </div>
+          <div class="modal-body">
+            <div v-if="loading" class="row center-block"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+            <div v-if="inInfo.length==0 && !loading" class="row">         
+                <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">此物资目前未入库</div>
+                </div>
+            </div>
+            <div v-else class="row">            
+                <div v-for="x of inInfo" class="col-md-12">
+                  <div class="content">
+                    <article>
+                      <h4>{{x.goodstype_descp}}  {{x.recv_count}}{{x.unit}}</h4>
+                      <br/>
+                      <section>
+                        <span class="point-time point-red"></span>
+                        <time :datetime="x.date">
+                          <span>{{x.date}}</span>
+                          <span>{{x.realname}}</span>
+                        </time>
+                        <aside>
+                          <p class="things">{{x.realname}}在 {{x.createtime}} 接收物资 {{x.recv_count}}{{x.unit}}</p>
+                          <p class="brief"><span class="text-red">到货信息</span></p>
+                        </aside>
+                      </section>
+                      <div v-for="y of x.requireInfo">
+                        <section>
+                          <span class="point-time point-green"></span>
+                          <time :datetime="y.date">
+                            <span>{{y.date}}</span>
+                            <span>{{y.realname}}</span>
+                          </time>
+                          <aside>
+                            <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 {{y.ready_out_count}}{{x.unit}}</p>
+                            <p v-if="y.project_name" class="things">项目名称:{{y.project_name}}</p>
+                            <p v-if="y.follow_comp_name" class="things">施工单位:{{y.follow_comp_name}}</p>
+                            <p class="brief"><span class="text-green">需求信息</span></p>
+                          </aside>
+                        </section>
+                        <section v-for="z of y.outInfo">
+                          <span class="point-time point-blue"></span>
+                          <time :datetime="z.date">
+                            <span>{{z.date}}</span>
+                            <span>{{z.realname}}</span>
+                          </time>
+                          <aside>
+                            <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单</p>
+                            <p class="things" v-if="z.order_status=='over'">{{z.storer}}在 {{z.endtime}} 扫码出库</p>
+                            <p class="brief"><span class="text-blue">物资出库</span></p>
+                          </aside>
+                        </section>
+                      </div>
+                      
+                      
+                    </article>
+                  </div>               
+                </div>
+            </div>
  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -173,12 +253,16 @@ export default {
     return {
         menus:[],
         info:null,
+        project:null,
       	pieDataBuy:{},
       	optionPieBuy:{},
       	buygoods:[],
+        inInfo:[],
+        loading:true,
         pieDataOut:{},
         optionPieOut:{},
         outgoods:[],
+        backStep:-1,
     }    
   },
   computed:{
@@ -187,16 +271,22 @@ export default {
     },
     project_code(){
       return this.$store.state.project.project_code;
-    }
+    },
+    project_status(){
+      return this.$store.state.project.status;
+    },
   },
   watch:{
     'pieDataBuy':'drawPieBuy',
     'pieDataOut':'drawPieOut',
   },
   mounted(){
-    
+    // console.log('project_status',this.project_status)
   	this.$store.dispatch("project_info_index").then((resp)=>{
-    	this.info=resp.body.itemMap
+      this.info=resp.body.itemMap
+    });
+    this.$store.dispatch("project_erp_one",{project_id:this.project_code}).then((resp)=>{
+    	this.project=resp.data[0]
     });
     this.$store.dispatch("project_info_buy",{comp_id:this.comp_id,project_code:this.project_code}).then((resp)=>{
     	var items=resp.body.items
@@ -206,12 +296,7 @@ export default {
     	var items=resp.body.items
       	this.pieDataOut=items;        
     });
-    // $('#accordion').on('shown.bs.collapse', (e)=>{
-    //   this.$store.dispatch("project_info_buylist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code:e.target.id}).then((resp)=>{
-    //     var items=resp.body.items
-               
-    //   });
-    // })
+    
   },
   methods:{
   	handleClickBuy(level_one_code){
@@ -220,14 +305,26 @@ export default {
 	    	this.buygoods=resp.body.items          
 	    });
   	},
+    handleItemClick(id){
+        $('#myModal').modal()
+        this.loading=true
+        this.$store.dispatch("trace_buyGoodsInfo",{id:id}).then(resp=>{
+            this.inInfo=resp.body.itemMap.inInfo
+            this.loading=false;         
+        });
+        
+    },
   	handleClickOut(level_one_code){
   		$('#myModalOut').modal()
   		this.$store.dispatch("project_info_outlist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code}).then((resp)=>{
 	    	this.outgoods=resp.body.items          
 	    });
   	},
-    handleClickCompare(){
-
+    handleClickCompare(linked){
+        console.log("click")
+        this.backStep=-2
+        this.$store.commit('setProLinked',linked)
+        this.$router.push({name:'ProjectAsset'})
     },
   	drawPieBuy(){    	
         this.optionPieBuy={
@@ -273,6 +370,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+@import "../../assets/timeline.css";
+
 .project-info{
 	font-size: 1.05em;
 	li{
@@ -283,83 +382,13 @@ export default {
 		}
 	}
 }
-.accordion {
-    a:hover,a:focus{
-        text-decoration: none;
-        outline: none;
-        border-bottom: none;
-    }
-    .panel{
-        border: none;
-        border-top: 1px solid #e8e8e8;
-        box-shadow: none;
-        border-radius: 0;
-        margin: 0;
-        &:last-child{
-            border-bottom: 1px solid #e8e8e8;
-        }
-    }
-    .panel-heading{
-        padding: 0 1em;
-    }
-    .panel-title{
-        a{
-            display: block;
-            font-size: 14px;
-            //font-weight: bold;
-            line-height: 24px;
-            background: #fff;
-            padding: 15px 20px 15px 47px;
-            position: relative;
-            transition: all 0.5s ease 0s;
-        }
-        .value{
-            padding-top: 1.2em;
-        }
-    }
-    .panel-title{
 
-        a:before{
-            content: "\f068";
-            font-family: 'FontAwesome';
-            display: block;
-            width: 30px;
-            height: 30px;
-            line-height: 32px;
-            border-radius: 50%;
-            background: #888bc2;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            position: absolute;
-            top: 25%;
-            left: 0;
-            transition: all 0.3s ease 0s;
-        }
-        a.collapsed:before{
-            content: "\f067";
-        }
-    }
-
-    .panel-body{
-        font-size: 15px;
-        color: #635858;
-        line-height: 25px;
-        border: none;
-        padding: 14px 10px 14px 20px;
-    } 
-
-    .dt-ul{
-        li{
-            padding:0.8em 1.5em;
-        } 
-    }
-}
 .p3{
     border: 1px solid #d5d5d5;
     border-radius: 1em;
     padding: 1em;
     padding-top: 0;
+    margin-bottom: 1.0em;
     > h4{
         padding: 0.3em 1em 0.8em;
         border-bottom: 1px solid #dfdfdf;
