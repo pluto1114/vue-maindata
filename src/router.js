@@ -23,6 +23,8 @@ import ProjectAsset from '@/views/project/asset/ProjectAsset.vue'
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
+import OPIndex from '@/views/operation/OPIndex.vue'
+
 import ShopIndex from '@/views/shop/ShopIndex.vue'
 import ShopCityIndex from '@/views/shop/ShopCityIndex.vue'
 
@@ -136,6 +138,19 @@ export default new Router({
                 component: TerminalIndex,
                 name: 'TerminalIndex',
                 description: '资源'
+            }
+        ]
+    },{
+        path: '/operation',
+        component: Main,
+        description: '运维',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: OPIndex,
+                name: 'OPIndex',
+                description: '运维'
             }
         ]
     },{

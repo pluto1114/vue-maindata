@@ -233,7 +233,7 @@ export default {
         this.$store.dispatch("store_city_index_logicStore",{comp_id:this.comp_id}).then((resp)=>{
             this.optionPie={
                 title: { 
-                    text: '各逻辑库占比(万元)',
+                    text: '各逻辑库占比',
                     left:'right'
                 },
                 tooltip: {
@@ -258,6 +258,12 @@ export default {
                 labelLine: {
                     normal: {
                         show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
                     }
                 },
                 series : [

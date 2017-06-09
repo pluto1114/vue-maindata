@@ -98,21 +98,7 @@ function isDesktop () {
 a{
   border:none;
 }
-.main{
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color:#fff;
-    border-radius:2em;
-    border:1px solid #ccc;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #F90;
-    background-image: -webkit-linear-gradient(45deg,  rgba(255, 255, 255, .4) 25%,  transparent 25%,  transparent 50%,  rgba(255, 255, 255, .4) 50%,  rgba(255, 255, 255, .4) 75%,  transparent 75%,  transparent);
-    border-radius:2em;
-  }
-}
+
 .banner{
   margin-top: 1em;
   margin-bottom: 0.5em;

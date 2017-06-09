@@ -72,7 +72,7 @@ export default {
         })
         // var label = new BMap.Label(this.storesL1[i].name,{offset:new BMap.Size(20,-10)});
         // marker.setLabel(label);
-        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
       }
     }
   },
@@ -84,4 +84,12 @@ export default {
 
 <style scoped>
 #container{height:650px;}
+.mu-radio{
+    min-width:180px;
+
+    .mu-radio-label{
+        font-size: 12px;
+    }
+}
+
 </style>

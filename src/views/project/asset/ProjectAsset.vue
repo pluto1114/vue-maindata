@@ -160,6 +160,9 @@ export default {
     this.$store.dispatch("project_asset_outlist",{comp_id:this.comp_id,project_code:this.project_code}).then((resp)=>{
         this.outgoods=resp.body.items          
     });
+    this.$store.dispatch("project_asset_erplist",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
+        this.erpgoods=resp.data         
+    });
     console.log(this.storecomp_code,this.project_code)
     this.$store.dispatch("project_asset_assetlist",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
         this.assetgoods=resp.data          

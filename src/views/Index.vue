@@ -1,48 +1,48 @@
 <template>
   <div class="index">
     <MyMenu :items="menus"></MyMenu>
-    <div class="container">
+    <div class="container chart-sec">
         <div class="row">
             <div class="col-md-7">
-                <Chart width="100%" height="600px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="580px" :option="optionMap" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
             <div class="col-md-5">
-                <Chart width="100%" height="300px" :option="optionType" theme='infographic' @chartClick="handleMapClick" loading></Chart>
+                <Chart width="100%" height="300px" :option="optionType" theme='infographic' @chartClick="handleClickLink('/store')" loading></Chart>
                 <Chart width="100%" height="280px" :option="optionLine" theme='infographic' @chartClick="handleMapClick" loading></Chart>
             </div>
         </div>
     </div>
     <div class="container order-list">
         <div class="row">
-            <div class="col-md-3 order-1">
+            <div class="col-md-3 order-1" @click="handleClickLink('/store')">
                 <div class="title"><img src="static/img/t-icon-1.fw.png"/>全区物资平台</div>
                 <ul>
                     <li v-for="x of orderInfo1">
-                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
+                        <div><span class="amount">{{x.value|money}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
-            <div class="col-md-3 order-2">
+            <div class="col-md-3 order-2" @click="handleClickLink('/shop')">
                 <div class="title"><img src="static/img/t-icon-2.fw.png"/>全区商城物资</div>
                 <ul>
                     <li v-for="x of orderInfo2">
-                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
+                        <div><span class="amount">{{x.value|money}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
-            <div class="col-md-3 order-3">
+            <div class="col-md-3 order-3" @click="handleClickLink('/project')">
                 <div class="title"><img src="static/img/t-icon-3.fw.png"/>全区工程项目</div>
                 <ul>
                     <li v-for="x of orderInfo3">
-                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
+                        <div><span class="amount">{{x.value|money}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
-            <div class="col-md-3 order-4">
+            <div class="col-md-3 order-4" @click="handleClickLink('/resource/terminalIndex')">
                 <div class="title"><img src="static/img/t-icon-4.fw.png"/>全区固网终端</div>
                 <ul>
                     <li v-for="x of orderInfo4">
-                        <div><span class="amount">{{x.value}}</span>{{x.d_name}}</div>
+                        <div><span class="amount">{{x.value|money}}</span>{{x.d_name}}</div>
                     </li>
                 </ul>
             </div>
@@ -65,7 +65,7 @@ export default {
             {name:"工程项目分析",to:"/project"},
             {name:"营销物资分析",to:"/"},
             {name:"固网终端分析",to:"/resource/terminalIndex"},
-            {name:"运维物资分析",to:"/resource"},
+            {name:"运维物资分析",to:"/operation"},
             {name:"网络资源分析",to:"/resource"},
             {name:"仓库位置信息",to:"/storeMap"},
             // {name:"综合查询",to:"/resource"},
@@ -81,7 +81,6 @@ export default {
     
   },
   mounted(){
-    
   	this.$store.dispatch("main_map").then((resp)=>{
         this.optionMap = {
             title: {
@@ -104,7 +103,12 @@ export default {
                 text: ['高','低'],           // 文本，默认为数值文本
                 calculable: true
             },
-            
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
+                }
+            },
             series: [
                 {
                     name: '当前量',
@@ -156,6 +160,12 @@ export default {
             labelLine: {
                 normal: {
                     show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
                 }
             },
             series : [
@@ -246,11 +256,14 @@ export default {
         console.log(params)
         this.$router.push({name:'IndexCity', params: { comp_id: params.data.comp_id }})
     },
+    handleClickLink(url){
+        this.$router.push(url)
+    },
     toHTML(params,items){
         var arr=_.where(items,{comp_id:params.data.comp_id});
         var str="";
         for (var i = 0;i<arr.length;i++){
-            str+="<br />"+arr[i].d_name+"  "+arr[i].value
+            str+="<br />"+arr[i].d_name+"  "+money(arr[i].value)
         }
         return params.name+str;
         // return params.data.comp_id;
@@ -264,7 +277,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-
+@import '../assets/animate.less';
+.chart-sec{
+    
+}
 .order-list{
     a{
         color:#333;
@@ -275,6 +291,7 @@ export default {
             margin-right: 0.3em;
         }
         margin: 0.5em 0;
+
     }
     .amount{
         float:right;
@@ -293,6 +310,7 @@ export default {
         li:nth-child(2n-1){
             background-color:#D4999F;
         }
+
     }
     .order-2{
         li:nth-child(2n-1){
@@ -310,6 +328,37 @@ export default {
         }
     }
     
+    .col-md-3{
+        .animated;
+        //animation-fill-mode:forwards;
+        &:hover{
+            cursor: pointer;
+            //animation: neon1 1.5s ease-in-out infinite alternate; 
+            .pulse;
+        }
+    }
 }
 
+@-webkit-keyframes neon1 {
+  from {
+    text-shadow: 0 0 10px #fff,
+               0 0 20px  #fff,
+               0 0 30px  #fff,
+               0 0 40px  #FF1177,
+               0 0 70px  #FF1177,
+               0 0 80px  #FF1177,
+               0 0 100px #FF1177,
+               0 0 150px #FF1177;
+  }
+  to {
+    text-shadow: 0 0 5px #fff,
+               0 0 10px #fff,
+               0 0 15px #fff,
+               0 0 20px #FF1177,
+               0 0 35px #FF1177,
+               0 0 40px #FF1177,
+               0 0 50px #FF1177,
+               0 0 75px #FF1177;
+  }
+}
 </style>

@@ -108,6 +108,12 @@ export default {
               data: _.map(resp.data,item=>item.name.substring(0,2))
           },
           yAxis: {},
+          itemStyle: {
+              normal: {
+                  shadowBlur: 20,
+                  shadowColor: 'rgba(0, 0, 0, 0.4)'
+              }
+          },
           series: [{
               name: '数量',
               type: 'bar',

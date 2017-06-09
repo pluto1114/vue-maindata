@@ -333,6 +333,12 @@ export default {
                 left:'right'
             },
             tooltip:{},
+            itemStyle: {
+                normal: {
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
+                }
+            },
             series : [
                 {
                     name: '物资类型',
@@ -350,6 +356,12 @@ export default {
                 left:'right'
             },
             tooltip:{},
+            itemStyle: {
+                normal: {
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
+                }
+            },
             series : [
                 {
                     name: '物资类型',

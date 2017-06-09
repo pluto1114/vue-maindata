@@ -36,7 +36,8 @@ export function api(url,options) {
 	}
     p.then(resp=>{
     	if(debug){
-    		console.log(`resp.data from ${url}`,resp.body);
+    		console.log(`resp.data from ${url}`,opt.params);
+            console.log('%cresult','color:green',resp.body)
     	}
     	if(showStr){
     		console.log(JSON.stringify(resp));
@@ -62,19 +63,21 @@ export function $api(url,options) {
     };
     // window.location.href="http://www.baidu.com"
     var opt = Object.assign(defaultOptions, options);
-    // console.log("opt",opt)
+    //console.log("opt",opt)
 
     
     if(opt.type==="get"){
-       
-        p=$.get(url,opt.params);
-        
+        p=$.get(url,opt.params);       
     }else if(opt.type==="post"){
         p=$.post(url,opt.params);
     }
     p.then(resp=>{
         if(debug){
-            console.log(`resp.data from ${url}`,resp);
+            console.log(`resp.data from ${url}`,opt.params);
+            console.log('%cresult','color:blue',resp.data)
+            if(console.table){
+                // console.table(resp.data)
+            }
         }
         if(showStr){
             console.log(JSON.stringify(resp));

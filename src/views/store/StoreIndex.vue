@@ -289,7 +289,6 @@ export default {
             tooltip : {
                 formatter: "{a} <br/>{b} : {c}%"
             },
-            
             series: [
                 {
                     name: '工程物资',
@@ -336,6 +335,12 @@ export default {
                     type : 'value'
                 }
             ],
+            itemStyle: {
+                normal: {
+                    shadowBlur: 20,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
+                }
+            },
             series : [
                 {
                     name:'库存金额',
@@ -357,7 +362,7 @@ export default {
     this.$store.dispatch("store_index_logic").then((resp)=>{
         this.optionPie={
             title: { 
-                text: '各逻辑库占比(万元)',
+                text: '各逻辑库占比',
                 left:'right'
             },
             tooltip: {
@@ -382,6 +387,12 @@ export default {
             labelLine: {
                 normal: {
                     show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0, 0, 0, 0.4)'
                 }
             },
             series : [
@@ -445,6 +456,12 @@ export default {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
+                },
                 series : [
                     {
                         name: '物资类型',
@@ -468,6 +485,12 @@ export default {
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
                 },
                 series : [
                     {
@@ -645,7 +668,9 @@ export default {
     .list-group{
         line-height: 2em;
         .active{
-            background-color: #4CB4A1;
+            animation-name: greenPulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
         }
     }
     .cur-month{
@@ -678,5 +703,9 @@ export default {
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
-
+@keyframes greenPulse {
+  from { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
+  50% { background-color: #5bc0de; box-shadow: 0 0 18px #8bd0fe; }
+  to { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
+}
 </style>

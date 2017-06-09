@@ -201,7 +201,7 @@ const project = {
     },
     project_asset_erplist(context,payload){
       let mock={};
-      return remote?api(`/api/project/one/outlistForAsset`,{params:payload}):Promise.resolve(mock);
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOut`,{params:payload}):Promise.resolve(mock);
     },
     project_asset_assetlist(context,payload){
       let mock={};
@@ -241,6 +241,21 @@ const resource = {
     }
   }
 }
+const operation = {
+  state: {},
+  mutations: {},
+  actions: {
+    operation_erp_index(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getDtMaterialSum`):Promise.resolve(mock);
+    },
+    operation_erp_detail(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getDtMaterialList`,{params:payload}):Promise.resolve(mock);
+    },
+   
+  }
+}
 
 const trace = {
   state: {},
@@ -252,7 +267,7 @@ const trace = {
     },
     trace_buyGoods(context,payload){
       let mock={};
-      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`,{params:{year:payload.year,month:payload.month}}):Promise.resolve(mock);
+      return remote?api(`/api/trace/buyOrders/buyGoods/${payload.comp_id}`,{params:payload}):Promise.resolve(mock);
     },
     trace_buyGoodsInfo(context,payload){
       let mock={};
@@ -317,6 +332,7 @@ const store = new Vuex.Store({
     myStore,
     project,
     resource,
+    operation,
     trace,
     storeMap,
     shop

@@ -145,7 +145,7 @@ export default {
 
   data () {
     return {
-        menus:[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}],
+        menus:[],
         year:'2016',
         cityItems:[],
         countyItems:[],
