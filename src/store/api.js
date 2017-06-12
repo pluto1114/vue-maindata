@@ -37,7 +37,7 @@ export function api(url,options) {
     p.then(resp=>{
     	if(debug){
     		console.log(`resp.data from ${url}`,opt.params);
-            console.log('%cresult','color:green',resp.body)
+            console.log(`%c${url} result`,'color:green',resp.body)
     	}
     	if(showStr){
     		console.log(JSON.stringify(resp));
@@ -74,7 +74,7 @@ export function $api(url,options) {
     p.then(resp=>{
         if(debug){
             console.log(`resp.data from ${url}`,opt.params);
-            console.log('%cresult','color:blue',resp.data)
+            console.log(`%c${url} result`,'color:blue',resp.data)
             if(console.table){
                 // console.table(resp.data)
             }

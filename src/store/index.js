@@ -106,6 +106,10 @@ const myStore = {
       let mock={};
       return remote?api(`/api/store/index/curMonthOutAmount/${payload.comp_id}`):Promise.resolve(mock);
     },
+    store_index_l2_info(context,payload){
+      let mock={};
+      return remote?api(`/api/store/index/l2Info`):Promise.resolve(mock);
+    },
     store_city_index(context,payload){
       let mock={};
       return remote?api(`/api/store/city/index/${payload.comp_id}`):Promise.resolve(mock);

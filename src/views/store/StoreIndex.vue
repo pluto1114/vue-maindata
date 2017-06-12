@@ -190,6 +190,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="panel panel-default l2">
+            <div class="panel-heading">
+                <h3 class="panel-title">二级库库存信息</h3>
+            </div>
+            <div class="panel-body">
+                <div v-for="(x,index) of l2Info">
+                    <h4>{{x.name}}</h4>
+                    <ul v-for="y of x.l2_depts">
+                        <li>{{y.name}}</li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Modal -->
@@ -228,7 +243,7 @@ export default {
 
   data () {
     return {
-        menus:[{name:"线上资源分析",to:"/third"}],
+        menus:[],
         infoMap:{},
         cities:[],
         optionNormal:{},
@@ -248,7 +263,8 @@ export default {
         curMonthOut:0,
         curMonthShow:true,
         optionPieMonth:{},
-        goodstypeMonth:[]
+        goodstypeMonth:[],
+        l2Info:[]
     }    
   },
   computed:{
@@ -429,6 +445,7 @@ export default {
 
     this.showCompareHis(1)
 
+    this.showL2Info()
     
     this.$root.$emit("bannerHidden")
     
@@ -516,8 +533,8 @@ export default {
             this.curMonthIn=resp.body.itemMap.curMonthIn
             this.curMonthOut=resp.body.itemMap.curMonthOut
             this.curMonthShow=true
-            console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
-            console.log(this.curMonthOut-this.curMonthIn)
+            // console.log(thisYear[thisYear.length-2]-thisYear[thisYear.length-1])
+            // console.log(this.curMonthOut-this.curMonthIn)
             this.optionYear = {
                 title: {
                     text: '库存去年同期比较'
@@ -557,6 +574,11 @@ export default {
                 }]
             }
         });
+    },
+    showL2Info(){
+        this.$store.dispatch("store_index_l2_info").then((resp)=>{
+            this.l2Info=resp.body.items
+        })
     }
   },
   components:{
@@ -679,6 +701,15 @@ export default {
             width:18em;
         }
         
+    }
+}
+.l2{
+    ul{
+        li{
+            float: left;
+            margin-right: 2em;
+            padding: 0.5em;
+        }
     }
 }
 .content{
