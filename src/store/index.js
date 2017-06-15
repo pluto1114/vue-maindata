@@ -126,6 +126,22 @@ const myStore = {
       let mock={};
       return remote?api(`/api/store/city/index/storegoods`,{params:payload}):Promise.resolve(mock);
     },
+    store_county_index(context,payload){
+      let mock={};
+      return remote?api(`/api/store/county/index/${payload.dept_code}`):Promise.resolve(mock);
+    },
+    store_county_index_logicStore(context,payload){
+      let mock={};
+      return remote?api(`/api/store/county/index/logicStore`,{params:payload}):Promise.resolve(mock);
+    },
+    store_county_index_goodstype(context,payload){
+      let mock={};
+      return remote?api(`/api/store/county/index/goodstype/${payload.dept_code}`):Promise.resolve(mock);
+    },
+    store_county_index_storegoods(context,payload){
+      let mock={};
+      return remote?api(`/api/store/county/index/storegoods`,{params:payload}):Promise.resolve(mock);
+    },
   }
 }
 const project = {
@@ -210,6 +226,26 @@ const project = {
     project_asset_assetlist(context,payload){
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAsset`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_outlist_ext(context,payload){
+      let mock={};
+      return remote?api(`/api/project/one/outlistForAsset`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_erplist_ext_1(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpReturn`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_erplist_ext_2(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAdjustOut`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_erplist_ext_3(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAdjustIn`,{params:payload}):Promise.resolve(mock);
+    },
+    project_asset_erplist_ext_4(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpWorkCostGoods`,{params:payload}):Promise.resolve(mock);
     },
     
   }

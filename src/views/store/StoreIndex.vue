@@ -21,7 +21,7 @@
                     <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
                     <div class="col-md-9 total">
                         <div class="title">全区库存物资总额</div>
-                        <div class="number">{{infoMap.totalValue|money}}</div>
+                        <div class="number">￥{{infoMap.totalValue|money}}</div>
                     </div>
                 </div>
                 <div class="row store-year">
@@ -193,13 +193,13 @@
 
         <div class="panel panel-default l2">
             <div class="panel-heading">
-                <h3 class="panel-title">二级库库存信息</h3>
+                <h4>二级库库存信息</h4>
             </div>
             <div class="panel-body">
-                <div v-for="(x,index) of l2Info">
+                <div v-for="(x,index) of l2Info" class="city-one">
                     <h4>{{x.name}}</h4>
                     <ul v-for="y of x.l2_depts">
-                        <li>{{y.name}}</li>
+                        <li @click="handleCountyClick(y.code)">{{y.name}}（{{y.value|money}}）</li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -525,6 +525,9 @@ export default {
         this.$store.commit("setCompId",comp_id);
         this.showCompareHis(comp_id);
     },
+    handleCountyClick(dept_code){
+        this.$router.push({name:'StoreCountyIndex',params:{dept_code}})
+    },
     showCompareHis(comp_id){
         this.curMonthShow=false
         
@@ -704,11 +707,22 @@ export default {
     }
 }
 .l2{
+    .city-one{
+        margin-top: 0.5em;
+        margin-bottom: 2em;
+    }
     ul{
+
         li{
             float: left;
             margin-right: 2em;
             padding: 0.5em;
+            cursor: pointer;
+            color:#228DFF;
+            &:hover{
+                color:#926D9f;
+                animation: neon2 1.5s ease-in-out infinite alternate;
+            }
         }
     }
 }
@@ -738,5 +752,27 @@ export default {
   from { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
   50% { background-color: #5bc0de; box-shadow: 0 0 18px #8bd0fe; }
   to { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
+}
+@keyframes neon2 {
+  from {
+    text-shadow: 0 0 5px #fff,
+               0 0 10px #fff,
+               0 0 15px #fff,
+               0 0 20px #228DFF,
+               0 0 35px #228DFF,
+               0 0 40px #228DFF,
+               0 0 50px #228DFF,
+               0 0 75px #228DFF;
+  }
+  to {
+    text-shadow: 0 0 1px #fff,
+               0 0 5px #fff,
+               0 0 8px #fff,
+               0 0 10px #228DFF,
+               0 0 18px #228DFF,
+               0 0 20px #228DFF,
+               0 0 25px #228DFF,
+               0 0 38px #228DFF;
+  }
 }
 </style>

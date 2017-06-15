@@ -130,51 +130,37 @@
         </div>
     </div>
    
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">资源详情</h4>
-          </div>
-          <div class="modal-body content">
-            <div style="height:630px;overflow-y:scroll;">
-                      
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th style="width:8em;">地域</th>
-                            <th style="width:6em;">资源状态</th>
-                            <th style="width:6em;">资源类型</th>
-                            <th style="width:10em;">所属项目</th>
-                            <th>供应商</th>
-                            <th>包机人</th>
-                            <th>包机人电话</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="x of dtlItems">
-                            <td>{{x.address_info}}</td>
-                            <td>{{x.dev_state}}</td>
-                            <td>{{x.dev_little_type}}</td>
-                            <td>{{x.project_name}}</td>
-                            <td>{{x.vendor}}</td>
-                            <td>{{x.w_name}}</td>                         
-                            <td>{{x.w_phone}}</td>                         
-                        </tr>
-                    </tbody>
-                </table>
-           
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
+    <MyModal :option='modalOption' title="资源详情">
+        <div style="height:630px;overflow-y:scroll;">
+                  
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:8em;">地域</th>
+                        <th style="width:6em;">资源状态</th>
+                        <th style="width:6em;">资源类型</th>
+                        <th style="width:10em;">所属项目</th>
+                        <th>供应商</th>
+                        <th>包机人</th>
+                        <th>包机人电话</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of dtlItems">
+                        <td>{{x.address_info}}</td>
+                        <td>{{x.dev_state}}</td>
+                        <td>{{x.dev_little_type}}</td>
+                        <td>{{x.project_name}}</td>
+                        <td>{{x.vendor}}</td>
+                        <td>{{x.w_name}}</td>                         
+                        <td>{{x.w_phone}}</td>                         
+                    </tr>
+                </tbody>
+            </table>
+       
         </div>
-      </div>
-    </div>
+    </MyModal>
     
     
   </div>
@@ -184,7 +170,7 @@
 
 import MyMenu from '@/components/MyMenu'
 import Chart from '@/components/Chart'
-
+import MyModal from '@/components/MyModal'
 export default {
 
   data () {
@@ -205,7 +191,8 @@ export default {
         pieDataZX:[],
         subPieDataZX:[],
         statusNameZX:"",
-        dtlItems:[]
+        dtlItems:[],
+        modalOption:{}
     }   
   },
   watch:{
@@ -257,7 +244,7 @@ export default {
   },
   methods:{
   	handleTrClick(code1,code2,code3,source){
-        $('#myModal').modal()
+        this.modalOption={visable:true}
         this.$store.dispatch("resource_status_pro_detail",{code1:code1,code2:code2,code3:code3,source:source}).then((resp)=>{ 
             this.dtlItems=resp.data; 
         });
@@ -336,7 +323,7 @@ export default {
 
   },
   components:{
-  	Chart,MyMenu
+  	Chart,MyMenu,MyModal
   }
 }
 </script>
@@ -369,6 +356,11 @@ a:hover,a:focus{
     outline: none;
 }
 #accordion {
+    a:hover,a:focus{
+        text-decoration: none;
+        outline: none;
+        border-bottom: none;
+    }
     .panel{
         border: none;
         border-top: 1px solid #e8e8e8;

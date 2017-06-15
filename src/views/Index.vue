@@ -67,7 +67,7 @@ export default {
             {name:"固网终端分析",to:"/resource/terminalIndex"},
             {name:"运维物资分析",to:"/operation"},
             {name:"网络资源分析",to:"/resource"},
-            {name:"仓库位置信息",to:"/storeMap"},
+            {name:"仓库位置信息",to:"/storeMap",dark:true},
             // {name:"综合查询",to:"/resource"},
         ],
         optionMap:{},

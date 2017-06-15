@@ -60,52 +60,40 @@
         </div>
     </div>
     
-    <!-- Modal -->
-    <div class="modal fade" id="myModalBuy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">采购详情</h4>
-          </div>
-          <div class="modal-body content">
-            <div style="height:430px;overflow-y:scroll;">
-                      
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>商品名称</th>
-                            <th>项目编号</th>
-                            <th>供应商名称</th>
-                            <th>采购需求人</th>
-                            <th>计量单位</th>
-                            <th>购买数量</th>
-                            <th>单价</th>
-                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="x of buygoods">
-                            <td><span v-html="x.comdity_name"></span></td>
-                            <td>{{x.project_code}}</td>
-                            <td>{{x.supplier_name}}</td>
-                            <td>{{x.demand_name}}</td>
-                            <td>{{x.units}}</td>
-                            <td>{{x.buy_number}}</td>
-                            <td>{{x.real_price}}</td>
-                                                  
-                        </tr>
-                    </tbody>
-                </table>
-           
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
+    <MyModal :option='modalOption' title="采购详情">
+        <div style="height:430px;overflow-y:scroll;">
+                  
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>商品名称</th>
+                        <th>项目编号</th>
+                        <th>供应商名称</th>
+                        <th>采购需求人</th>
+                        <th>计量单位</th>
+                        <th>购买数量</th>
+                        <th>单价</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of buygoods">
+                        <td><span v-html="x.comdity_name"></span></td>
+                        <td>{{x.project_code}}</td>
+                        <td>{{x.supplier_name}}</td>
+                        <td>{{x.demand_name}}</td>
+                        <td>{{x.units}}</td>
+                        <td>{{x.buy_number}}</td>
+                        <td>{{x.real_price}}</td>
+                                              
+                    </tr>
+                </tbody>
+            </table>
+       
         </div>
-      </div>
-    </div>  
+    </MyModal>
+
+    
   </div>
 </template>
 
@@ -113,6 +101,7 @@
 
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import MyModal from '@/components/MyModal'
 
 export default {
 
@@ -125,7 +114,8 @@ export default {
         buyInfos:null,
         inValues:null,
         outValues:null,
-        buygoods:[]
+        buygoods:[],
+        modalOption:{}
     }
     
   },
@@ -167,11 +157,13 @@ export default {
   },
   methods:{
   	handleCityClick(params){
+
         console.log(params)
-       this.$router.push({name:'ShopCityIndex','params':{comp_id:params.data.code,category_id:0}})
+        this.$router.push({name:'ShopCityIndex','params':{comp_id:params.data.code,category_id:0}})
+        
     },
     handleBuyClick(category_id,comp_id){
-       $('#myModalBuy').modal()
+        this.modalOption={visable:true,small:true}
         this.$store.dispatch("shop_city_index_buy",{category_id,comp_id}).then((resp)=>{
             this.buygoods=resp.data          
         });
@@ -182,7 +174,7 @@ export default {
 
   },
   components:{
-  	Chart,MyMenu
+  	Chart,MyMenu,MyModal
   }
 }
 </script>

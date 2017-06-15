@@ -79,171 +79,129 @@
         <router-view></router-view>
     </div>
     
-    <!-- Modal -->
-    <div class="modal fade" id="myModalBuy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">采购详情</h4>
-          </div>
-          <div class="modal-body content">
-            <div style="height:430px;overflow-y:scroll;">
-                      
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>物资编号</th>
-                            <th>物资名称</th>
-                            <th>采购单号</th>
-                            <th>数量</th>
-                            <th>单价</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="x of buygoods">
-                            <td>{{x.goodstype_code}}</td>
-                            <td><span v-html="x.goodstype_name"></span></td>
-                            <td>{{x.buyorder_code}}</td>
-                            <td>{{x.buy_count}}</td>
-                            <td>{{x.no_tax_price}}</td>
-                            <td><a @click="handleItemClick(x.id)">使用详情</a></td>                      
-                        </tr>
-                    </tbody>
-                </table>
-           
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
-        </div>
+    <MyModal :option="buyModalOption" title="采购物资详情">
+      <div style="height:430px;overflow-y:scroll;">
+                
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>物资编号</th>
+                      <th>物资名称</th>
+                      <th>采购单号</th>
+                      <th>数量</th>
+                      <th>单价</th>
+                      <th></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-for="x of buygoods">
+                      <td>{{x.goodstype_code}}</td>
+                      <td><span v-html="x.goodstype_name"></span></td>
+                      <td>{{x.buyorder_code}}</td>
+                      <td>{{x.buy_count}}</td>
+                      <td>{{x.no_tax_price}}</td>
+                      <td><a @click="handleItemClick(x.id)">使用详情</a></td>                      
+                  </tr>
+              </tbody>
+          </table>
+     
       </div>
-    </div>  
+    </MyModal>
 
-  	<!-- Modal -->
-    <div class="modal fade" id="myModalOut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">出库详情</h4>
-          </div>
-          <div class="modal-body content">
-            <div style="height:430px;overflow-y:scroll;">
-                      
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>物资编号</th>
-                            <th>物资名称</th>
-                            <th>需求单号</th>
-                            <th>数量</th>
-                            <th>单价</th>
-                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="x of outgoods">
-                            <td>{{x.goodstype_code}}</td>
-                            <td><span v-html="x.goodstype_name"></span></td>
-                            <td>{{x.order_code}}</td>
-                            <td>{{x.ready_out_count}}</td>
-                            <td>{{x.single_price}}</td>
-                                                  
-                        </tr>
-                    </tbody>
-                </table>
-           
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
-        </div>
+  	<MyModal :option="outModalOption" title="出库物资详情">
+      <div style="height:430px;overflow-y:scroll;">
+                
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>物资编号</th>
+                      <th>物资名称</th>
+                      <th>需求单号</th>
+                      <th>数量</th>
+                      <th>单价</th>
+                     
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-for="x of outgoods">
+                      <td>{{x.goodstype_code}}</td>
+                      <td><span v-html="x.goodstype_name"></span></td>
+                      <td>{{x.order_code}}</td>
+                      <td>{{x.ready_out_count}}</td>
+                      <td>{{x.single_price}}</td>
+                                            
+                  </tr>
+              </tbody>
+          </table>
+     
       </div>
-    </div>       
+    </MyModal>     
     
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">物资使用详情</h4>
+    <MyModal :option="useModalOption" title="使用物资详情" small>
+      <div v-if="loading" class="row center-block"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+      <div v-if="inInfo.length==0 && !loading" class="row">         
+          <div class="col-md-12">
+            <div class="alert alert-danger" role="alert">此物资目前未入库</div>
           </div>
-          <div class="modal-body">
-            <div v-if="loading" class="row center-block"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
-            <div v-if="inInfo.length==0 && !loading" class="row">         
-                <div class="col-md-12">
-                  <div class="alert alert-danger" role="alert">此物资目前未入库</div>
-                </div>
-            </div>
-            <div v-else class="row">            
-                <div v-for="x of inInfo" class="col-md-12">
-                  <div class="content">
-                    <article>
-                      <h4>{{x.goodstype_descp}}  {{x.recv_count}}{{x.unit}}</h4>
-                      <br/>
-                      <section>
-                        <span class="point-time point-red"></span>
-                        <time :datetime="x.date">
-                          <span>{{x.date}}</span>
-                          <span>{{x.realname}}</span>
-                        </time>
-                        <aside>
-                          <p class="things">{{x.realname}}在 {{x.createtime}} 接收物资 {{x.recv_count}}{{x.unit}}</p>
-                          <p class="brief"><span class="text-red">到货信息</span></p>
-                        </aside>
-                      </section>
-                      <div v-for="y of x.requireInfo">
-                        <section>
-                          <span class="point-time point-green"></span>
-                          <time :datetime="y.date">
-                            <span>{{y.date}}</span>
-                            <span>{{y.realname}}</span>
-                          </time>
-                          <aside>
-                            <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 {{y.ready_out_count}}{{x.unit}}</p>
-                            <p v-if="y.project_name" class="things">项目名称:{{y.project_name}}</p>
-                            <p v-if="y.follow_comp_name" class="things">施工单位:{{y.follow_comp_name}}</p>
-                            <p class="brief"><span class="text-green">需求信息</span></p>
-                          </aside>
-                        </section>
-                        <section v-for="z of y.outInfo">
-                          <span class="point-time point-blue"></span>
-                          <time :datetime="z.date">
-                            <span>{{z.date}}</span>
-                            <span>{{z.realname}}</span>
-                          </time>
-                          <aside>
-                            <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单</p>
-                            <p class="things" v-if="z.order_status=='over'">{{z.storer}}在 {{z.endtime}} 扫码出库</p>
-                            <p class="brief"><span class="text-blue">物资出库</span></p>
-                          </aside>
-                        </section>
-                      </div>
-                      
-                      
-                    </article>
-                  </div>               
-                </div>
-            </div>
- 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
-        </div>
       </div>
-    </div>
+      <div v-else class="row">            
+          <div v-for="x of inInfo" class="col-md-12">
+            <div class="content">
+              <article>
+                <h4>{{x.goodstype_descp}}  {{x.recv_count}}{{x.unit}}</h4>
+                <br/>
+                <section>
+                  <span class="point-time point-red"></span>
+                  <time :datetime="x.date">
+                    <span>{{x.date}}</span>
+                    <span>{{x.realname}}</span>
+                  </time>
+                  <aside>
+                    <p class="things">{{x.realname}}在 {{x.createtime}} 接收物资 {{x.recv_count}}{{x.unit}}</p>
+                    <p class="brief"><span class="text-red">到货信息</span></p>
+                  </aside>
+                </section>
+                <div v-for="y of x.requireInfo">
+                  <section>
+                    <span class="point-time point-green"></span>
+                    <time :datetime="y.date">
+                      <span>{{y.date}}</span>
+                      <span>{{y.realname}}</span>
+                    </time>
+                    <aside>
+                      <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 {{y.ready_out_count}}{{x.unit}}</p>
+                      <p v-if="y.project_name" class="things">项目名称:{{y.project_name}}</p>
+                      <p v-if="y.follow_comp_name" class="things">施工单位:{{y.follow_comp_name}}</p>
+                      <p class="brief"><span class="text-green">需求信息</span></p>
+                    </aside>
+                  </section>
+                  <section v-for="z of y.outInfo">
+                    <span class="point-time point-blue"></span>
+                    <time :datetime="z.date">
+                      <span>{{z.date}}</span>
+                      <span>{{z.realname}}</span>
+                    </time>
+                    <aside>
+                      <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单</p>
+                      <p class="things" v-if="z.order_status=='over'">{{z.storer}}在 {{z.endtime}} 扫码出库</p>
+                      <p class="brief"><span class="text-blue">物资出库</span></p>
+                    </aside>
+                  </section>
+                </div>
+                
+                
+              </article>
+            </div>               
+          </div>
+      </div>
+
+    </MyModal>
   </div>
 </template>
 
 <script>
 
-import Card from '@/components/Card'
+import MyModal from '@/components/MyModal'
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
 
@@ -263,6 +221,9 @@ export default {
         optionPieOut:{},
         outgoods:[],
         backStep:-1,
+        buyModalOption:{},
+        outModalOption:{},
+        useModalOption:{},
     }    
   },
   computed:{
@@ -300,13 +261,13 @@ export default {
   },
   methods:{
   	handleClickBuy(level_one_code){
-  		$('#myModalBuy').modal()
+  		this.buyModalOption={visable:true}
   		this.$store.dispatch("project_info_buylist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code}).then((resp)=>{
 	    	this.buygoods=resp.body.items          
 	    });
   	},
     handleItemClick(id){
-        $('#myModal').modal()
+        this.useModalOption={visable:true}
         this.loading=true
         this.$store.dispatch("trace_buyGoodsInfo",{id:id}).then(resp=>{
             this.inInfo=resp.body.itemMap.inInfo
@@ -315,7 +276,7 @@ export default {
         
     },
   	handleClickOut(level_one_code){
-  		$('#myModalOut').modal()
+  		this.outModalOption={visable:true}
   		this.$store.dispatch("project_info_outlist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code}).then((resp)=>{
 	    	this.outgoods=resp.body.items          
 	    });
@@ -375,7 +336,7 @@ export default {
     
   },
   components:{
-  	Chart,MyMenu,Card
+  	Chart,MyMenu,MyModal
   }
 }
 </script>

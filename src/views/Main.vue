@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" :class="dark?'dark':'light'">
     <div class="container banner">
       <div class="row">
         <div class="col-md-1"><a href="/"><img src="../assets/logo.png" class="logo-img" /></a></div>
@@ -36,7 +36,8 @@ export default {
     return {
       loginname:'',
       slideName:'slide-1',
-      footerShow:true
+      footerShow:true,
+      dark:false
     }
   },
   mounted () {
@@ -53,7 +54,16 @@ export default {
       },2000)
     })
 
-    
+    this.$root.$on("dark",p=>{
+      this.dark=true
+    })
+    $(window).on('popstate',()=>{
+        console.log("back")
+        var hashLocation = location.hash;
+        if(hashLocation=='#/'){
+          this.dark=false
+        }
+    })
   },
   methods: {
     
@@ -100,7 +110,7 @@ a{
 }
 
 .banner{
-  margin-top: 1em;
+  padding-top: 1em;
   margin-bottom: 0.5em;
 }
 .logo-title{
@@ -176,7 +186,16 @@ a{
   opacity: 0;
 }
 */
-.main-content{
-  
+.main{
+  transition: all 2s ease;
+}
+
+.dark{ 
+  background: rgb(64, 74, 89);
+  color:white;
+}
+.light{
+  background-color: white;
+  color:#333;
 }
 </style>

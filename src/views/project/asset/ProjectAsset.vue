@@ -12,7 +12,7 @@
                     <ul class="list-group">
                     <li class="list-group-item" v-for="(x,index) of outgoods">
                         <span class="badge">{{x.value}}</span>
-                        <span>{{x.name}}</span>
+                        <span v-html="x.name"></span>
                     </li>
                     </ul>
                 </div>
@@ -36,15 +36,18 @@
         <div class="col-sm-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">ERP交资</h3>
+                <h3 class="panel-title">ERP交资</h3>
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                    <li class="list-group-item" v-for="(x,index) of assetgoods">
-                        <span class="badge">{{x.value}}</span>
-                        <span>{{x.name}}</span>
-                    </li>
+                        <li class="list-group-item" v-for="(x,index) of assetgoods">
+                            <span class="badge">{{x.value}}</span>
+                            <span>{{x.name}}</span>
+                        </li>
                     </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="btn btn-default" @click="handleClickAssetX">退库调拨信息</div>
                 </div>
             </div>
         </div>
@@ -63,57 +66,79 @@
                 </div>
             </div>
         </div>
-          
-    </div>
 
-    <div v-else class="row">
-        
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">ERP出库</h3>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                    <li class="list-group-item" v-for="(x,index) of erpgoods">
-                        <span class="badge">{{x.value}}</span>
-                        <span>{{x.name}}</span>
-                    </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">ERP交资</h3>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                    <li class="list-group-item" v-for="(x,index) of assetgoods">
-                        <span class="badge">{{x.value}}</span>
-                        <span>{{x.name}}</span>
-                    </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">资源管理交资</h3>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                    <li class="list-group-item" v-for="(x,index) of resoucegoods">
-                        <span class="badge">{{x.value}}</span>
-                        <span>{{x.name}}</span>
-                    </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-          
+    
+        <MyModal :option="assetModalOption" title="交资补充信息">  
+            <table class="table">
+                <caption>ERP退库明细</caption>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of assetgoodsExt1">
+                        <td>{{x.code}}</td>
+                        <td>{{x.name}}</td>
+                        <td>{{x.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <caption>ERP调拨出明细</caption>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of assetgoodsExt2">
+                        <td>{{x.code}}</td>
+                        <td>{{x.name}}</td>
+                        <td>{{x.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <caption>ERP调拨入明细</caption>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of assetgoodsExt3">
+                        <td>{{x.code}}</td>
+                        <td>{{x.name}}</td>
+                        <td>{{x.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <caption>ERP以工抵料</caption>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of assetgoodsExt4">
+                        <td>{{x.code}}</td>
+                        <td>{{x.name}}</td>
+                        <td>{{x.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+              
+        </MyModal>  
     </div>
  
   
@@ -123,7 +148,7 @@
 
 
 import Chart from '@/components/Chart'
-
+import MyModal from '@/components/MyModal'
 
 export default {
 
@@ -136,6 +161,13 @@ export default {
         erpgoods:[],
         assetgoods:[],
         resoucegoods:[],
+
+        assetModalOption:{},
+
+        assetgoodsExt1:[],
+        assetgoodsExt2:[],
+        assetgoodsExt3:[],
+        assetgoodsExt4:[],
     }    
   },
   computed:{
@@ -165,64 +197,41 @@ export default {
     });
     console.log(this.storecomp_code,this.project_code)
     this.$store.dispatch("project_asset_assetlist",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
-        this.assetgoods=resp.data          
+        resp.data.forEach(item=>{
+            item.value=parseFloat(item.current_units)
+        })
+        let groups=_.groupBy(resp.data,'asset_name')
+        let arr=[]
+        _.forIn(groups,(v,k)=>{
+            arr.push({name:k,value:_.sum(v,'value')})
+        })
+
+        this.assetgoods=arr          
     });
    
   },
   methods:{
-    handleClickBuy(level_one_code){
-        $('#myModalBuy').modal()
-        this.$store.dispatch("project_info_buylist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code}).then((resp)=>{
-            this.buygoods=resp.body.items          
-        });
-    },
-    handleClickOut(level_one_code){
-        $('#myModalOut').modal()
-        this.$store.dispatch("project_info_outlist",{comp_id:this.comp_id,project_code:this.project_code,level_one_code}).then((resp)=>{
-            this.outgoods=resp.body.items          
-        });
-    },
-    handleClickCompare(){
+    handleClickAssetX(){
+        this.assetModalOption={visable:true}
+        this.$store.dispatch("project_asset_erplist_ext_1",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
+            this.assetgoodsExt1=resp.data        
+        })
+        this.$store.dispatch("project_asset_erplist_ext_2",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
+            this.assetgoodsExt2=resp.data        
+        })
+        this.$store.dispatch("project_asset_erplist_ext_3",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
+            this.assetgoodsExt3=resp.data        
+        })
+        this.$store.dispatch("project_asset_erplist_ext_4",{storecomp_code:this.storecomp_code,project_id:this.project_code}).then((resp)=>{
+            this.assetgoodsExt4=resp.data        
+        })
 
     },
-    drawPieBuy(){       
-        this.optionPieBuy={
-            title: { 
-                // text: '全区物资类型分布',
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: ['20%','55%'],
-                    data:this.pieDataBuy
-                }
-            ]
-        }         
-    },
-    drawPieOut(){
-        this.optionPieOut={
-            title: { 
-                // text: '全区物资类型分布',
-                left:'right'
-            },
-            tooltip:{},
-            series : [
-                {
-                    name: '物资类型',
-                    type: 'pie',
-                    radius: ['20%','55%'],
-                    data:this.pieDataOut
-                }
-            ]
-        }        
-    }
+    
     
   },
   components:{
-    Chart
+    Chart,MyModal
   }
 }
 </script>
@@ -230,9 +239,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 @import '../../../assets/animate.less';
+.list-group-item{
+    .badge{
+        margin-left: 0.5em;
+    }
+}
 .panel{
     .animated;
-    .bounceInUp;
+    .zoomInUp;
 }
 
 //定义

@@ -29,7 +29,7 @@
                                         <td>{{city.storegoods.lt180}}</td>
                                         <td>{{city.storegoods.gt180}}</td>
                                     </tr>
-                                    <tr v-if="counties" v-for="x of counties">
+                                    <tr v-if="counties" v-for="x of counties" @click='$router.push({name:"StoreCountyIndex",params:{dept_code:x.code}})'>
                                         <td>{{x.name}}</td>
                                         <td>{{x.storegoods.lt90}}</td>
                                         <td>{{x.storegoods.lt180}}</td>
@@ -397,6 +397,9 @@ export default {
     }
     td{
          padding: 0.8em 0.4em;
+         &:hover{
+            cursor: pointer;
+         }
     }
 }   
 

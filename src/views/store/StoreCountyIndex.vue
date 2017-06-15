@@ -3,10 +3,10 @@
     <MyMenu :items="menus" back=true></MyMenu>
     
     <div class="container">
-        <h2 class="comp-title" v-if="infoMap.comp">{{infoMap.comp.name}}</h2>    
+        <h2 class="comp-title" v-if="infoMap.dept">{{infoMap.dept.name}}</h2>    
         <br/>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="row">
                     <div class="col-md-3"><i class="fa fa-database fa-4x" aria-hidden="true"></i></div>
                     <div class="col-md-9 total">
@@ -15,31 +15,26 @@
                     </div>
                 </div>
                 <div class="row store-year">
-                    <div v-for="(x,index) of infoMap.yearValues" class="col-md-3">
-                        <div class="percent">{{parseInt(x*100/infoMap.totalValue)}}%</div>
-                        <div class="">{{2014+index}}</div>
+                    <div v-for="(x,index) of infoMap.agesAmount" class="col-md-3">
+                        <div class="percent" v-if="infoMap.totalValue>0">{{parseInt(x.amount*100/infoMap.totalValue)}}%</div>
+                        <div class="">{{x.age}}</div>
                     </div>  
                 </div>
                 <div class="row store-amount" style="margin-top:2em;">
-                    <div class="col-md-6">入库年份</div>
+                    <div class="col-md-6">物资库龄</div>
                     <div class="col-md-6">当前余量</div>
                 </div>
-                <div v-for="(x,index) of infoMap.yearValues" class="row store-amount">
-                    <div class="col-md-6">{{2014+index}}</div>
-                    <div class="col-md-6">￥{{(x/10000).toFixed()}}万元</div>                 
+                <div v-for="(x,index) of infoMap.agesAmount" class="row store-amount">
+                    <div class="col-md-6">{{x.age}}天</div>
+                    <div class="col-md-6">￥{{x.amount|money}}元</div>                 
                 </div>
             </div>
 
             <div class="col-md-6">
                 <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handlePieClick" loading></Chart>
             </div>
-
-            <div class="col-md-3 goodstype-order">                
-                <h3>物资类型排行</h3>
-                <ol>
-                    <li v-for="(x,index) of goodstypeOrderBy" v-if="index<10">{{x.name}}<span>{{parseInt(x.value/10000)}}万</span></li>
-                </ol>                
-            </div>
+            <div class="col-md-2"></div>
+            
             
             
         </div>
@@ -67,30 +62,7 @@
         
     </div>
 
-    <div v-if="logicStores.length>0" class="container">
-        <hr />
-        
-        <div class="row">
-            <div class="col-sm-1">逻辑库</div>
-            <div class="col-sm-11">         
-                <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x"  v-model="selLogicStore" labelClass="my-label"/>
-            </div>   
-        </div>
-        <div class="row">
-            <div class="col-sm-1">实体库</div>
-            <div class="col-sm-11">         
-                <mu-radio :label="x" name="store" v-for="x of stores" :nativeValue="x" :key="x"  v-model="selStore"/>
-            </div>   
-        </div>
-        <br/>
-         <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-11">         
-               <button class="btn btn-default" type="button" @click="handleAllStore">所有库</button>
-            </div>   
-        </div>
-        <hr />
-    </div>
+   
     <div class="container">
         <div class="row">
             <transition  name="fade"  mode="out-in">
@@ -108,7 +80,7 @@
                         
                         <th>单位</th>
                         <th>入库数量</th>                  
-                        <th>当前数量</th> 
+                        <th>当前数量</th>  
                         <th>单价</th>  
                     </tr>
                 </thead>
@@ -144,7 +116,7 @@ export default {
     return {
         menus:[],
         infoMap:{},
-        comp_id:this.$route.params["comp_id"] || 2,
+        dept_code:this.$route.params["dept_code"] || 2,
        
         optionPie:{},
         goodstypeOrderBy:[],
@@ -154,52 +126,21 @@ export default {
        
         selTypes:[],
         useable:false,
-        stores:[],
-        logicStores:[],
-        selStore:"",
-        selLogicStore:"",
+        
     }    
   },
   computed:{
-    comp_id(){
-        return this.$store.state.myStore.comp_id
-    }
+    
   },
   watch:{
-    selStore(newVal, oldVal){
-        if (newVal=="") {
-            this.results=this.items;
-        }else{  
-            if(this.selLogicStore==""){    
-                this.results=_.where(this.items,{store_name:newVal});
-            }else{
-                this.results=_.where(this.items,{store_name:newVal,logic_store_name:this.selLogicStore});
-            }
-            console.log(this.selLogicStore,this.results)
-            this.logicStores=_.uniq(_.pluck(this.results, 'logic_store_name'));
-            // this.selLogicStore=0;
-        }
-    },
-    selLogicStore(newVal, oldVal){
-         if (newVal=="") {
-            this.results=this.items;
-        }else{
-            if(this.selStore==""){
-                this.results=_.where(this.items,{logic_store_name:newVal});
-            }else{
-                this.results=_.where(this.items,{logic_store_name:newVal,store_name:this.selStore});
-            }
-            this.stores=_.uniq(_.pluck(this.results, 'store_name'));
-            // this.selStore=0;
-        }
-    },
+   
   },
   mounted(){
 
-    this.$store.dispatch("store_city_index",{comp_id:this.comp_id}).then((resp)=>{
+    this.$store.dispatch("store_county_index",{dept_code:this.dept_code}).then((resp)=>{
         this.infoMap=resp.body.itemMap;
     });
-    this.$store.dispatch("store_city_index_goodstype",{comp_id:this.comp_id}).then((resp)=>{
+    this.$store.dispatch("store_county_index_goodstype",{dept_code:this.dept_code}).then((resp)=>{
         this.goodstypeOrderBy=resp.body.items;
     });
     this.showPie();
@@ -224,19 +165,13 @@ export default {
         this.showItems();
         this.handleAllStore();
     },
-    handleAllStore(){
-        this.selStore="";
-        this.selLogicStore="";
-        this.stores=_.uniq(_.pluck(this.items, 'store_name'));
-        this.logicStores=_.uniq(_.pluck(this.items, 'logic_store_name'));
-        console.log("allStore")
-    },
+    
     showPie(){
-        this.$store.dispatch("store_city_index_logicStore",{comp_id:this.comp_id}).then((resp)=>{
+        this.$store.dispatch("store_county_index_goodstype",{dept_code:this.dept_code}).then((resp)=>{
             this.optionPie={
                 title: { 
-                    text: '各逻辑库占比',
-                    left:'right'
+                    text: '物资类型占比',
+                    left:'left'
                 },
                 tooltip: {
                     trigger: 'item',
@@ -283,11 +218,10 @@ export default {
     },
     showItems(){
 
-        this.$store.dispatch("store_city_index_storegoods",{comp_id:this.comp_id,selTypes:this.selTypes,useable:this.useable}).then((resp)=>{
+        this.$store.dispatch("store_county_index_storegoods",{dept_code:this.dept_code,selTypes:this.selTypes,useable:this.useable}).then((resp)=>{
             this.items=resp.body.items;
             this.results=resp.body.items;
-            this.stores=_.uniq(_.pluck(this.items, 'store_name'));
-            this.logicStores=_.uniq(_.pluck(this.items, 'logic_store_name'));
+            
             
         });
 

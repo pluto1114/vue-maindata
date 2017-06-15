@@ -4,7 +4,7 @@
         <a v-if="back" @click="handleRetClick" class="myback"><i class="fa fa-arrow-left"></i> 返回</a>
         <div style="float:right;" v-if="items.length>0">
             <div v-for="x of items" class="menu-item">
-                <router-link :to="x.to">{{x.name}}</router-link>
+              <a @click="handleLinkClick(x)">{{x.name}}</a>
             </div>
         </div>
     </div>
@@ -30,7 +30,13 @@ export default {
     		this.$router.go(-1)
       }
       this.$root.$emit("returnLast")
-  	}
+  	},
+    handleLinkClick(item){
+      if (item.dark) {
+        this.$root.$emit("dark")
+      }
+      this.$router.push(item.to)
+    }
   }
 }
 </script>
