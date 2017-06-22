@@ -2,17 +2,36 @@ body {
 	-webkit-backface-visibility: hidden;
 }
 
-.animated(@animationDurationTime: 1s; @animationDelayTime: 0s; @animationFillMode: both) {
-	 -webkit-animation-duration: @animationDurationTime;
-	    -moz-animation-duration: @animationDurationTime;
-	      -o-animation-duration: @animationDurationTime;
-	         animation-duration: @animationDurationTime;
-	    -webkit-animation-delay: @animationDelayTime;
-	       -moz-animation-delay: @animationDelayTime;
-	         -o-animation-delay: @animationDelayTime;
-	            animation-delay: @animationDelayTime;
-	-webkit-animation-fill-mode: @animationFillMode;
-	   -moz-animation-fill-mode: @animationFillMode;
-	     -o-animation-fill-mode: @animationFillMode;
-	        animation-fill-mode: @animationFillMode;
+// .animated(@animationDurationTime: 1s; @animationDelayTime: 0s; @animationFillMode: both) {
+// 	 -webkit-animation-duration: @animationDurationTime;
+// 	    -moz-animation-duration: @animationDurationTime;
+// 	      -o-animation-duration: @animationDurationTime;
+// 	         animation-duration: @animationDurationTime;
+// 	    -webkit-animation-delay: @animationDelayTime;
+// 	       -moz-animation-delay: @animationDelayTime;
+// 	         -o-animation-delay: @animationDelayTime;
+// 	            animation-delay: @animationDelayTime;
+// 	-webkit-animation-fill-mode: @animationFillMode;
+// 	   -moz-animation-fill-mode: @animationFillMode;
+// 	     -o-animation-fill-mode: @animationFillMode;
+// 	        animation-fill-mode: @animationFillMode;
+// }
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animated.infinite {
+  animation-iteration-count: infinite;
+}
+
+.animated.hinge {
+  animation-duration: 2s;
+}
+
+.animated.flipOutX,
+.animated.flipOutY,
+.animated.bounceIn,
+.animated.bounceOut {
+  animation-duration: .75s;
 }

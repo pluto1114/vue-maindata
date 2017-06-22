@@ -742,12 +742,7 @@ export default {
     }
 }   
 
-.fade-enter-active,.fade-leave-active {
-  transition: opacity .5s ease;
-}
-.fade-enter, .fade-leave-active {
-  opacity: 0
-}
+
 @keyframes greenPulse {
   from { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
   50% { background-color: #5bc0de; box-shadow: 0 0 18px #8bd0fe; }

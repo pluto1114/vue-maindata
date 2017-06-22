@@ -5,10 +5,10 @@
 </template>
 
 <script>
-var myChart;
+var myChart=null;
 export default {
   name: 'echarts',
-  props:['width','height','option','theme','loading'],
+  props:['width','height','option','theme','loading','actionOption'],
   data () {
     return {
     	styleObject: {
@@ -24,7 +24,8 @@ export default {
     // }
   },
   watch:{
-    'option':'fresh'
+    'option':'fresh',
+    'actionOption':'doAction'
   },
   mounted(){
     
@@ -32,6 +33,9 @@ export default {
   },
   methods:{
     fresh(){
+      // if (this.option==null || !_.has(this.option,'series')) {
+      //   return
+      // }
       Object.assign(this.myOption,this.option)
       if(this.theme){
         myChart = echarts.init(this.$el,this.theme);
@@ -39,8 +43,8 @@ export default {
         myChart = echarts.init(this.$el);
       }
       
+     // _.delay(()=>{
       myChart.setOption(this.myOption)
-      
       if(this.loading!=undefined){
         // console.log("series",this.option.series)
         if(!this.option.series){
@@ -50,15 +54,16 @@ export default {
         }
       }
       myChart.on("click",this.handleClick)
+      //},10)
+      
       
      
     },
-    highlight(){
-      myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          // dataIndex: this.currentIndex
-      });
+    doAction(){
+      if (myChart) {
+        myChart.dispatchAction(this.actionOption);
+      }
+      
     },
     handleClick(params){
       // console.log(params)

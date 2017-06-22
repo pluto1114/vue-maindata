@@ -29,6 +29,8 @@ import OPIndex from '@/views/operation/OPIndex.vue'
 import ShopIndex from '@/views/shop/ShopIndex.vue'
 import ShopCityIndex from '@/views/shop/ShopCityIndex.vue'
 
+import MapIndex from '@/views/dataMap/MapIndex.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -178,16 +180,16 @@ export default new Router({
             },
         ]
     },{
-        path: '/storeMap',
+        path: '/dataMap',
         component: Main,
-        description: '库存',
+        description: '数据地图',
         auth: true,
         children: [
             {
                 path: '',
-                component: StoreMap,
-                name: 'StoreMap',
-                description: '库存'
+                component: MapIndex,
+                name: 'MapIndex',
+                description: '数据地图'
             }
         ]
     },

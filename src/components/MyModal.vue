@@ -1,6 +1,6 @@
 <template>
 <!-- Modal -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" :class="{dark:dark}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" :class="[small?'':'modal-lg']" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -37,6 +37,10 @@ export default {
     small:{
     	type:Boolean,
     	default:false
+    },
+    dark:{
+      type:Boolean,
+      default:false
     }
   },
   data () {
@@ -64,7 +68,7 @@ export default {
   },
   methods:{
   	show(){
-		$(this.$el).modal()
+		  $(this.$el).modal()
   	},
   	hide(){
   		$(this.$el).modal('hide')
@@ -76,5 +80,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 @import '../assets/animate.less';
-
+.dark{
+  .modal-header{
+    .close{
+      color:white;
+      opacity: 0.9;
+    }
+  }
+  .modal-content{
+    background-color: rgba(40, 40, 40, 0.9);
+  }
+  .modal-footer{
+    .btn-default{
+      background-color: rgba(100, 100, 100, 0.8);
+      color:#ddd;
+    }
+  }
+}
 </style>

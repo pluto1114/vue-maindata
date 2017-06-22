@@ -93,7 +93,7 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    this.footerShow=false
+    // this.footerShow=false
     next()
   }
 }
@@ -133,7 +133,15 @@ a{
 .page-info{
   min-height:700px;
 }
-
+.footer{
+  text-align: center;
+  background:url(../assets/bottom-line.png);
+  background-size:cover;
+  line-height:3em;
+  color:white;
+  margin-top: 1.5em;
+  
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease;
 }
@@ -191,11 +199,30 @@ a{
 }
 
 .dark{ 
-  background: rgb(64, 74, 89);
+  background: #404A59;
   color:white;
+  .menu{
+    background-image:none;
+    // background-image: linear-gradient(to bottom,#617586 0,#404A59 100%);
+    background-color: rgba(50, 50, 50, 0.3);
+    box-shadow:inset 0 0 0 1px #617586,inset 0 0 40px 5px rgba(0,0,0,.3),0 0 2px 1px rgba(0,0,0,.5);
+  }
+  .footer{
+    background-image: none;
+    background-color: rgba(50, 50, 50, 0.3);
+    box-shadow:inset 0 0 0 1px #617586,inset 0 0 40px 5px rgba(0,0,0,.3),0 0 2px 1px rgba(0,0,0,.5);
+  }
 }
 .light{
   background-color: white;
   color:#333;
+  .menu{
+    background:url(../assets/red-line.png);
+    background-size:cover;
+  }
+  .footer{
+    background:url(../assets/bottom-line.png);
+    background-size:cover;
+  }
 }
 </style>

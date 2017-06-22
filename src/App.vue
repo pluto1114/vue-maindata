@@ -30,6 +30,7 @@ function isDesktop () {
 </script>
 
 <style lang="less">
+@import 'assets/animate.less';
 a{ 
   transition: all .1s;
   &:hover{
@@ -57,14 +58,17 @@ ul li{
     border-radius:2em;
   }
 }
-.footer{
-  text-align: center;
-  background:url(assets/bottom-line.png);
-  background-size:cover;
-  line-height:3em;
-  color:white;
-  margin-top: 1.5em;
-  margin-bottom:2em;
+
+.fade-enter-active,.fade-leave-active {
+  transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
+.zoom-enter-active{
+  .animated;
+  .zoomIn;
 }
 
 .box {

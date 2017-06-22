@@ -316,13 +316,23 @@ const trace = {
   }
 }
 const storeMap = {
-  state: {},
-  mutations: {},
+  state: {
+    map_index_info:null
+  },
+  mutations: {
+    setMapIndexInfo(state,n){
+      state.map_index_info=n
+    }
+  },
   actions: {
     store_map_index(context,payload){
+      let mock=context.state.map_index_info;
+      return mock==null?api(`/api/storeMap`):Promise.resolve(mock);
+    },
+    store_map_goodstype(context,payload){
       let mock={};
-      return remote?api(`/api/storeMap`):Promise.resolve(mock);
-    }
+      return remote?api(`/api/storeMap/goodstype`,{params:payload}):Promise.resolve(mock);
+    },
   }
 }
 const shop = {
