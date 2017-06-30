@@ -37,7 +37,12 @@ export default {
       loginname:'',
       slideName:'slide-1',
       footerShow:true,
-      dark:false
+     
+    }
+  },
+  computed:{
+    dark(){
+      return this.$store.state.main.dark
     }
   },
   mounted () {
@@ -54,16 +59,16 @@ export default {
       },2000)
     })
 
-    this.$root.$on("dark",p=>{
-      this.dark=true
-    })
+   
     $(window).on('popstate',()=>{
         console.log("back")
         var hashLocation = location.hash;
         if(hashLocation=='#/'){
-          this.dark=false
+          this.$store.commit('setDark',false)
         }
     })
+    // window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+    // window.history.forward(1);
   },
   methods: {
     
@@ -128,7 +133,7 @@ a{
   line-height:3.5em;
   min-height:48px;
   color:white;
-
+  
 }
 .page-info{
   min-height:700px;
@@ -201,6 +206,17 @@ a{
 .dark{ 
   background: #404A59;
   color:white;
+  .logo-img{
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    border-radius: 0.5em;
+    animation-name: bluePulse;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+  .logo-title{
+    margin-left: 1em;
+  }
   .menu{
     background-image:none;
     // background-image: linear-gradient(to bottom,#617586 0,#404A59 100%);
@@ -225,4 +241,10 @@ a{
     background-size:cover;
   }
 }
+@keyframes bluePulse {
+  from { background-color: rgba(250, 240, 230, 0.1); box-shadow: 0 0 9px #333; }
+  50% { background-color: rgba(255, 250, 240, 0.3);; box-shadow: 0 0 18px #4d7e8f; }
+  to { background-color: rgba(250, 240, 230, 0.1); box-shadow: 0 0 9px #333; }
+}
+
 </style>

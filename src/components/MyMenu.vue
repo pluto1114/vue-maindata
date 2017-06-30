@@ -3,8 +3,8 @@
     <div class="container">
         <a v-if="back" @click="handleRetClick" class="myback"><i class="fa fa-arrow-left"></i> 返回</a>
         <div style="float:right;" v-if="items.length>0">
-            <div v-for="x of items" class="menu-item">
-              <a @click="handleLinkClick(x)">{{x.name}}</a>
+            <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''">
+              <a @click="handleLinkClick(x)" >{{x.name}}</a>
             </div>
         </div>
     </div>
@@ -23,6 +23,7 @@ export default {
   methods:{
   	handleRetClick(){
   		console.log('ret')
+      this.$store.commit('setDark',false)
       $(".banner").slideDown()
       if (this.step) {
         this.$router.go(this.step)
@@ -33,7 +34,7 @@ export default {
   	},
     handleLinkClick(item){
       if (item.dark) {
-        this.$root.$emit("dark")
+        this.$store.commit('setDark',true)
       }
       this.$router.push(item.to)
     }
@@ -82,5 +83,11 @@ a{
 }
 .menu-item:nth-child(1)::before{
     content: "";
+}
+
+.flash{
+  .flash;
+  //animation-duration: 5000ms; 
+  animation-iteration-count:3; 
 }
 </style>

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// import json7 from '@/assets/7.json'
 var myChart=null;
 export default {
   name: 'echarts',
@@ -28,7 +29,7 @@ export default {
     'actionOption':'doAction'
   },
   mounted(){
-    
+    // echarts.registerMap('7', json7);
   	this.fresh()
   },
   methods:{
@@ -55,7 +56,7 @@ export default {
       }
       myChart.on("click",this.handleClick)
       //},10)
-      
+      console.log("width",myChart.getWidth())
       
      
     },

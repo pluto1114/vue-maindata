@@ -32,11 +32,12 @@ export function api(url,options) {
             p=Vue.http.get(url);
         }
 	}else if(opt.type==="post"){
+        // console.log("post data")
 		p=Vue.http.post(url,opt.params);
 	}
     p.then(resp=>{
     	if(debug){
-    		console.log(`resp.data from ${url}`,opt.params);
+    		console.log(`resp.data from ${url}`,opt);
             console.log(`%c${url} result`,'color:green',resp.body)
     	}
     	if(showStr){
@@ -63,17 +64,18 @@ export function $api(url,options) {
     };
     // window.location.href="http://www.baidu.com"
     var opt = Object.assign(defaultOptions, options);
-    //console.log("opt",opt)
+    // console.log("opt",opt)
 
     
     if(opt.type==="get"){
         p=$.get(url,opt.params);       
     }else if(opt.type==="post"){
+        console.log("post data")
         p=$.post(url,opt.params);
     }
     p.then(resp=>{
         if(debug){
-            console.log(`resp.data from ${url}`,opt.params);
+            console.log(`resp.data from ${url}`,opt);
             console.log(`%c${url} result`,'color:blue',resp.data)
             if(console.table){
                 // console.table(resp.data)

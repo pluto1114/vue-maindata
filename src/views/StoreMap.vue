@@ -51,7 +51,7 @@ export default {
     //     map.panTo(new BMap.Point(116.409, 39.918));    
     // }, 2000);
 
-    this.$store.dispatch('store_map_index').then(resp=>{
+    this.$store.dispatch('store_map_baidumap').then(resp=>{
       this.storesL1=resp.body.itemMap.storesL1;
       this.storesL2=resp.body.itemMap.storesL2;
       
@@ -61,6 +61,7 @@ export default {
   methods:{
     showMarkers(stores){
       this.map.clearOverlays(); 
+      console.log("length:"+stores.length)
       for (var i = stores.length - 1; i >= 0; i--) {
         var point = new BMap.Point(stores[i].lng, stores[i].lat);
  

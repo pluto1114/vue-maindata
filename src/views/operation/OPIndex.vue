@@ -2,7 +2,30 @@
   <div class="index">
     <MyMenu :items="menus" back=true></MyMenu>
     <div class="container">
-    	
+    	<div class="row">
+            <div class="col-md-6">
+                <Chart width="100%" height="480px" :option="optionBar1" theme='macarons' loading></Chart>
+            </div>
+            <div class="col-md-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>盟市</th>
+                            <th>库存金额</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(x,index) of shopStock">
+                            <td>{{x.name}}</td>
+                            <td>{{x.value|money}}</td>
+                            
+                            <td ><a @click="handleTRClickForShop(x.code)">详情</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>   
+        </div>
     	<div class="row">
             <div class="col-md-12">
                 <table class="table">
@@ -78,11 +101,43 @@
                     </tr>
                 </tbody>
             </table>          
-            
-       
         </div>
     </MyModal>
 
+    <MyModal :option='compModalOptionForShop' title="商城盟市详情">
+    
+        <div style="height:630px;overflow-y:scroll;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>物资编号</th>
+                        <th>物资名称</th>
+                        <th>所属仓库</th>
+                        <th>仓库用途</th>
+                        <th>入库日期</th>
+                        <th>金额</th>
+                        <th>数量</th>
+                        <th>单位</th>
+                        <th>单价</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of shopGoods">
+                        <td>{{x.comdity_code}}</td>
+                        <td>{{x.comdity_name}}</td>
+                        <td>{{x.storage_name}}</td>
+                        <td>{{x.storage_yt}}</td>
+                        <td>{{x.in_date|prettyDate}}</td>
+                        <td>{{x.money|money}}</td>
+                        <td>{{x.number}}</td>
+                        <td>{{x.units}}</td>
+                        <td>{{x.price}}</td>
+                    </tr>
+                </tbody>
+            </table>             
+        </div>
+    </MyModal>
   </div>
 </template>
 
@@ -104,14 +159,16 @@ export default {
         erpCountyGroup:[],
         erpGoods:[],
         compModalOption:{},
-        countyModalOption:{}
+        countyModalOption:{},
+
+        shopStock:[],
+        optionBar1:{},
+        compModalOptionForShop:{},
+        shopGoods:[]
     }
     
   },
   mounted(){
-
-   
-
     this.$store.dispatch("operation_erp_index").then((resp)=>{
         let data=_.sortByAll(resp.data,['comp_name','material_name'])
         let compGroupBy=_.groupBy(data,'comp_name')
@@ -126,11 +183,33 @@ export default {
         console.log(compGroupBy)
         this.erpCompGroup=compGroupBy;
         // this.erpMaterialNames=_.uniq(_.pluck(resp.data,'material_name'))
-        this.erpMaterialNames=compGroupBy[0].groupLabel
-        
+        this.erpMaterialNames=compGroupBy[0].groupLabel    
     });
     
-    
+    this.$store.dispatch("operation_shop_index").then(resp=>{
+        this.shopStock=resp.data
+
+        this.optionBar1={
+            title: {
+                text: '商城库存运维物资(万)'
+            },
+            tooltip: {},
+            legend: {
+                data:['库存']
+            },
+            xAxis: {
+                data: _.map(resp.data,item=>item.name.substring(0,2))
+            },
+            yAxis: {},
+            series: [{
+                name: '库存',
+                type: 'bar',
+                data: _.map(resp.data,item=>{
+                    return {name:item.name,value:(item.value/10000).toFixed(2)}
+                })
+            }]
+        }
+    })
   },
   methods:{
   	
@@ -156,6 +235,12 @@ export default {
         })
         this.erpCountyGroup=countyGroupBy
         this.compModalOption={visable:true}
+    },
+    handleTRClickForShop(comp_id){
+        this.compModalOptionForShop={visable:true}
+        this.$store.dispatch("operation_shop_detail",{comp_id}).then((resp)=>{
+            this.shopGoods=resp.data          
+        });
     },
     groupByAfter(obj,sumField){
         let arr=[]

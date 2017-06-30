@@ -82,6 +82,7 @@ export default {
 @import '../assets/animate.less';
 .dark{
   .modal-header{
+    border-bottom:#999;
     .close{
       color:white;
       opacity: 0.9;
@@ -91,8 +92,9 @@ export default {
     background-color: rgba(40, 40, 40, 0.9);
   }
   .modal-footer{
+    border-top:#999;
     .btn-default{
-      background-color: rgba(100, 100, 100, 0.8);
+      background-color: rgba(80, 80, 80, 0.8);
       color:#ddd;
     }
   }

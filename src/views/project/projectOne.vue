@@ -65,7 +65,7 @@
 		                    </div>
                            
 		                </div>
-                        <div class="row" v-if="project_status=='CLOSED'">
+                        <div class="row">
                             <div class="col-sm-4 col-sm-offset-8 control">
                                 <div class="btn btn-default" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
                             </div>

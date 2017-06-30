@@ -26,6 +26,8 @@ import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 
 import OPIndex from '@/views/operation/OPIndex.vue'
 
+import MarketIndex from '@/views/market/MarketIndex.vue'
+
 import ShopIndex from '@/views/shop/ShopIndex.vue'
 import ShopCityIndex from '@/views/shop/ShopCityIndex.vue'
 
@@ -162,6 +164,19 @@ export default new Router({
             }
         ]
     },{
+        path: '/market',
+        component: Main,
+        description: '营销',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: MarketIndex,
+                name: 'MarketIndex',
+                description: '营销'
+            }
+        ]
+    },{
         path: '/shop',
         component: Main,
         description: '商城',
@@ -190,6 +205,11 @@ export default new Router({
                 component: MapIndex,
                 name: 'MapIndex',
                 description: '数据地图'
+            },{
+                path: '/baidumap',
+                component: StoreMap,
+                name: 'StoreMap',
+                description: '百度地图'
             }
         ]
     },

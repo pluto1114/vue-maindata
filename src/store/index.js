@@ -18,9 +18,13 @@ const moduleA = {
 }
 
 const main = {
-  state: { 
+  state: {
+    dark:false, 
   },
   mutations: {
+    setDark(state,n){
+      state.dark=n
+    }
   },
   actions: {
     login(context,payload){
@@ -55,6 +59,18 @@ const city = {
     city_index(context,payload){
       let mock={};
       return remote?api('/api/city/index/'+payload.comp_id):Promise.resolve(mock);
+    },
+    city_index_shop_stock(context,payload){
+      let mock={};
+      return remote?$api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumChild',{params:payload}):Promise.resolve(mock);
+    },
+    city_index_shop_op(context,payload){
+      let mock={};
+      return remote?$api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYWChild',{params:payload}):Promise.resolve(mock);
+    },
+    city_index_shop_market(context,payload){
+      let mock={};
+      return remote?$api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYXChild',{params:payload}):Promise.resolve(mock);
     },
     city_index_resource(context,payload){
       let mock={};
@@ -191,6 +207,10 @@ const project = {
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectList`,{params:payload}):Promise.resolve(mock);
     },
+    project_erp_search(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectListByQuery`,{params:payload}):Promise.resolve(mock);
+    },
     project_erp_one(context,payload){
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProject`,{params:payload}):Promise.resolve(mock);
@@ -289,11 +309,33 @@ const operation = {
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getDtMaterialSum`):Promise.resolve(mock);
     },
+    operation_shop_index(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYW`):Promise.resolve(mock);
+    },
     operation_erp_detail(context,payload){
       let mock={};
       return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getDtMaterialList`,{params:payload}):Promise.resolve(mock);
     },
+    operation_shop_detail(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockListYW`,{params:payload}):Promise.resolve(mock);
+    },
    
+  }
+}
+const marketing = {
+  state: {},
+  mutations: {},
+  actions: {   
+    marketing_index(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYX`):Promise.resolve(mock);
+    },
+    marketing_index_comp(context,payload){
+      let mock={};
+      return remote?$api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockListYX`,{params:payload}):Promise.resolve(mock);
+    },
   }
 }
 
@@ -332,6 +374,10 @@ const storeMap = {
     store_map_goodstype(context,payload){
       let mock={};
       return remote?api(`/api/storeMap/goodstype`,{params:payload}):Promise.resolve(mock);
+    },
+    store_map_baidumap(context,payload){
+      let mock=context.state.map_index_info;
+      return remote?api(`/api/storeMap/baidumap`):Promise.resolve(mock);
     },
   }
 }
@@ -383,6 +429,7 @@ const store = new Vuex.Store({
     project,
     resource,
     operation,
+    marketing,
     trace,
     storeMap,
     shop

@@ -42,7 +42,22 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="storegoods2">
                         <div class="content">             
-                           商城数据 
+                           <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>商城子库</th>
+                                        <th>库存金额</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="x of shopStock">
+                                        <td>{{x.name}}</td>
+                                        <td>{{x.value|money}}</td>
+                                        <td><a>详情</a></td>
+                                    </tr>
+                                </tbody>
+                            </table> 
                         </div>
                     </div>
                 </div>
@@ -145,22 +160,20 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="width:12em;">地域</th>
-                            <th>物资平台</th>
-                            <th>商城</th>
+                            <th>商城子库</th>
+                            <th>库存金额</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="city">
-                            <td>{{city.name}}</td>
-                            <td>0</td>
-                            <td>0</td>
-                          
+                        <tr v-for="x of shopStockForOp">
+                            <td>{{x.name}}</td>
+                            <td>{{x.value|money}}</td>
+                            <td><a>详情</a></td>
                         </tr>
-                        
                     </tbody>
-                </table>
-                
+                </table> 
+    
             </div>
         </div>
     </div>
@@ -180,21 +193,19 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="width:12em;">地域</th>
-                            <th>物资平台</th>
-                            <th>商城</th>
+                            <th>商城子库</th>
+                            <th>库存金额</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="city">
-                            <td>{{city.name}}</td>
-                            <td>0</td>
-                            <td>0</td>
-                          
+                        <tr v-for="x of shopStockForMarket">
+                            <td>{{x.name}}</td>
+                            <td>{{x.value|money}}</td>
+                            <td><a>详情</a></td>
                         </tr>
-                        
                     </tbody>
-                </table>
+                </table> 
                 
             </div>
         </div>
@@ -326,6 +337,9 @@ export default {
         menus:[],
         counties:null,
         city:null,
+        shopStock:[],
+        shopStockForOp:[],
+        shopStockForMarket:[],
         resource1:[],
         resource2:[],
         resource3:[],
@@ -335,12 +349,23 @@ export default {
    
   },
   mounted(){
-    this.menus=[{name:"终端设备分析",to:`/third/${this.comp_id}`},{name:"线上资源分析",to:"/third"},{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
+    this.menus=[{name:"采购物资跟踪",to:`/trace/month/${this.comp_id}`}];
     console.log("comp_id:"+this.$route.params["comp_id"])
     this.$store.dispatch("city_index",{comp_id:this.comp_id}).then((resp)=>{
         this.counties=resp.body.itemMap.counties;    
         this.city=resp.body.itemMap.city;    
     });
+    this.$store.dispatch("city_index_shop_stock",{comp_id:this.comp_id}).then(resp=>{
+        this.shopStock=resp.data   
+    });
+    this.$store.dispatch("city_index_shop_op",{comp_id:this.comp_id}).then(resp=>{
+        this.shopStockForOp=resp.data   
+    });
+    this.$store.dispatch("city_index_shop_market",{comp_id:this.comp_id}).then(resp=>{
+        this.shopStockForMarket=resp.data   
+    });
+
+
     this.$store.dispatch("city_index_resource",{source:'ZX',comp_id:this.comp_id}).then((resp)=>{
          this.resource1=resp.data;
          setTimeout(()=>{

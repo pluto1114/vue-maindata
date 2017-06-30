@@ -12,7 +12,7 @@
                 <div class="row city-one" v-if="selCity">
             		<div class="col-sm-6">
 				    	<ul v-if="cityStoresL1.length>0">
-				    		<li class="list-group-item box" v-for="x of cityStoresL1" @click="handleClickForStoreL1(x.id)">
+				    		<li class="list-group-item box" v-for="x of cityStoresL1" @click="handleClickForStore(x.id,1)">
 				    			<div class="box-cell-1">{{x.name}}</div>
 				    			<div class="">￥{{x.amount|money}}</div>
 				    		</li>
@@ -20,7 +20,7 @@
             		</div>
             		<div class="col-sm-6">
 				    	<ul>
-				    		<li class="list-group-item box" v-for="x of cityStoresL2" @click="handleClickForStoreL2(x.id)">
+				    		<li class="list-group-item box" v-for="x of cityStoresL2" @click="handleClickForStore(x.id,2)">
 				    			<div class="box-cell-1">{{x.name}}</div>
 				    			<div class="">￥{{x.amount|money}}</div>
 				    		</li>
@@ -30,10 +30,15 @@
             	</div>
             </div>
             
-            <div class="col-md-3 cities" style="padding-top:1em;">
+            <div class="col-md-3 cities">
             	<ul class="list-group" v-if="cities.length>0">
-            	  <li class="list-group-item" @click="handleClickForIndex()">
-					<div class="title">内蒙分公司</div>
+            	  <li class="list-group-item">
+					<div class="title pull-left" @click="handleClickForIndex()">内蒙分公司</div>
+					<div class="descp pull-right box" @click='handleClickForBaiduMap' v-if="storesNum">
+						<div class="l1"><i class="fa fa-tree" title="一级库"></i>{{storesNum.l1}}个</div>
+				  		<div class="l2"><i class="fa fa-tags" title="二级库"></i>{{storesNum.l2}}个</div>
+					</div>
+					<div class="clearfix"></div>
             	  </li>
 				  <li class="list-group-item" v-for="x of cities" @click="handleClickForCity(x.id)">
 				  	<div class="title pull-left">{{x.name}}</div>
@@ -47,21 +52,16 @@
             </div>
         </div>
 
-        <div class="row">
-        	<div class="col-md-9">
-            	        	
-            </div>
-            <div class="col-md-3"></div>
-        </div>
+        
     </div>
-	 <MyModal :option="modalOption" title="仓库物资详情" small>
+	 <MyModal :option="modalOption" title="仓库物资详情" small class="goodstype">
 	 	<div>
-	 		<Chart width="550px" height="400px" :option="optionPie" theme='dark' loading></Chart>
+	 		<Chart width="560px" height="400px" :option="optionPie" theme='dark' loading></Chart>
 	 	</div>
-        <ul class="list-group">
-            <li class="list-group-item" v-for="x of optionPie.series[0].data">
-                <span class="pull-right">{{x.value|money}}</span>
-                <span>{{x.name}}</span>
+        <ul class="list-group ">
+            <li class="list-group-item" v-for="x of pieData">
+                <span class="pull-right">￥{{x.value|money}}</span>
+                <span class="name" @click="handleClickForGoodsType(x.code)">{{x.name}}</span>
             </li>
         </ul>
 	 </MyModal>
@@ -85,8 +85,10 @@ export default {
       optionMap:{},
       showMap:false,
       optionPie:{},
+      pieData:[],
       cityStoresL1:{},
       cityStoresL2:{},
+      storesNum:null,
       modalOption:{}
     }
   },
@@ -95,15 +97,36 @@ export default {
   },
   mounted(){
     this.index()
+    this.$store.commit('setDark',true)
     
-    // this.$root.$emit("bannerHidden")
+    
   },
   methods:{
-    handleMapClick(){
-      
+    handleMapClick(params){
+      console.log(params,params.seriesType)
+      if(params.componentType=='geo'){
+      	let city=_.find(this.cities,{addr_name:params.name})
+      	if(city){
+      		this.selCity=city
+      		this.handleClickForCity(this.selCity.id)
+      	}
+      	return
+      }
+      this.cityStoresL1=_.where(this.storesL1,{comp_id:params.data.comp_id})
+      this.cityStoresL2=_.where(this.storesL2,{comp_id:params.data.comp_id})
+      if(params.seriesType=='effectScatter'){
+      	this.handleClickForStore(params.data.id,1)
+      }
+      if(params.seriesType=='scatter'){
+      	this.handleClickForStore(params.data.id,2)
+      }
     },
     handleClickForIndex(){
     	this.index()
+    },
+    handleClickForBaiduMap(){
+    	this.$store.commit("setDark",false)
+    	this.$router.push({name:"StoreMap"})
     },
     handleClickForCity(id){
     	this.selCity=_.find(this.cities,{id})
@@ -155,6 +178,7 @@ export default {
 		                areaColor: '#2a333d'
 		            }
 		        },
+		        
 		    },
             series: [
             	{
@@ -163,7 +187,7 @@ export default {
 		            coordinateSystem: 'geo',
 		            data: this.cityStoresL2,
 		            symbolSize: function (val) {
-		                return val[2]/(3000+val[2]*0.08);
+		                return val[2]/(10000+val[2]*0.1);
 		            },
 		            
 		            itemStyle: {
@@ -220,7 +244,7 @@ export default {
 			            normal: {
 			                color: color[0],
 			                width: 1,
-                			opacity: 0.6,
+                			opacity: 0.2,
                 			curveness: 0.2
 			            }
 			        },
@@ -233,23 +257,22 @@ export default {
 	        this.showMap=true
 	    })
     },
-    handleClickForStoreL1(id){
-    	this.selStore=_.find(this.cityStoresL1,{id})
+    handleClickForStore(id,level){
+    	if(level==1){
+			this.selStore=_.find(this.cityStoresL1,{id})
+    	}else{
+			this.selStore=_.find(this.cityStoresL2,{id})
+    	}
+    	
     	if (this.selStore.amount==0) {
     		bootbox.alert(this.selStore.name+'目前没有库存物资')
     	}else{
     		this.modalOption={visable:true}
-    		this.storeInfo(id,1)
+    		this.storeInfo(id,level)
     	}
     },
-    handleClickForStoreL2(id){
-    	this.selStore=_.find(this.cityStoresL2,{id})
-    	if (this.selStore.amount==0) {
-    		bootbox.alert(this.selStore.name+'目前无法计算库存物资价值')
-    	}else{
-    		this.modalOption={visable:true}
-    		this.storeInfo(id,2)
-    	}
+    handleClickForGoodsType(code){
+
     },
     index(){
     	this.selCity=null
@@ -313,7 +336,7 @@ export default {
 			            coordinateSystem: 'geo',
 			            data: storesL2,
 			            symbolSize: function (val) {
-			                return val[2]/(20000+val[2]*0.08);
+			                return val[2]/(20000+val[2]*0.1);
 			            },
 			            label: {
 			                normal: {
@@ -362,13 +385,20 @@ export default {
 	        	this.showMap=true
 	        })
 	    })
+
+	    this.$store.dispatch('store_map_baidumap').then(resp=>{
+	    	this.storesNum={}
+		    this.storesNum.l1=resp.body.itemMap.storesL1.length;
+		    this.storesNum.l2=resp.body.itemMap.storesL2.length;
+		});
     },
     storeInfo(id,level){
     	this.$store.dispatch("store_map_goodstype",{id,level}).then((resp)=>{
+    		this.pieData=resp.body.items
 	    	this.optionPie={
 	            title: { 
-	                text: '全区物资类型分布(万元)',
-	                left:'right'
+	                text:this.selStore.name,
+	                left:'center'
 	            },
 	            tooltip: {
 	                trigger: 'item',
@@ -385,7 +415,7 @@ export default {
 	                    name: '物资类型',
 	                    type: 'pie',
 	                    radius: ['20%','55%'],
-	                    data:resp.body.items
+	                    data:this.pieData
 	                }
 	            ]
 	        } 
@@ -448,7 +478,10 @@ export default {
 					padding-right: 0.5em;
 				}
 				.l1,.l2{
-					width:4em;
+					width:4.4em;
+				}
+				.map{
+					width: 8em;
 				}
 			}
 		}
@@ -481,6 +514,13 @@ export default {
 		}
 	}
 	.shown-loop(13);
+}
+.goodstype{
+	border:none;
+	li{
+		border: none;
+		background:rgba(40, 40, 40,0.6); 
+	}
 }
 @keyframes animationStyle1 {
     0% {

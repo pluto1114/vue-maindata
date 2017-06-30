@@ -82,19 +82,25 @@
                 <mu-radio :label="x" name="store" v-for="x of stores" :nativeValue="x" :key="x"  v-model="selStore"/>
             </div>   
         </div>
-        <br/>
-         <div class="row">
+        <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-11">         
-               <button class="btn btn-default" type="button" @click="handleAllStore">所有库</button>
+               <button class="btn btn-default blue" type="button" @click="handleAllStore">所有库</button>
             </div>   
         </div>
         <hr />
     </div>
-    <div class="container">
+    <transition  name="fade"  mode="out-in">
+    <div class="container" v-if="results.length > 0">
         <div class="row">
-            <transition  name="fade"  mode="out-in">
-            <table v-if="results.length > 0" class="table table-striped table-hover">
+            <div class="col-md-12 btn-ext">
+            <Excel selector="#storeCityIndexTable"><button class="btn blue"><span class="fa fa-download"></span>导出Excel</button></Excel>
+            </div>
+        
+        </div>
+        <div class="row">
+            
+            <table class="table table-striped table-hover" id="storeCityIndexTable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -108,6 +114,7 @@
                         
                         <th>单位</th>
                         <th>入库数量</th>                  
+                        <th>占用数量</th>                  
                         <th>当前数量</th> 
                         <th>单价</th>  
                     </tr>
@@ -122,14 +129,16 @@
                         <td>{{x.store_name}}</td>
                         <td>{{x.unit}}</td>
                         <td>{{x.in_count}}</td>
+                        <td>{{x.ready_out_count}}</td>
                         <td>{{x.cur_count}}</td>
-                        <td>{{x.single_price}}</td>
+                        <td>{{x.single_price|money(2)}}</td>
                     </tr>
                 </tbody>
             </table>
-            </transition>
+            
         </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -137,6 +146,7 @@
 
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import Excel from '@/components/Excel'
 
 export default {
 
@@ -158,6 +168,9 @@ export default {
         logicStores:[],
         selStore:"",
         selLogicStore:"",
+
+        excelCols:{goodstype_code:"物资编号",goodstype_name:"物资名称",factory:'供应商'},
+        excelItems:[{a:12,b:"有什么"},{a:10,b:"没什么"}]
     }    
   },
   computed:{
@@ -295,7 +308,7 @@ export default {
     
   },
   components:{
-  	Chart,MyMenu
+  	Chart,MyMenu,Excel
   }
 }
 </script>

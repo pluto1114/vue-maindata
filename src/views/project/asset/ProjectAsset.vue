@@ -2,7 +2,7 @@
  
     
 
-    <div v-if="linked" class="row">
+    <div class="row">
         <div class="col-sm-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
