@@ -69,6 +69,8 @@ export default {
     })
     // window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
     // window.history.forward(1);
+
+    this.showScreenInfo()
   },
   methods: {
     
@@ -82,6 +84,15 @@ export default {
     },
     afterEnter(){
       this.footerShow=true
+    },
+    showScreenInfo() {
+      var w = document.body.clientWidth;
+      console.log(w);
+      if (w > 1220) {
+        toastr.success("恭喜您，已达到最佳显示效果！");
+      } else {
+        toastr.warning("您当前窗口的可用宽度为：" + w + "px，建议增加窗口宽度或使用更高分辨率，以使显示效果更佳");
+      }
     }
   },
   destroyed () {

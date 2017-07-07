@@ -25,7 +25,7 @@
 <script>
 export default {
     name: 'excel',
-    props:['cols','items','selector'],
+    props:['cols','items','selector','filename'],
     data () {
 	  	if (this.selector) {
 	  		console.log("from table")
@@ -38,16 +38,18 @@ export default {
 		}
     },
     mounted(){
-
+		console.log(this.cols)
     },
     methods:{
 	  	handleExport(){
 	  		let time=formatDate(new Date())
+			let filename=this.filename
+			filename=filename?`${filename}_${time}.xlsx`:`excel报表_${time}.xlsx`
 	  		// console.log(this.selector)
 	  		// console.log(document.querySelector(this.selector).innerHTML)
 	  		if (this.selector)
 	 			document.querySelector('.my-excel-table').innerHTML=document.querySelector(this.selector).innerHTML
-			this.export_table_to_excel('.my-excel-table', 'xlsx',`excel报表_${time}.xlsx`)
+			this.export_table_to_excel('.my-excel-table', 'xlsx',filename)
 	  	},
 	  	export_table_to_excel(selector, type, fn) {
 		    var wb = XLSX.utils.table_to_book(document.querySelector(selector), {sheet:"Sheet JS"});
@@ -77,6 +79,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 .my-excel-table{
-	// display: none;
+	display: none;
 }
 </style>

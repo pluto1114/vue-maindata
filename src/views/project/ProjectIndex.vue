@@ -135,7 +135,7 @@
         <div class="search">
           <div class="search__inner">
             <form class="search__form" @submit.prevent>
-              <input class="search__input" type="text" placeholder="Search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" v-model="searchInput" @keyup.enter="searchPro"/>
+              <input class="search__input" type="search" placeholder="Search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" v-model="searchInput" @keyup.enter="searchPro"/>
               <span class="search__info">按回车键开始搜索</span>
             </form>
             <div class="search__related">
@@ -168,8 +168,7 @@ export default {
         projects:[],
         optionBar1:{},
         loading:false,
-        searchState:false,
-        searchOpen:false,
+
         searchInput:'',
         
     }
@@ -181,6 +180,8 @@ export default {
       storecomp_code:state=>state.project.storecomp_code,
       status:state=>state.project.status,
       year:state=>state.project.year,
+      searchState:state=>state.project.searchState,
+      searchText:state=>state.project.searchText,
     }),
     
   },
@@ -215,15 +216,17 @@ export default {
       this.$nextTick(()=>{
           $('.menu-1').lazeemenu();
       })
-
     });
     
-    
-    if(this.storecomp_code && this.status && this.year){
-      this.handleStatusClick(this.storecomp_code,this.status)
-      this.freshList(this.year)
+    if(!this.searchState){
+        if(this.storecomp_code && this.status && this.year){
+        this.handleStatusClick(this.storecomp_code,this.status)
+        this.freshList(this.year)
+        }
+    }else{
+        this.searchInput=this.searchText
+        this.searchPro()
     }
-    
     document.addEventListener('keyup', ev=> {
       // escape key.
       if( ev.keyCode == 27 ) {
@@ -243,7 +246,7 @@ export default {
       this.$store.commit("setProStoreCompCode",storecomp_code);
       this.$store.commit("setProStatus",status);
      
-      this.searchState=false
+      this.$store.commit("setProSearchState",false)
       let statusList=this.statusListData.data;
       this.years=_.find(_.find(statusList,{code:this.storecomp_code})['list1'],{code:status})['list1']
       this.years=_.sortByOrder(this.years, ['code'], ['desc'])
@@ -261,7 +264,7 @@ export default {
     searchPro(){
       this.projects=[]
       this.loading=true
-      this.searchState=true
+      this.$store.commit("setProSearchState",true)
       this.$store.dispatch("project_erp_search",{condition:encodeURIComponent(this.searchInput)}).then((resp)=>{
         this.projects=resp.data
         this.$nextTick(()=>{

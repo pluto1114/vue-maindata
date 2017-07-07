@@ -46,15 +46,16 @@
 
             <div class="col-md-3 goodstype-order">                
                 <h3>物资类型排行</h3>
-                <transition name="fade"  mode="out-in">
+                
                 <ol v-if="goodstypeOrderBy.length>0">
-                    <li v-for="x of goodstypeOrderBy">{{x.name}}<span>{{parseInt(x.value/10000)}}万</span></li>
+                    <li v-for="x of goodstypeOrderBy" class="my-item" :key="x">{{x.name}}<span>{{parseInt(x.value/10000)}}万</span></li>
                 </ol>                
-                </transition>
+                
             </div>    
         </div>
 
         <div class="row age">
+            
             <div class="col-sm-3">
                 <div class="panel panel-default">
                   <div class="panel-body">
@@ -71,12 +72,14 @@
                     </div>
                   </div>
                 </div>
+                
                 <ul class="list-group" v-show="showD">
                   <li class="list-group-item" v-for="(x,index) of d90">
                     <span class="pull-right">{{x.value|money}}</span>
                     <span>{{x.name}}</span>
                   </li>
                 </ul>
+               
             </div>
 
             <div class="col-sm-3">
@@ -152,8 +155,9 @@
             </div>
 
             <div class="col-sm-12">
-                <button type="button" class="btn btn-default btn-block" v-if="!showD" @click="showD=true">查看库龄详情</button>
+                <button type="button" class="btn btn-default btn-block" @click="handleShowD">{{showD?"收起":"查看库龄详情"}}</button>
             </div>
+            
         </div>
         
        
@@ -461,6 +465,15 @@ export default {
         this.$store.commit("setCompId",city.id);
         this.$router.push({name:"StoreCityIndex",params:{comp_id:city.id}});
     },
+    handleShowD(){
+        if(!this.showD)
+            this.showD=true
+        else{
+            $(".age ul").slideUp("slow",()=>{
+                this.showD=false
+            })
+        }
+    },
   	handleInAmountClick(comp_id){
         $('#myModal').modal()
         this.$store.dispatch("store_index_in_amount",{comp_id}).then((resp)=>{
@@ -626,23 +639,14 @@ export default {
         li{
             line-height: 2em;
             font-size: 1.12em;
-            .animated;
-            .fadeOut;
-            .fadeInUp;
+            
             span{
                 float:right;
             }
             
         }
     }
-    .shown-loop(@n, @i:1) when (@i <= @n) {
-        li:nth-child(@{i}) { 
-          animation-duration: @i*600ms;
-        }
-        .shown-loop(@n, (@i + 1));
-    }
-
-    .shown-loop(10);
+   
 }
 
 .age{
@@ -744,9 +748,9 @@ export default {
 
 
 @keyframes greenPulse {
-  from { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
-  50% { background-color: #5bc0de; box-shadow: 0 0 18px #8bd0fe; }
-  to { background-color: #66CCCC; box-shadow: 0 0 9px #333; }
+  from { background-color: #66CCCC;  }
+  50% { background-color: #5bc0de;  }
+  to { background-color: #66CCCC;  }
 }
 @keyframes neon2 {
   from {

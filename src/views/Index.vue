@@ -267,7 +267,8 @@ export default {
         }
         return params.name+str;
         // return params.data.comp_id;
-    }
+    },
+    
   },
   components:{
   	Chart,MyMenu

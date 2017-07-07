@@ -158,17 +158,18 @@ ul li{
         background: #ee955b;
     }
     .btn.green{
-        border: 1px solid #79d799;
-        background: #79d799;
+        border: 1px solid #34D6B6;
+        background: #1ABC9C;
     }
     .btn.green:hover,
     .btn.green span{
-        color: #79d799;
+        color: #1ABC9C;
     }
     .btn.green:hover span,
     .btn.green:hover span:after{
-        background: #79d799;
+        background: #1ABC9C;
     }
+  
     .btn:hover span{
         color: #fff;
     }
@@ -200,4 +201,28 @@ ul li{
  flex:1;
 }
 
+.my-item{
+	opacity: 0;
+    animation-name: animationStyle1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+}
+.shown-loop(@n, @i:1) when (@i <= @n) {
+    .my-item:nth-child(@{i}) {    	
+        animation-duration: @i*200ms;
+    }
+    .shown-loop(@n, (@i + 1));
+}
+.shown-loop(14);
+@keyframes animationStyle1 {
+    0% {
+        opacity: 0;
+        transform: rotateY(-90deg) translate3d(0, 30px, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+}
 </style>

@@ -1,78 +1,85 @@
 <template>
-<!-- Modal -->
-<div class="modal fade" :class="{dark:dark}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" :class="[small?'':'modal-lg']" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
-      </div>
-      <div class="modal-body content">
-      	<slot>
-		    只有在没有要分发的内容时才会显示。
-	  	</slot>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+  <!-- Modal -->
+  <div class="modal fade" :class="{dark:dark}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" :class="[small?'':'modal-lg']" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
+        </div>
+        <div class="modal-body content">
+          <slot>
+            只有在没有要分发的内容时才会显示。
+          </slot>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
       </div>
     </div>
   </div>
-</div>  
 </template>
 
 <script>
 
 export default {
   name: 'my-modal',
-  props:{
-  	option: {
-      	type: Object,
-      	default(){return {visable:false}},
-      	required:true
+  props: {
+    option: {
+      type: Object,
+      default() { return { visable: false } },
+      required: true
     },
-    title:{
-    	type: String,
-      	default: 'Title'
+    title: {
+      type: String,
+      default: 'Title'
     },
-    small:{
-    	type:Boolean,
-    	default:false
+    small: {
+      type: Boolean,
+      default: false
     },
-    dark:{
-      type:Boolean,
-      default:false
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
-  data () {
+  data() {
     return {
-    	
+
     }
   },
-  watch:{
-    'option':function (val, oldVal) {
-    	console.log(val)
-    	if (val.visable) {
-    		this.show();
-    	}
+  watch: {
+    'option': function (val, oldVal) {
+      console.log(val)
+      if (val.visable) {
+        this.show()
+      } else {
+        this.hide()
+      }
+
 
     },
   },
-  mounted(){
+  mounted() {
+    this.$root.$on("modalHideAll",p=>{
+      this.hide()
+    })
+    $(this.$el).on('shown.bs.modal', function (e) {
 
-  	$(this.$el).on('shown.bs.modal', function (e) {
-		
-	})
-	$(this.$el).on('hidden.bs.modal', function (e) {
-	  	
-	})
+    })
+    $(this.$el).on('hidden.bs.modal', function (e) {
+
+    })
   },
-  methods:{
-  	show(){
-		  $(this.$el).modal()
-  	},
-  	hide(){
-  		$(this.$el).modal('hide')
-  	}
+  methods: {
+    show() {
+      $(this.$el).modal()
+    },
+    hide() {
+      $(this.$el).modal('hide')
+    }
   }
 }
 </script>
@@ -80,22 +87,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 @import '../assets/animate.less';
-.dark{
-  .modal-header{
-    border-bottom:#999;
-    .close{
-      color:white;
+.dark {
+  .modal-header {
+    border-bottom: #999;
+    .close {
+      color: white;
       opacity: 0.9;
     }
   }
-  .modal-content{
+  .modal-content {
     background-color: rgba(40, 40, 40, 0.9);
   }
-  .modal-footer{
-    border-top:#999;
-    .btn-default{
+  .modal-footer {
+    border-top: #999;
+    .btn-default {
       background-color: rgba(80, 80, 80, 0.8);
-      color:#ddd;
+      color: #ddd;
     }
   }
 }

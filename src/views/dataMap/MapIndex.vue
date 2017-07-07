@@ -161,7 +161,9 @@ export default {
                 }.bind(this)
             },
             geo: {
-		        map: id,
+		        map: id==7?'内蒙古':id,
+				layoutCenter: id==7?['50%', '1%']:null,
+				layoutSize: id==7?'240%':'100%',
 		        label:{
 			        emphasis:{
 			        	textStyle:{
