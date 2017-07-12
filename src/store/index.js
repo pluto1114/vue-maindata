@@ -72,15 +72,35 @@ const city = {
       let mock = {};
       return remote ? $api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYXChild', { params: payload }) : Promise.resolve(mock);
     },
+    city_index_shop_stock_dtl(context, payload) {
+      let mock = {};
+      return remote ? $api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumChildList', { params: payload }) : Promise.resolve(mock);
+    },
+    city_index_shop_op_dtl(context, payload) {
+      let mock = {};
+      return remote ? $api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYWChildList', { params: payload }) : Promise.resolve(mock);
+    },
+    city_index_shop_market_dtl(context, payload) {
+      let mock = {};
+      return remote ? $api('http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockSumYXChildList', { params: payload }) : Promise.resolve(mock);
+    },
     city_index_resource(context, payload) {
       let mock = {};
       if (payload.source == 'DT') {
-        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistDt&type1=4&source=${payload.source}&comp_id=${payload.comp_id}`) : Promise.resolve(mock);
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistDt&type1=4`, { params: payload }) : Promise.resolve(mock);
       } else {
-        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistZxXdl&type1=4&source=${payload.source}&comp_id=${payload.comp_id}`) : Promise.resolve(mock);
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalinfolistZxXdl&type1=4`, { params: payload }) : Promise.resolve(mock);
+      }
+    },
+    city_index_resource_detail(context, payload) {
+      let mock = {};
+      if (payload.source == 'DT') {
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalSourceListDt`, { params: payload }) : Promise.resolve(mock);
+      } else {
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getLocalSourceListZxXdl`, { params: payload }) : Promise.resolve(mock);
       }
 
-    }
+    },
   }
 }
 const myStore = {
@@ -141,6 +161,10 @@ const myStore = {
     store_city_index_storegoods(context, payload) {
       let mock = {};
       return remote ? api(`/api/store/city/index/storegoods`, { params: payload }) : Promise.resolve(mock);
+    },
+    store_city_index_l2(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/city/index/l2List`, { params: payload }) : Promise.resolve(mock);
     },
     store_county_index(context, payload) {
       let mock = {};
@@ -249,7 +273,7 @@ const project = {
     },
     project_asset_outlist(context, payload) {
       let mock = {};
-      return remote ? api(`/api/project/one/outlistForAsset`, { params: payload }) : Promise.resolve(mock);
+      return remote ? api(`/api/project/asset/outlist`, { params: payload }) : Promise.resolve(mock);
     },
     project_asset_erplist(context, payload) {
       let mock = {};
@@ -259,10 +283,7 @@ const project = {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAsset`, { params: payload }) : Promise.resolve(mock);
     },
-    project_asset_outlist_ext(context, payload) {
-      let mock = {};
-      return remote ? api(`/api/project/one/outlistForAsset`, { params: payload }) : Promise.resolve(mock);
-    },
+    
     project_asset_erplist_ext_1(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpReturn`, { params: payload }) : Promise.resolve(mock);
@@ -293,9 +314,9 @@ const resource = {
     resource_status_pro_detail(context, payload) {
       let mock = {};
       if (payload.source == 'DT') {
-        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceListDt&code1=${payload.code1}&code2=${payload.code2}&source=${payload.source}`) : Promise.resolve(mock);
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceListDt`, { params: payload }) : Promise.resolve(mock);
       } else {
-        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceList&code1=${payload.code1}&code2=${payload.code2}&code3=${payload.code3}&source=${payload.source}`) : Promise.resolve(mock);
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getSourceList`, { params: payload }) : Promise.resolve(mock);
       }
 
     },
@@ -445,6 +466,10 @@ const shop = {
     shop_city_index_storegoods(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getMallStockList`, { params: payload }) : Promise.resolve(mock);
+    },
+    shop_city_index_storegoods_buyorder(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getOrderByStock`, { params: payload }) : Promise.resolve(mock);
     },
     shop_city_index_buy(context, payload) {
       let mock = {};

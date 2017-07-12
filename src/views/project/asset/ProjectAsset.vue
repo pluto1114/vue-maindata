@@ -12,7 +12,7 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item" v-for="(x,index) of outgoods">
+                        <li class="list-group-item" v-for="(x,index) of outgoods" :key="x">
                             <span class="badge">{{x.value}}</span>
                             <span v-html="x.name"></span>
                         </li>
@@ -226,6 +226,7 @@ export default {
 
     },
     methods: {
+       
         handleClickAssetX() {
             this.assetModalOption = { visable: true }
             this.$store.dispatch("project_asset_erplist_ext_1", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
@@ -255,6 +256,7 @@ export default {
 <style lang="less" scoped>
 @import '../../../assets/animate.less';
 .list-group-item {
+    // cursor: pointer;
     .badge {
         margin-left: 0.5em;
     }

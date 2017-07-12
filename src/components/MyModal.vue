@@ -11,7 +11,7 @@
         </div>
         <div class="modal-body content">
           <slot>
-            只有在没有要分发的内容时才会显示。
+            没有相关信息。
           </slot>
         </div>
         <div class="modal-footer">

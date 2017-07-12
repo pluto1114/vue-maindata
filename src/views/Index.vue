@@ -60,7 +60,7 @@ export default {
   data () {
     return {
         menus:[
-            {name:"库存物资分析",to:"/store"},
+            {name:"二维码库存分析",to:"/store"},
             {name:"商城数据分析",to:"/shop"},
             {name:"工程项目分析",to:"/project"},
             {name:"营销物资分析",to:"/market"},

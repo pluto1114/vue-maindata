@@ -63,7 +63,7 @@
                                     <td>{{x.single_price|money(2)}}</td>
                                     <td>{{x.createtime|prettyDate}}</td>
                                     <td>
-                                        <a @click="trace(x.id)">追溯</a>
+                                        <a @click="trace(x.qrcode_code)">追溯</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -75,7 +75,7 @@
         </div>
     
         <MyModal :option="modalOption" title="使用物资详情" small>
-            <TraceInfo :id="selId" level=1></TraceInfo>
+            <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
         </MyModal>
     </div>
 </template>
@@ -104,7 +104,7 @@ export default {
             searchText: "",
 
             modalOption: {},
-            selId: 0
+            selqrcode: 0
         }
     },
     computed: {
@@ -139,11 +139,15 @@ export default {
                 this.items = resp.body.items;
                 this.comp = resp.body.itemMap.comp
                 this.show = true
+
+                this.$nextTick(()=>{
+                    $("#storeHisIndexTable").freezeHeader();
+                })
             });
 
         },
-        trace(id) {
-            this.selId = id
+        trace(qrcode) {
+            this.selqrcode = qrcode
             this.modalOption = { visable: true }
         }
     },

@@ -200,6 +200,16 @@ ul li{
 .box-cell-1{
  flex:1;
 }
+.my-link{
+    cursor:pointer;
+    transition: all 0.5s ease;
+    text-decoration:underline; 
+    &:hover{
+        opacity: 0.6;
+        
+    }
+}
+
 
 .my-item{
 	opacity: 0;

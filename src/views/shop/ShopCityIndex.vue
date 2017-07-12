@@ -42,20 +42,31 @@
                                     <th>入库批次号</th>
                                     <th>所属仓库</th>
                                     <th>计量单位</th>
+                                    <th>单价</th>
                                     <th>库存数量</th>
-                                    <th>企业价</th>
+                                    <th>总价</th>
+                                    <th>库龄</th>
+                                    <th>入库时间</th>
+                                    
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(x,index) of storeInfos">
+                                <tr v-for="(x,index) of storeInfos" :key="x">
                                     <td>{{x.comdity_code}}</td>
                                     <td>{{x.comdity_name}}</td>
                                     <td>{{x.supplier_name}}</td>
                                     <td>{{x.storage_batch}}</td>
                                     <td>{{x.storage_name}}</td>
                                     <td>{{x.units}}</td>
+                                    <td>{{x.price}}</td>
                                     <td>{{x.number}}</td>
-                                    <td>{{x.real_price}}</td>
+                                    <td>{{x.money}}</td>
+                                    <td>{{x.storage_time}}</td>
+                                    <td>{{x.in_date|prettyDate}}</td>
+                                    <td>
+                                        <a @click="handleClickForTrace(x)">追溯</a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -98,7 +109,7 @@
     
                                     <th>出库单号</th>
                                     <th>出库批次</th>
-                                    <th>商品用途</th>
+                                    <!-- <th>商品用途</th> -->
                                     <th>需求人</th>
                                     <th>计量单位</th>
                                     <th>出库数量</th>
@@ -112,7 +123,7 @@
                                     <td>{{x.comdity_name}}</td>
                                     <td>{{x.dlivry_code}}</td>
                                     <td>{{x.dlivry_batch}}</td>
-                                    <td>{{x.comdity_use}}</td>
+                                    <!-- <td>{{x.comdity_use}}</td> -->
                                     <td>{{x.demand_name}}</td>
                                     <td>{{x.units}}</td>
                                     <td>{{x.number}}</td>
@@ -190,6 +201,56 @@
     
         </div>
     
+        <MyModal :option="modalOption" title="采购单详情" small>
+            <table class="table" v-if="buyOrder">
+                <tr>
+                    <td class="td-label">
+                        <label>制单时间：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.order_date|prettyDate}}</td>
+    
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>物资分类：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.category}}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>需求部门：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.demand_deprt_name}}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>需求人：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.demand_name}}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>项目名称：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.project_name}}</td>
+    
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>接收类型：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.recep_type}}</td>
+                </tr>
+                <tr>
+                    <td class="td-label">
+                        <label>供应商：</label>
+                    </td>
+                    <td class="td-content">{{buyOrder.supplier_name}}</td>
+                </tr>
+                
+    
+            </table>
+        </MyModal>
     </div>
 </template>
 
@@ -197,6 +258,7 @@
 
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import MyModal from '@/components/MyModal'
 
 export default {
 
@@ -213,6 +275,9 @@ export default {
 
             inInfosMonth: null,
             outInfosMonth: null,
+
+            modalOption: {},
+            buyOrder: {},
         }
 
     },
@@ -257,16 +322,17 @@ export default {
         })
     },
     methods: {
-        handleCityClick(params) {
-
-        },
-        handleTRClick(params) {
-
-        },
+        handleClickForTrace(item) {
+            console.log(item.purchase_code)
+            this.modalOption = { visable: true }
+            this.$store.dispatch("shop_city_index_storegoods_buyorder", { purchase_code: item.purchase_code,goodsname:encodeURIComponent(item.comdity_name)}).then((resp) => {
+                this.buyOrder = resp.data[0]
+            });
+        }
 
     },
     components: {
-        Chart, MyMenu
+        Chart, MyMenu, MyModal
     }
 }
 </script>
@@ -281,7 +347,14 @@ export default {
 .table {
     margin-top: 1em;
     td {
-        max-width: 12em;
+        min-width: 4em;
+        max-width: 10em;
+    }
+    .td-label{
+        width: 8em;
+    }
+    .td-content{
+        text-align: left;
     }
 }
 </style>

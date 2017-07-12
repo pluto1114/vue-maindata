@@ -34,7 +34,7 @@
                 </time>
                 <aside>
                   <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 <strong>{{y.ready_out_count}}</strong>{{info.unit}}</p>
-                  <p v-if="y.project_name" class="things">项目名称：{{y.project_name}} <i class="fa fa-link" @click="handleClickForPro(y.start_comp_id,y.project_code)"></i></p>
+                  <p v-if="y.project_name" class="things ">项目名称：<span class="my-link" @click="handleClickForPro(y.start_comp_id,y.project_code)">{{y.project_name}}</span></p>
                   <p v-if="y.follow_comp_name" class="things">施工单位：{{y.follow_comp_name}}</p>
                   <p class="brief">
                     <span class="text-green">需求信息</span>
@@ -126,8 +126,7 @@ import MyModal from '@/components/MyModal'
 export default {
   name: 'traceInfo',
   props: {
-    id: {
-      type: Number,
+    qrcode: {
       required: true
     },
     level: {
@@ -143,7 +142,7 @@ export default {
     }
   },
   watch: {
-    'id': 'fetch'
+    'qrcode': 'fetch'
   },
   mounted() {
 
@@ -155,7 +154,7 @@ export default {
       }
       this.buyOrder = {}
       this.modalOption = { visable: true }
-      this.$store.dispatch("trace_storeGoodsInfo_buyOrder", { id: this.id }).then(resp => {
+      this.$store.dispatch("trace_storeGoodsInfo_buyOrder", { qrcode: this.qrcode }).then(resp => {
         this.buyOrder = resp.body.itemMap.buyOrder
       })
     },
@@ -166,10 +165,10 @@ export default {
       this.$router.push("/project/one")
     },
     fetch() {
-      if (this.id < 1) {
+      if (!this.qrcode) {
         return
       }
-      this.$store.dispatch("trace_storeGoodsInfo", { id: this.id, level: this.level }).then(resp => {
+      this.$store.dispatch("trace_storeGoodsInfo", { qrcode: this.qrcode, level: this.level }).then(resp => {
         this.info = resp.body.itemMap.storeGoodsInfo
         this.loading = false
       })

@@ -19,7 +19,7 @@
                             </li>
                             <li class="list-group-item">
                                 <i class="fa fa-user-o"></i>项目经理：
-                                <span class="">{{project.pm_person_name.split(",")[0]}}<i class="fa fa-link" @click="handleSearch(project.pm_person_name.split(',')[0])"></i></span>
+                                <span class="my-link" @click="handleSearch(project.pm_person_name.split(',')[0])">{{project.pm_person_name.split(",")[0]}}</span>
                                 
                             </li>
                             <li class="list-group-item">
@@ -148,7 +148,7 @@
                             <th>需求单号</th>
                             <th>数量</th>
                             <th>单价</th>
-    
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,7 +160,7 @@
                             <td>{{x.order_code}}</td>
                             <td>{{x.ready_out_count}}</td>
                             <td>{{x.single_price}}</td>
-    
+                            <td><a @click="handleItemClickForOut(x.qrcode_code)">追溯</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -234,6 +234,10 @@
             </div>
     
         </MyModal>
+
+        <MyModal :option="outTraceModalOption" title="物资追溯" small>
+            <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
+        </MyModal>
     </div>
 </template>
 
@@ -242,6 +246,7 @@
 import MyModal from '@/components/MyModal'
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import TraceInfo from '@/components/TraceInfo'
 
 export default {
 
@@ -262,6 +267,9 @@ export default {
             buyModalOption: {},
             outModalOption: {},
             useModalOption: {},
+            selqrcode:0,
+            outTraceModalOption:{},
+
         }
     },
     computed: {
@@ -318,6 +326,10 @@ export default {
             this.$store.dispatch("project_info_outlist", { comp_id: this.comp_id, project_code: this.project_code, level_one_code }).then((resp) => {
                 this.outgoods = resp.body.items
             });
+        },
+        handleItemClickForOut(qrcode_code){
+            this.selqrcode=qrcode_code
+            this.outTraceModalOption={visable:true}
         },
         handleClickCompare(linked) {
             console.log("click")
@@ -379,7 +391,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal
+        Chart, MyMenu, MyModal,TraceInfo
     }
 }
 </script>
@@ -391,7 +403,7 @@ export default {
 .project-info {
     font-size: 1.05em;
     li {
-        padding: 1em 1em;
+        padding: 1em 0.8em;
 
         .fa {
             margin-right: 1em;

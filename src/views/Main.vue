@@ -71,6 +71,11 @@ export default {
     // window.history.forward(1);
 
     this.showScreenInfo()
+
+    $(".logo-title").animatext({speed: 80,
+		    effect: 'flipInX',
+		    infinite: false
+		})
   },
   methods: {
     
@@ -110,6 +115,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     // this.footerShow=false
+    
     next()
   }
 }

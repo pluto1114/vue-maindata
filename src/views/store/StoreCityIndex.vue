@@ -1,9 +1,15 @@
 <template>
     <div class="index">
         <MyMenu :items="menus" back=true></MyMenu>
-    
+        
+        <div id="my-wrapper">
         <div class="container">
-            <h2 class="comp-title" v-if="infoMap.comp">{{infoMap.comp.name}}</h2>
+            <div class="row" v-if="infoMap.comp">
+                <div class="col-md-12">
+                    <h2 class="comp-title pull-left">{{infoMap.comp.name}}</h2>
+                    <a @click="handleClickForL2" class="pull-right">二级库库存</a>
+                </div>
+            </div>
             <br>
             <div class="row">
                 <div class="col-md-3">
@@ -48,7 +54,8 @@
             </div>
     
         </div>
-    
+    <table id="test">
+    </table>
         <div class="container">
             <transition name="fade" mode="out-in">
                 <div v-if="goodstypeOrderBy.length > 0" class="row">
@@ -90,6 +97,8 @@
             </div>
             <hr>
         </div>
+        </div>
+
         <transition name="fade" mode="out-in">
             <div class="container" v-if="results.length > 0">
                 <div class="row">
@@ -137,18 +146,38 @@
                                 <td>{{x.cur_count|money(2)}}</td>
                                 <td>{{x.single_price|money(2)}}</td>
                                 <td>
-                                    <a @click="trace(x.id)">追溯</a>
+                                    <a @click="trace(x.qrcode_code)">追溯</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-    
+                    
                 </div>
+
             </div>
         </transition>
         <MyModal :option="modalOption" title="使用物资详情" small>
-            <TraceInfo :id="selId" level=1></TraceInfo>
+            <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
         </MyModal>
+        <MyModal :option="l2ModalOption" title="二级库列表" small>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>库存金额</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of l2s" :key="x">
+                        <td>{{x.name}}</td>
+                        <td>{{x.value|money}}</td>
+                        <td><a @click="handleCountyClick(x.code)">详情</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </MyModal>
+        
     </div>
 </template>
 
@@ -182,8 +211,11 @@ export default {
             selStore: "",
             selLogicStore: "",
 
+            l2s:[],
+            l2ModalOption:{},
             modalOption:{},
-            selId:0
+            selqrcode:0,
+
         }
     },
     computed: {
@@ -228,14 +260,24 @@ export default {
         });
         this.showPie();
 
-        // this.showItems();
     },
     methods: {
+        handleClickForL2(){
+            this.l2ModalOption={visable:true}
+            this.$store.dispatch("store_city_index_l2", { comp_id: this.comp_id }).then((resp) => {
+                this.l2s = resp.body.items
+            })
+        },
+        handleCountyClick(dept_code){
+            this.l2ModalOption={visable:false}
+            this.$nextTick(()=>{
+                this.$router.push({name:'StoreCountyIndex',params:{dept_code}})
+            })
+            
+        },
         handlePieClick(params) {
             console.log(params)
-
             // this.showItems();
-
         },
         handleTypeChange(value) {
             this.selTypes = value;
@@ -313,11 +355,14 @@ export default {
                 this.stores = _.uniq(_.pluck(this.items, 'store_name'));
                 this.logicStores = _.uniq(_.pluck(this.items, 'logic_store_name'));
 
+                this.$nextTick(()=>{
+                    $("#storeCityIndexTable").freezeHeader();
+                })
             });
 
         },
-        trace(id) {
-           this.selId=id
+        trace(qrcode_code) {
+           this.selqrcode=qrcode_code
            this.modalOption={visable:true}
         }
     },
