@@ -5,7 +5,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title box">
                         <span class="box-cell-1">物资平台</span>
-                        <Excel :cols="{'name':'物资名称','value':'物资数量'}" :items="outgoods" filename="物资平台">
+                        <Excel v-if="outgoods.length>0" :cols="{'name':'物资名称','value':'物资数量'}" :items="outgoods" filename="物资平台">
                             <i class="fa fa-download"></i>
                         </Excel>
                     </h3>
@@ -13,7 +13,7 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(x,index) of outgoods" :key="x">
-                            <span class="badge">{{x.value}}</span>
+                            <span class="badge">{{x.value|money}}</span>
                             <span v-html="x.name"></span>
                         </li>
                     </ul>
@@ -25,7 +25,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title box">
                         <span class="box-cell-1">ERP出库</span>
-                        <Excel :cols="{'name':'物资名称','value':'物资数量'}" :items="erpgoods" filename="ERP出库">
+                        <Excel v-if="erpgoods.length>0" :cols="{'name':'物资名称','value':'物资数量'}" :items="erpgoods" filename="ERP出库">
                             <i class="fa fa-download"></i>
                         </Excel>
                     </h3>
@@ -33,7 +33,7 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(x,index) of erpgoods">
-                            <span class="badge">{{x.value}}</span>
+                            <span class="badge">{{x.value|money}}</span>
                             <span>{{x.name}}</span>
                         </li>
                     </ul>
@@ -45,7 +45,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title box">
                         <span class="box-cell-1">ERP交资</span>
-                        <Excel :cols="{'name':'物资名称','value':'物资数量'}" :items="assetgoods" filename="ERP交资">
+                        <Excel v-if="assetgoods.length>0" :cols="{'name':'物资名称','value':'物资数量'}" :items="assetgoods" filename="ERP交资">
                             <i class="fa fa-download"></i>
                         </Excel>
                     </h3>
@@ -53,7 +53,7 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(x,index) of assetgoods">
-                            <span class="badge">{{x.value}}</span>
+                            <span class="badge">{{x.value|money}}</span>
                             <span>{{x.name}}</span>
                         </li>
                     </ul>
@@ -68,7 +68,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title box">
                         <span class="box-cell-1">资源管理交资</span>
-                        <Excel :cols="{'name':'物资名称','value':'物资数量'}" :items="resoucegoods" filename="资源管理交资">
+                        <Excel v-if="resoucegoods.length>0" :cols="{'name':'物资名称','value':'物资数量'}" :items="resoucegoods" filename="资源管理交资">
                             <i class="fa fa-download"></i>
                         </Excel>
                     </h3>

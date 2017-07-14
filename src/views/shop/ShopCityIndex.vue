@@ -32,7 +32,16 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="tab1">
-                        <table class="table" v-if="storeInfos">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <Excel selector="#shopCityIndex_storeInfos" class="pull-right">
+                                    <button class="btn btn-default">
+                                        <span class="fa fa-download"></span></button>
+                                </Excel>
+                            </div>
+            
+                        </div>
+                        <table id="shopCityIndex_storeInfos" class="table" v-if="storeInfos">
                             <thead>
                                 <tr>
                                     <th>商品编号</th>
@@ -72,7 +81,16 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab2">
-                        <table class="table" v-if="inInfos">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <Excel selector="#shopCityIndex_inInfos" class="pull-right">
+                                    <button class="btn btn-default">
+                                        <span class="fa fa-download"></span></button>
+                                </Excel>
+                            </div>
+            
+                        </div>
+                        <table id="shopCityIndex_inInfos" class="table" v-if="inInfos">
                             <thead>
                                 <tr>
                                     <th>商品编号</th>
@@ -101,7 +119,16 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab3">
-                        <table class="table" v-if="outInfos">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <Excel selector="#shopCityIndex_outInfos" class="pull-right">
+                                    <button class="btn btn-default">
+                                        <span class="fa fa-download"></span></button>
+                                </Excel>
+                            </div>
+            
+                        </div>
+                        <table id="shopCityIndex_outInfos" class="table" v-if="outInfos">
                             <thead>
                                 <tr>
                                     <th>商品编号</th>
@@ -134,7 +161,16 @@
                     </div>
     
                     <div role="tabpanel" class="tab-pane fade" id="tab4">
-                        <table class="table" v-if="inInfosMonth">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <Excel selector="#shopCityIndex_inInfosMonth" class="pull-right">
+                                    <button class="btn btn-default">
+                                        <span class="fa fa-download"></span></button>
+                                </Excel>
+                            </div>
+            
+                        </div>
+                        <table id="shopCityIndex_inInfosMonth" class="table" v-if="inInfosMonth">
                             <thead>
                                 <tr>
                                     <th>商品编号</th>
@@ -163,7 +199,16 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab5">
-                        <table class="table" v-if="outInfosMonth">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <Excel selector="#shopCityIndex_outInfosMonth" class="pull-right">
+                                    <button class="btn btn-default">
+                                        <span class="fa fa-download"></span></button>
+                                </Excel>
+                            </div>
+            
+                        </div>
+                        <table id="shopCityIndex_outInfosMonth" class="table" v-if="outInfosMonth">
                             <thead>
                                 <tr>
                                     <th>商品编号</th>
@@ -259,6 +304,7 @@
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
 import MyModal from '@/components/MyModal'
+import Excel from '@/components/Excel'
 
 export default {
 
@@ -332,7 +378,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal
+        Chart, MyMenu, MyModal,Excel
     }
 }
 </script>
@@ -344,8 +390,11 @@ export default {
     font-weight: bold;
 }
 
-.table {
+.btn-ext{
     margin-top: 1em;
+}
+.table {
+    
     td {
         min-width: 4em;
         max-width: 10em;

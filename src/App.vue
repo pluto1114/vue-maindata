@@ -31,6 +31,9 @@ function isDesktop () {
 
 <style lang="less">
 @import 'assets/animate.less';
+.app{
+    
+}
 a{ 
   transition: all .1s;
   &:hover{

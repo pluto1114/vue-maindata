@@ -395,6 +395,7 @@
                             <th style="width:8em;">地域</th>
                             <th style="width:6em;">资源状态</th>
                             <th style="width:6em;">资源类型</th>
+                            <th style="width:8em;">设备名称</th>
                             <th style="width:10em;">所属项目</th>
                             <th>供应商</th>
                             <th>包机人</th>
@@ -407,6 +408,7 @@
                             <td>{{x.address_info}}</td>
                             <td>{{x.dev_state}}</td>
                             <td>{{x.dev_little_type}}</td>
+                            <td>{{x.dev_name}}</td>
                             <td>{{x.project_name}}</td>
                             <td>{{x.vendor}}</td>
                             <td>{{x.w_name}}</td>

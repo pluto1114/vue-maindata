@@ -100,9 +100,17 @@
         </div>
     
         <MyModal :option='compModalOption' title="盟市详情">
-    
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#opIndexTable1" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:430px;overflow-y:scroll;">
-                <table class="table">
+                <table id="opIndexTable1" class="table">
                     <thead>
                         <tr>
                             <th>旗县</th>
@@ -124,9 +132,17 @@
         </MyModal>
     
         <MyModal :option='countyModalOption' title="物资明细">
-    
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#opIndexTable2" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:430px;overflow-y:scroll;">
-                <table class="table">
+                <table id="opIndexTable2" class="table">
                     <thead>
                         <tr>
                             <th>工单号</th>
@@ -152,9 +168,17 @@
         </MyModal>
     
         <MyModal :option='compModalOptionForShop' title="商城库存盟市详情">
-    
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#opIndexTable3" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:630px;overflow-y:scroll;">
-                <table class="table">
+                <table id="opIndexTable3" class="table">
                     <thead>
                         <tr>
                             <th>物资编号</th>
@@ -187,9 +211,17 @@
         </MyModal>
 
         <MyModal :option='monthModalOptionForShop' title="采购物资明细">
-    
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#opIndexTable4" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:630px;overflow-y:scroll;">
-                <table class="table">
+                <table id="opIndexTable4" class="table">
                     <thead>
                         <tr>
                             <th>物资分类</th>
@@ -228,6 +260,7 @@
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
 import MyModal from '@/components/MyModal'
+import Excel from '@/components/Excel'
 
 export default {
 
@@ -363,7 +396,7 @@ export default {
         }
     },
     components: {
-        Chart, MyMenu, MyModal
+        Chart, MyMenu, MyModal,Excel
     }
 }
 </script>

@@ -74,9 +74,17 @@
             </div>
         </div>
         <MyModal :option='compModalOption' title="盟市详情">
-    
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#marketIndexTable1" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:630px;overflow-y:scroll;">
-                <table class="table">
+                <table id="marketIndexTable1" class="table">
                     <thead>
                         <tr>
                             <th>物资编号</th>
@@ -109,8 +117,16 @@
         </MyModal>
     
         <MyModal :option='monthModalOption' title="采购物资明细">
-    
-            <div style="height:630px;overflow-y:scroll;">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#marketIndexTable2" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
+            <div id="marketIndexTable2" style="height:630px;overflow-y:scroll;">
                 <table class="table">
                     <thead>
                         <tr>
@@ -151,6 +167,7 @@
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
 import MyModal from '@/components/MyModal'
+import Excel from '@/components/Excel'
 
 export default {
 
@@ -227,7 +244,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal
+        Chart, MyMenu, MyModal,Excel
     }
 }
 </script>

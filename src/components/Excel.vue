@@ -2,11 +2,11 @@
   <div class="excel" @click="handleExport">
   	<slot></slot>
   	<template v-if="selector">
-  	<table class="table my-excel-table">
+  	<table :id="tid" class="table my-excel-table">
   	</table>
   	</template>
   	<template v-else>
-    <table class="table my-excel-table">
+    <table :id="tid" class="table my-excel-table">
     	<thead>
     		<tr>
     			<th v-for="x of headers">{{x}}</th>
@@ -27,18 +27,21 @@ export default {
     name: 'excel',
     props:['cols','items','selector','filename'],
     data () {
+		let tid='tid'+new Date().getTime()
 	  	if (this.selector) {
 	  		console.log("from table")
-	  		return {}
+	  		return {tid}
 	  	}else{
 		    return {
 		    	keys:_.keys(this.cols),
-		    	headers:_.values(this.cols)
+				headers:_.values(this.cols),
+				tid
 		    }
 		}
     },
     mounted(){
-		console.log(this.cols)
+		if(this.items)
+		console.log(this.filename,this.items.length)
     },
     methods:{
 	  	handleExport(){
@@ -48,8 +51,8 @@ export default {
 	  		// console.log(this.selector)
 	  		// console.log(document.querySelector(this.selector).innerHTML)
 	  		if (this.selector)
-	 			document.querySelector('.my-excel-table').innerHTML=document.querySelector(this.selector).innerHTML
-			this.export_table_to_excel('.my-excel-table', 'xlsx',filename)
+	 			document.querySelector('#'+this.tid).innerHTML=document.querySelector(this.selector).innerHTML
+			this.export_table_to_excel('#'+this.tid, 'xlsx',filename)
 	  	},
 	  	export_table_to_excel(selector, type, fn) {
 		    var wb = XLSX.utils.table_to_book(document.querySelector(selector), {sheet:"Sheet JS"});

@@ -90,7 +90,7 @@
                                             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                                         </div>
                                         <ul class="list-group">
-                                            <li @click="handleProClick(x.project_number,x.comp_id)" class="list-group-item project-item" v-for="x of projects">
+                                            <li @click="handleProClick(x.project_number,x.comp_id,x.storecomp_code)" class="list-group-item project-item" v-for="x of projects">
                                                 <h4>
                                                     {{x.project_name}}
                                                 </h4>
@@ -105,7 +105,7 @@
                                                 </p>
                                             </li>
                                             <li class="list-group-item" v-if="projects.length==0 && !loading">
-                                                很遗憾，没有匹配项目！
+                                                <!-- 很遗憾，没有匹配项目！ -->
                                             </li>
                                         </ul>
                                     </div>
@@ -255,10 +255,11 @@ export default {
         handleClickForGeneral() {
             this.$store.commit("setProStatus", null);
         },
-        handleProClick(project_id, comp_id) {
-            this.$store.commit("setProCompId", comp_id);
-            this.$store.commit("setProProjectCode", project_id);
-            this.$router.push("/project/one");
+        handleProClick(project_id, comp_id,storecomp_code) {
+            this.$store.commit("setProCompId", comp_id)
+            this.$store.commit("setProProjectCode", project_id)
+            this.$store.commit("setProStoreCompCode", storecomp_code)
+            this.$router.push("/project/one")
         },
         handleStatusClick(storecomp_code, status) {
             this.$store.commit("setProStoreCompCode", storecomp_code);
@@ -286,6 +287,7 @@ export default {
             this.projects = []
             this.loading = true
             this.$store.commit("setProSearchState", true)
+            this.$store.commit("setProSearchText", this.searchInput)
             this.$store.dispatch("project_erp_search", { condition: encodeURIComponent(this.searchInput) }).then((resp) => {
                 this.projects = resp.data
                 this.$nextTick(() => {

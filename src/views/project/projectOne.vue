@@ -55,7 +55,7 @@
                 <div class="col-sm-9">
     
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" v-if="pieDataBuy.length>0">
                             <div class="p3">
                                 <h4>采购物资</h4>
                                 <Chart width="99%" height="300px" :option="optionPieBuy" theme="macarons" loading></Chart>
@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" v-if="pieDataOut.length>0">
                             <div class="p3">
                                 <h4>出库物资</h4>
                                 <Chart width="100%" height="300px" :option="optionPieOut" theme="macarons" loading></Chart>
@@ -90,12 +90,30 @@
                                 </div>
     
                             </div>
-                            <div class="row">
-                                <div class="col-sm-4 col-sm-offset-8 control">
-                                    <div class="btn btn-default" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
+                           
+                        </div>
+
+                        <div class="col-sm-6" v-if="pieDataBuyDirect.length>0">
+                            <div class="p3">
+                                <h4>采购物资</h4>
+                                <Chart width="99%" height="300px" :option="optionPieBuyDirect" theme="macarons" loading></Chart>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" v-for="(x,index) of pieDataBuyDirect">
+                                                <span class="pull-right">{{x.value | money}}</span>
+                                                <a @click="handleClickBuyDirect(x.code)">{{x.name}}</a>
+                                            </li>
+                                        </ul>
+    
+                                    </div>
+    
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                                    <div class="btn btn-default" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
+                                </div>
                     </div>
     
                 </div>
@@ -105,9 +123,18 @@
         </div>
     
         <MyModal :option="buyModalOption" title="采购物资详情">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#projectOneTable1" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:430px;overflow-y:scroll;">
     
-                <table class="table">
+                <table id="projectOneTable1" class="table">
                     <thead>
                         <tr>
                             <th>物资编号</th>
@@ -138,9 +165,18 @@
         </MyModal>
     
         <MyModal :option="outModalOption" title="出库物资详情">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#projectOneTable2" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
             <div style="height:430px;overflow-y:scroll;">
     
-                <table class="table">
+                <table id="projectOneTable2" class="table">
                     <thead>
                         <tr>
                             <th>物资编号</th>
@@ -167,7 +203,47 @@
     
             </div>
         </MyModal>
+        <MyModal :option="buyModalOptionDirect" title="采购物资详情">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#projectOneTable3" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span></button>
+                    </Excel>
+                </div>
+
+            </div>
+            <div style="height:430px;overflow-y:scroll;">
     
+                <table id="projectOneTable3" class="table">
+                    <thead>
+                        <tr>
+                            <th>物资编号</th>
+                            <th>物资名称</th>
+                            <th>采购单号</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="x of buygoodsDirect">
+                            <td>{{x.goodstype_code}}</td>
+                            <td>
+                                <span v-html="x.goodstype_name"></span>
+                            </td>
+                            <td>{{x.buyorder_code}}</td>
+                            <td>{{x.buy_count}}</td>
+                            <td>{{x.no_tax_price}}</td>
+                            <td>
+                                <a @click="handleItemClick(x.id)">使用详情</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+        </MyModal>
         <MyModal :option="useModalOption" title="使用物资详情" small>
             <div v-if="loading" class="row center-block">
                 <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
@@ -247,6 +323,7 @@ import MyModal from '@/components/MyModal'
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
 import TraceInfo from '@/components/TraceInfo'
+import Excel from '@/components/Excel'
 
 export default {
 
@@ -263,8 +340,13 @@ export default {
             pieDataOut: {},
             optionPieOut: {},
             outgoods: [],
+            pieDataBuyDirect:{},
+            optionPieBuyDirect: {},
+            buygoodsDirect: [],
+
             backStep: -1,
             buyModalOption: {},
+            buyModalOptionDirect: {},
             outModalOption: {},
             useModalOption: {},
             selqrcode:0,
@@ -276,6 +358,9 @@ export default {
         comp_id() {
             return this.$store.state.project.comp_id;
         },
+        storecomp_code() {
+            return this.$store.state.project.storecomp_code;
+        },
         project_code() {
             return this.$store.state.project.project_code;
         },
@@ -285,6 +370,7 @@ export default {
     },
     watch: {
         'pieDataBuy': 'drawPieBuy',
+        'pieDataBuyDirect': 'drawPieBuyDirect',
         'pieDataOut': 'drawPieOut',
     },
     mounted() {
@@ -303,13 +389,22 @@ export default {
             var items = resp.body.items
             this.pieDataOut = items;
         });
-
+        this.$store.dispatch("project_info_buy_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
+            var items = resp.data
+            this.pieDataBuyDirect = items;
+        });
     },
     methods: {
         handleClickBuy(level_one_code) {
             this.buyModalOption = { visable: true }
             this.$store.dispatch("project_info_buylist", { comp_id: this.comp_id, project_code: this.project_code, level_one_code }).then((resp) => {
                 this.buygoods = resp.body.items
+            });
+        },
+        handleClickBuyDirect(level_one_code) {
+            this.buyModalOptionDirect = { visable: true }
+            this.$store.dispatch("project_info_buylist_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type:level_one_code }).then((resp) => {
+                this.buygoodsDirect = resp.data
             });
         },
         handleItemClick(id) {
@@ -365,6 +460,29 @@ export default {
                 ]
             }
         },
+        drawPieBuyDirect() {
+            this.optionPieBuyDirect = {
+                title: {
+                    // text: '全区物资类型分布',
+                    left: 'right'
+                },
+                tooltip: {},
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
+                },
+                series: [
+                    {
+                        name: '物资类型',
+                        type: 'pie',
+                        radius: ['20%', '55%'],
+                        data: this.pieDataBuyDirect
+                    }
+                ]
+            }
+        },
         drawPieOut() {
             this.optionPieOut = {
                 title: {
@@ -391,7 +509,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal,TraceInfo
+        Chart, MyMenu, MyModal,TraceInfo,Excel
     }
 }
 </script>
@@ -403,7 +521,7 @@ export default {
 .project-info {
     font-size: 1.05em;
     li {
-        padding: 1em 0.8em;
+        padding: 1em 0.2em 1em 1em;
 
         .fa {
             margin-right: 1em;
@@ -420,6 +538,11 @@ export default {
     >h4 {
         padding: 0.3em 1em 0.8em;
         border-bottom: 1px solid #dfdfdf;
+    }
+}
+.table{
+    td{
+        max-width:10em;
     }
 }
 </style>

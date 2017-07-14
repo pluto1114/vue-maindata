@@ -1,104 +1,103 @@
 <template>
     <div class="index">
-        <MyMenu :items="menus" back=true></MyMenu>
-        
+        <MyMenu :items="menus" back=true @click:l2="handleClickForL2"></MyMenu>
+    
         <div id="my-wrapper">
-        <div class="container">
-            <div class="row" v-if="infoMap.comp">
-                <div class="col-md-12">
-                    <h2 class="comp-title pull-left">{{infoMap.comp.name}}</h2>
-                    <a @click="handleClickForL2" class="pull-right">二级库库存</a>
+            <div class="container">
+                <div class="row" v-if="infoMap.comp">
+                    <div class="col-md-12">
+                        <h2 class="comp-title pull-left">{{infoMap.comp.name}}</h2>
+                    </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <i class="fa fa-database fa-4x" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-md-9 total">
+                                <div class="title">库存物资总额</div>
+                                <div class="number">￥{{infoMap.totalValue|money}}</div>
+                            </div>
+                        </div>
+                        <div class="row store-year">
+                            <div v-for="(x,index) of infoMap.yearValues" class="col-md-3">
+                                <div class="percent">{{parseInt(x*100/infoMap.totalValue)}}%</div>
+                                <div class="">{{2014+index}}</div>
+                            </div>
+                        </div>
+                        <div class="row store-amount" style="margin-top:2em;">
+                            <div class="col-md-6">入库年份</div>
+                            <div class="col-md-6">当前余量</div>
+                        </div>
+                        <div v-for="(x,index) of infoMap.yearValues" class="row store-amount">
+                            <div class="col-md-6">{{2014+index}}</div>
+                            <div class="col-md-6">￥{{(x/10000).toFixed()}}万元</div>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-6">
+                        <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handlePieClick" loading></Chart>
+                    </div>
+    
+                    <div class="col-md-3 goodstype-order">
+                        <h3>物资类型排行</h3>
+                        <ol>
+                            <li v-for="(x,index) of goodstypeOrderBy" v-if="index<10" :key="x" class="my-item">{{x.name}}
+                                <span>{{parseInt(x.value/10000)}}万</span>
+                            </li>
+                        </ol>
+                    </div>
+    
+                </div>
+    
             </div>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <i class="fa fa-database fa-4x" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-md-9 total">
-                            <div class="title">库存物资总额</div>
-                            <div class="number">￥{{infoMap.totalValue|money}}</div>
+            <table id="test">
+            </table>
+            <div class="container">
+                <transition name="fade" mode="out-in">
+                    <div v-if="goodstypeOrderBy.length > 0" class="row">
+                        <div class="col-sm-1">包含类型</div>
+                        <div class="col-sm-11">
+                            <mu-checkbox name="group" v-for="x of goodstypeOrderBy" :nativeValue="x.code" :key="x.code" v-model="selTypes" :label="x.name" class="type-checkbox" @change="handleTypeChange" />
                         </div>
                     </div>
-                    <div class="row store-year">
-                        <div v-for="(x,index) of infoMap.yearValues" class="col-md-3">
-                            <div class="percent">{{parseInt(x*100/infoMap.totalValue)}}%</div>
-                            <div class="">{{2014+index}}</div>
-                        </div>
-                    </div>
-                    <div class="row store-amount" style="margin-top:2em;">
-                        <div class="col-md-6">入库年份</div>
-                        <div class="col-md-6">当前余量</div>
-                    </div>
-                    <div v-for="(x,index) of infoMap.yearValues" class="row store-amount">
-                        <div class="col-md-6">{{2014+index}}</div>
-                        <div class="col-md-6">￥{{(x/10000).toFixed()}}万元</div>
-                    </div>
-                </div>
-    
-                <div class="col-md-6">
-                    <Chart width="100%" height="400px" :option="optionPie" theme='macarons' @chartClick="handlePieClick" loading></Chart>
-                </div>
-    
-                <div class="col-md-3 goodstype-order">
-                    <h3>物资类型排行</h3>
-                    <ol>
-                        <li v-for="(x,index) of goodstypeOrderBy" v-if="index<10" :key="x" class="my-item">{{x.name}}
-                            <span>{{parseInt(x.value/10000)}}万</span>
-                        </li>
-                    </ol>
-                </div>
+                </transition>
+                <!-- <div class="row">
+                    <div class="col-sm-1">可用物资</div>
+                    <div class="col-sm-11">         
+                        <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
+                    </div>   
+                </div> -->
     
             </div>
     
-        </div>
-    <table id="test">
-    </table>
-        <div class="container">
-            <transition name="fade" mode="out-in">
-                <div v-if="goodstypeOrderBy.length > 0" class="row">
-                    <div class="col-sm-1">包含类型</div>
+            <div v-if="logicStores.length>0" class="container">
+                <hr>
+    
+                <div class="row">
+                    <div class="col-sm-1">逻辑库</div>
                     <div class="col-sm-11">
-                        <mu-checkbox name="group" v-for="x of goodstypeOrderBy" :nativeValue="x.code" :key="x.code" v-model="selTypes" :label="x.name" class="type-checkbox" @change="handleTypeChange" />
+                        <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x" v-model="selLogicStore" labelClass="my-label" />
                     </div>
                 </div>
-            </transition>
-            <!-- <div class="row">
-                <div class="col-sm-1">可用物资</div>
-                <div class="col-sm-11">         
-                    <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
-                </div>   
-            </div> -->
-    
+                <div class="row">
+                    <div class="col-sm-1">实体库</div>
+                    <div class="col-sm-11">
+                        <mu-radio :label="x" name="store" v-for="x of stores" :nativeValue="x" :key="x" v-model="selStore" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-11">
+                        <button class="btn btn-default blue" type="button" @click="handleAllStore">所有库</button>
+                    </div>
+                </div>
+                <hr>
+            </div>
         </div>
     
-        <div v-if="logicStores.length>0" class="container">
-            <hr>
-    
-            <div class="row">
-                <div class="col-sm-1">逻辑库</div>
-                <div class="col-sm-11">
-                    <mu-radio :label="x" name="logic_store" v-for="x of logicStores" :nativeValue="x" :key="x" v-model="selLogicStore" labelClass="my-label" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-1">实体库</div>
-                <div class="col-sm-11">
-                    <mu-radio :label="x" name="store" v-for="x of stores" :nativeValue="x" :key="x" v-model="selStore" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-11">
-                    <button class="btn btn-default blue" type="button" @click="handleAllStore">所有库</button>
-                </div>
-            </div>
-            <hr>
-        </div>
-        </div>
-
         <transition name="fade" mode="out-in">
             <div class="container" v-if="results.length > 0">
                 <div class="row">
@@ -129,6 +128,7 @@
                                 <th>占用数量</th>
                                 <th>当前数量</th>
                                 <th>单价</th>
+                                <th hidden>入库时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -145,15 +145,16 @@
                                 <td>{{x.ready_out_count|money(2)}}</td>
                                 <td>{{x.cur_count|money(2)}}</td>
                                 <td>{{x.single_price|money(2)}}</td>
+                                <td hidden>{{x.createtime}}</td>
                                 <td>
                                     <a @click="trace(x.qrcode_code)">追溯</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    
+    
                 </div>
-
+    
             </div>
         </transition>
         <MyModal :option="modalOption" title="使用物资详情" small>
@@ -172,12 +173,14 @@
                     <tr v-for="x of l2s" :key="x">
                         <td>{{x.name}}</td>
                         <td>{{x.value|money}}</td>
-                        <td><a @click="handleCountyClick(x.code)">详情</a></td>
+                        <td>
+                            <a @click="handleCountyClick(x.code)">详情</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </MyModal>
-        
+    
     </div>
 </template>
 
@@ -197,7 +200,7 @@ export default {
             comp_id: this.$route.params["comp_id"] || 2,
             menus: [],
             infoMap: {},
-            
+
             optionPie: {},
             goodstypeOrderBy: [],
 
@@ -211,15 +214,15 @@ export default {
             selStore: "",
             selLogicStore: "",
 
-            l2s:[],
-            l2ModalOption:{},
-            modalOption:{},
-            selqrcode:0,
+            l2s: [],
+            l2ModalOption: {},
+            modalOption: {},
+            selqrcode: 0,
 
         }
     },
     computed: {
-       
+
     },
     watch: {
         selStore(newVal, oldVal) {
@@ -251,7 +254,11 @@ export default {
         },
     },
     mounted() {
-        this.menus.push({name:"历史库存",to:{name:"StoreHisIndex",params:{comp_id:this.comp_id,dept_code:0}}})
+        this.menus = [
+            { name:"二级库库存",customEvent:"click:l2"},
+            { name: "历史库存", to: { name: "StoreHisIndex", params: { comp_id: this.comp_id, dept_code: 0 } } },
+        ]
+        
         this.$store.dispatch("store_city_index", { comp_id: this.comp_id }).then((resp) => {
             this.infoMap = resp.body.itemMap;
         });
@@ -262,18 +269,19 @@ export default {
 
     },
     methods: {
-        handleClickForL2(){
-            this.l2ModalOption={visable:true}
+        
+        handleClickForL2() {
+            this.l2ModalOption = { visable: true }
             this.$store.dispatch("store_city_index_l2", { comp_id: this.comp_id }).then((resp) => {
                 this.l2s = resp.body.items
             })
         },
-        handleCountyClick(dept_code){
-            this.l2ModalOption={visable:false}
-            this.$nextTick(()=>{
-                this.$router.push({name:'StoreCountyIndex',params:{dept_code}})
+        handleCountyClick(dept_code) {
+            this.l2ModalOption = { visable: false }
+            this.$nextTick(() => {
+                this.$router.push({ name: 'StoreCountyIndex', params: { dept_code } })
             })
-            
+
         },
         handlePieClick(params) {
             console.log(params)
@@ -355,15 +363,15 @@ export default {
                 this.stores = _.uniq(_.pluck(this.items, 'store_name'));
                 this.logicStores = _.uniq(_.pluck(this.items, 'logic_store_name'));
 
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     $("#storeCityIndexTable").freezeHeader();
                 })
             });
 
         },
         trace(qrcode_code) {
-           this.selqrcode=qrcode_code
-           this.modalOption={visable:true}
+            this.selqrcode = qrcode_code
+            this.modalOption = { visable: true }
         }
     },
     components: {
@@ -421,10 +429,10 @@ export default {
     margin-bottom: 2em;
 }
 
-.table{
-    td{
+.table {
+    td {
         min-width: 6em;
-        max-width:16em;
+        max-width: 16em;
     }
 }
 

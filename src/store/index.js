@@ -263,6 +263,14 @@ const project = {
       let mock = {};
       return remote ? api(`/api/project/one/buylist`, { params: payload }) : Promise.resolve(mock);
     },
+    project_info_buy_direct(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOrderSumByProject`, { params: payload }) : Promise.resolve(mock);
+    },
+    project_info_buylist_direct(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOrderlistByProject`, { params: payload }) : Promise.resolve(mock);
+    },
     project_info_out(context, payload) {
       let mock = {};
       return remote ? api(`/api/project/one/out`, { params: payload }) : Promise.resolve(mock);
