@@ -101,13 +101,17 @@
         <transition name="fade" mode="out-in">
             <div class="container" v-if="results.length > 0">
                 <div class="row">
-                    <div class="col-md-12 btn-ext">
+                    <div class="col-sm-6 btn-ext">
                         <Excel selector="#storeCityIndexTable">
                             <button class="btn blue">
                                 <span class="fa fa-download"></span>导出Excel</button>
                         </Excel>
                     </div>
-    
+                    <div class="col-sm-6">
+                        <div class="pull-right">
+                            <input type="search" class="form-control" placeholder="搜索" v-model="searchText">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
     
@@ -133,7 +137,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(x,index) of results" :key="x.id">
+                            <tr v-for="(x,index) of filterData" :key="x.id">
                                 <td>{{index+1}}</td>
                                 <td>{{x.goodstype_code}}</td>
                                 <td>{{x.goodstype_name}}</td>
@@ -219,10 +223,13 @@ export default {
             modalOption: {},
             selqrcode: 0,
 
+            searchText: "",
         }
     },
     computed: {
-
+        filterData() {
+            return filterArr(this.results,this.searchText)
+        }
     },
     watch: {
         selStore(newVal, oldVal) {
@@ -255,8 +262,10 @@ export default {
     },
     mounted() {
         this.menus = [
+            { name: "入库物资跟踪", to: { name: "StoreCityInGoods", params: { comp_id: this.comp_id} } },
             { name:"二级库库存",customEvent:"click:l2"},
             { name: "历史库存", to: { name: "StoreHisIndex", params: { comp_id: this.comp_id, dept_code: 0 } } },
+            
         ]
         
         this.$store.dispatch("store_city_index", { comp_id: this.comp_id }).then((resp) => {

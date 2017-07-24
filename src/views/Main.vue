@@ -188,25 +188,7 @@ a {
   opacity: 0
 }
 
-.fade-1-enter-active {
-  .animated;
-  .fadeInRight;
-}
 
-.fade-1-leave-active {
-  .animated;
-  .fadeOutLeft;
-}
-
-.fade-2-enter-active {
-  .animated;
-  .fadeInLeft;
-}
-
-.fade-2-leave-active {
-  .animated;
-  .fadeOutRight;
-}
 
 .slide-1-enter-active {
   .animated;

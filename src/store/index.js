@@ -115,8 +115,13 @@ const myStore = {
   },
   actions: {
     store_index(context, payload) {
-      let mock = {};
-      return remote ? api(`/api/store/index`) : Promise.resolve(mock);
+      return api(`/api/store/index`);
+    },
+    store_index_new_age(context, payload) {
+      return api(`/api/store/index/newAge`);
+    },
+    store_index_free(context, payload) {
+      return api(`/api/store/index/free`);
     },
     store_index_goodstype(context, payload) {
       let mock = {};
@@ -130,6 +135,10 @@ const myStore = {
       let mock = {};
       return remote ? api(`/api/store/index/age`) : Promise.resolve(mock);
     },
+    store_index_age_detail(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/index/ageDetail`, { params: payload }) : Promise.resolve(mock);
+    },
     store_index_compareHis(context, payload) {
       let mock = {};
       return remote ? api(`/api/store/index/compareHis/${payload.comp_id}`) : Promise.resolve(mock);
@@ -138,9 +147,17 @@ const myStore = {
       let mock = {};
       return remote ? api(`/api/store/index/curMonthInAmount/${payload.comp_id}`) : Promise.resolve(mock);
     },
+    store_index_in_detail(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/index/curMonthInDetail`, { params: payload }) : Promise.resolve(mock);
+    },
     store_index_out_amount(context, payload) {
       let mock = {};
       return remote ? api(`/api/store/index/curMonthOutAmount/${payload.comp_id}`) : Promise.resolve(mock);
+    },
+    store_index_out_detail(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/index/curMonthOutDetail`, { params: payload }) : Promise.resolve(mock);
     },
     store_index_l2_info(context, payload) {
       let mock = {};
@@ -185,6 +202,14 @@ const myStore = {
     store_his_index_storegoods(context, payload) {
       let mock = {};
       return remote ? api(`/api/store/his/index/storegoods`, { params: payload }) : Promise.resolve(mock);
+    },
+    store_city_ingoods(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/city/ingoods/${payload.comp_id}`) : Promise.resolve(mock);
+    },
+    store_city_ingoods_detail(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/city/ingoods/dtlgoods`,{params:payload}) : Promise.resolve(mock);
     },
   }
 }
@@ -239,6 +264,14 @@ const project = {
       console.log("data", data)
       return data == null ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectSum`, { params: payload }) : Promise.resolve(data);
     },
+    project_unfinish_year_list(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectApproved`) : Promise.resolve(mock);
+    },
+    project_unfinish_year_one(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectApprovedList&year=${payload.year}`) : Promise.resolve(mock);
+    },
     project_erp_list(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProjectList`, { params: payload }) : Promise.resolve(mock);
@@ -271,6 +304,14 @@ const project = {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOrderlistByProject`, { params: payload }) : Promise.resolve(mock);
     },
+    project_info_out_erp(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOutBigType`, { params: payload }) : Promise.resolve(mock);
+    },
+    project_info_outlist_erp(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpOutBigTypeList`, { params: payload }) : Promise.resolve(mock);
+    },
     project_info_out(context, payload) {
       let mock = {};
       return remote ? api(`/api/project/one/out`, { params: payload }) : Promise.resolve(mock);
@@ -290,6 +331,10 @@ const project = {
     project_asset_assetlist(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpAsset`, { params: payload }) : Promise.resolve(mock);
+    },
+    project_asset_resclist(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getThreeSourceByPro`, { params: payload }) : Promise.resolve(mock);
     },
     
     project_asset_erplist_ext_1(context, payload) {
@@ -426,7 +471,11 @@ const trace = {
     trace_storeGoodsInfo_buyOrder(context, payload) {
       let mock = {};
       return remote ? api(`/api/trace/storeGoods/traceBuyOrder`, { params: payload }) : Promise.resolve(mock);
-    }
+    },
+    trace_storeGoodsInfo_one(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/trace/storeGoods/one`, { params: payload }) : Promise.resolve(mock);
+    },
   }
 }
 const storeMap = {

@@ -109,16 +109,7 @@ export default {
     },
     computed: {
         filterData() {
-            var data = this.items
-            var filterKey = this.searchText && this.searchText.toLowerCase()
-            if (filterKey.length > 0) {
-                data = data.filter(function (row) {
-                    return Object.keys(row).some(function (key) {
-                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-                    })
-                })
-            }
-            return data
+            return filterArr(this.items,this.searchText)
         }
     },
     watch: {

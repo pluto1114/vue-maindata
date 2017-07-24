@@ -13,7 +13,7 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(x,index) of outgoods" :key="x">
-                            <span class="badge">{{x.value|money}}</span>
+                            <span class="badge">{{x.value|money}}{{x.unit}}</span>
                             <span v-html="x.name"></span>
                         </li>
                     </ul>
@@ -33,7 +33,7 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="(x,index) of erpgoods">
-                            <span class="badge">{{x.value|money}}</span>
+                            <span class="badge">{{x.value|money}}{{x.unit}}</span>
                             <span>{{x.name}}</span>
                         </li>
                     </ul>
@@ -108,13 +108,15 @@
                     <tr>
                         <th>编号</th>
                         <th>名称</th>
+                        <th>对应项目编号</th>
                         <th>数量</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="x of assetgoodsExt2">
-                        <td>{{x.code}}</td>
-                        <td>{{x.name}}</td>
+                        <td>{{x.name1}}</td>
+                        <td>{{x.name2}}</td>
+                        <td><a @click="handleClickForExt(x.name3)">{{x.name3}}</a></td>
                         <td>{{x.value}}</td>
                     </tr>
                 </tbody>
@@ -125,13 +127,15 @@
                     <tr>
                         <th>编号</th>
                         <th>名称</th>
+                        <th>对应项目编号</th>
                         <th>数量</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="x of assetgoodsExt3">
-                        <td>{{x.code}}</td>
-                        <td>{{x.name}}</td>
+                        <td>{{x.name1}}</td>
+                        <td>{{x.name2}}</td>
+                        <td><a @click="handleClickForExt(x.name3)">{{x.name3}}</a></td>
                         <td>{{x.value}}</td>
                     </tr>
                 </tbody>
@@ -206,22 +210,26 @@ export default {
         console.log('linked', this.linked)
         this.$store.dispatch("project_asset_outlist", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
             this.outgoods = resp.body.items
+            this.outgoods.forEach(item=>{
+                console.log(item.code)
+            })
         });
         this.$store.dispatch("project_asset_erplist", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
             this.erpgoods = resp.data
+            
         });
         console.log(this.storecomp_code, this.project_code)
         this.$store.dispatch("project_asset_assetlist", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
-            resp.data.forEach(item => {
-                item.value = parseFloat(item.current_units)
-            })
             let groups = _.groupBy(resp.data, 'asset_name')
             let arr = []
             _.forIn(groups, (v, k) => {
-                arr.push({ name: k, value: _.sum(v, 'value') })
+                arr.push({ name: k, value: _.sum(v, 'current_units'),unit:v[0].unit_of_measure })
             })
 
             this.assetgoods = arr
+        });
+        this.$store.dispatch("project_asset_resclist", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
+             this.resoucegoods = resp.data
         });
 
     },
@@ -243,7 +251,11 @@ export default {
             })
 
         },
-
+        handleClickForExt(code){
+            this.$store.commit("setProProjectCode",code)
+            this.$root.$emit("modalHideAll")
+            this.$router.push("/project/one")
+        }
 
     },
     components: {

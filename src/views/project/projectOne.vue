@@ -20,7 +20,10 @@
                             <li class="list-group-item">
                                 <i class="fa fa-user-o"></i>项目经理：
                                 <span class="my-link" @click="handleSearch(project.pm_person_name.split(',')[0])">{{project.pm_person_name.split(",")[0]}}</span>
-                                
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fa fa-star-o"></i>项目状态：
+                                <span class="">{{project.pjt_status_desc}}</span>
                             </li>
                             <li class="list-group-item">
                                 <i class="fa fa-clock-o"></i>项目开始日期：
@@ -30,8 +33,7 @@
                                 <i class="fa fa-clock-o"></i>最后出库日期：
                                 <span class="">{{info.lastOutDate|prettyDate}}</span>
                             </li>
-                            <!-- <li class="list-group-item"><i class="fa fa-paper-plane"></i>采购单数量：<span class="">{{info.buyCount}}</span></li>
-    				  	<li class="list-group-item"><i class="fa fa-paper-plane"></i>出库单数量：<span class="">{{info.outCount}}</span></li> -->
+    
                             <li class="list-group-item">
                                 <i class="fa fa-money"></i>采购总金额：
                                 <span class="">{{info.buyAmount|money}}</span>
@@ -48,6 +50,9 @@
                                 <i class="fa fa-money"></i>库存总金额：
                                 <span class="">{{info.storeAmount|money}}</span>
                             </li>
+                            <li class="list-group-item" style="padding:1em;">
+                                <div class="btn btn-default btn-block" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
+                            </li>
     
                         </ul>
                     </div>
@@ -57,7 +62,7 @@
                     <div class="row">
                         <div class="col-sm-6" v-if="pieDataBuy.length>0">
                             <div class="p3">
-                                <h4>采购物资</h4>
+                                <h4>经仓采购物资</h4>
                                 <Chart width="99%" height="300px" :option="optionPieBuy" theme="macarons" loading></Chart>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -75,7 +80,7 @@
                         </div>
                         <div class="col-sm-6" v-if="pieDataOut.length>0">
                             <div class="p3">
-                                <h4>出库物资</h4>
+                                <h4>物资平台出库</h4>
                                 <Chart width="100%" height="300px" :option="optionPieOut" theme="macarons" loading></Chart>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -90,19 +95,19 @@
                                 </div>
     
                             </div>
-                           
+    
                         </div>
-
+    
                         <div class="col-sm-6" v-if="pieDataBuyDirect.length>0">
                             <div class="p3">
-                                <h4>采购物资</h4>
+                                <h4>直发采购物资</h4>
                                 <Chart width="99%" height="300px" :option="optionPieBuyDirect" theme="macarons" loading></Chart>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="list-group">
                                             <li class="list-group-item" v-for="(x,index) of pieDataBuyDirect">
                                                 <span class="pull-right">{{x.value | money}}</span>
-                                                <a @click="handleClickBuyDirect(x.code)">{{x.name}}</a>
+                                                <a @click="handleClickBuyDirect(parseInt(x.code))">{{x.name}}</a>
                                             </li>
                                         </ul>
     
@@ -111,15 +116,31 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                                    <div class="btn btn-default" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
+                        <div class="col-sm-6" v-if="pieDataOutERP.length>0">
+                            <div class="p3">
+                                <h4>ERP平台出库</h4>
+                                <Chart width="100%" height="300px" :option="optionPieOutERP" theme="macarons" loading></Chart>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" v-for="(x,index) of pieDataOutERP">
+                                                <span class="pull-right">{{x.value | money}}</span>
+                                                <a @click="handleClickOutERP(parseInt(x.code))">{{x.name}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
                                 </div>
+    
+                            </div>
+                        </div>
                     </div>
     
                 </div>
             </div>
-    
-            <router-view></router-view>
+            <div id="asset">
+                <router-view></router-view>
+            </div>
         </div>
     
         <MyModal :option="buyModalOption" title="采购物资详情">
@@ -127,10 +148,11 @@
                 <div class="col-md-12">
                     <Excel selector="#projectOneTable1" class="pull-right">
                         <button class="btn btn-default">
-                            <span class="fa fa-download"></span></button>
+                            <span class="fa fa-download"></span>
+                        </button>
                     </Excel>
                 </div>
-
+    
             </div>
             <div style="height:430px;overflow-y:scroll;">
     
@@ -169,10 +191,11 @@
                 <div class="col-md-12">
                     <Excel selector="#projectOneTable2" class="pull-right">
                         <button class="btn btn-default">
-                            <span class="fa fa-download"></span></button>
+                            <span class="fa fa-download"></span>
+                        </button>
                     </Excel>
                 </div>
-
+    
             </div>
             <div style="height:430px;overflow-y:scroll;">
     
@@ -196,7 +219,49 @@
                             <td>{{x.order_code}}</td>
                             <td>{{x.ready_out_count}}</td>
                             <td>{{x.single_price}}</td>
-                            <td><a @click="handleItemClickForOut(x.qrcode_code)">追溯</a></td>
+                            <td>
+                                <a @click="handleItemClickForOut(x.qrcode_code)">追溯</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+        </MyModal>
+        <MyModal :option="outModalOptionERP" title="ERP出库物资">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#projectOneTable2" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span>
+                        </button>
+                    </Excel>
+                </div>
+    
+            </div>
+            <div style="height:430px;overflow-y:scroll;">
+    
+                <table id="projectOneTable2" class="table">
+                    <thead>
+                        <tr>
+                            <th>物资编号</th>
+                            <th>物资名称</th>
+                            <th>需求部门</th>
+                            <th>数量</th>
+                            <th>单价</th>
+    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="x of outgoodsERP">
+                            <td>{{x.item_code}}</td>
+                            <td>
+                                <span v-html="x.item_desc"></span>
+                            </td>
+                            <td>{{x.require_dept}}</td>
+                            <td>{{x.issued_quantity}}</td>
+                            <td>{{x.unit_cost}}</td>
+    
                         </tr>
                     </tbody>
                 </table>
@@ -208,10 +273,11 @@
                 <div class="col-md-12">
                     <Excel selector="#projectOneTable3" class="pull-right">
                         <button class="btn btn-default">
-                            <span class="fa fa-download"></span></button>
+                            <span class="fa fa-download"></span>
+                        </button>
                     </Excel>
                 </div>
-
+    
             </div>
             <div style="height:430px;overflow-y:scroll;">
     
@@ -223,21 +289,19 @@
                             <th>采购单号</th>
                             <th>数量</th>
                             <th>单价</th>
-                            <th></th>
+    
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="x of buygoodsDirect">
-                            <td>{{x.goodstype_code}}</td>
+                            <td>{{x.mate_code_cg}}</td>
                             <td>
-                                <span v-html="x.goodstype_name"></span>
+                                <span v-html="x.mate_desc_cg"></span>
                             </td>
-                            <td>{{x.buyorder_code}}</td>
-                            <td>{{x.buy_count}}</td>
-                            <td>{{x.no_tax_price}}</td>
-                            <td>
-                                <a @click="handleItemClick(x.id)">使用详情</a>
-                            </td>
+                            <td>{{x.order_no}}</td>
+                            <td>{{x.mate_qty}}</td>
+                            <td>{{x.prot_price}}</td>
+    
                         </tr>
                     </tbody>
                 </table>
@@ -310,10 +374,18 @@
             </div>
     
         </MyModal>
-
+        <MyModal :option="goodsModalOption" title="物资追溯" small>
+            <table class="table">
+                <tr>
+                    <td><label>物资编码：</label></td>
+                    <td>{{goodsOne.goodstype_code}}</td>
+                </tr>
+            </table>
+        </MyModal>
         <MyModal :option="outTraceModalOption" title="物资追溯" small>
             <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
         </MyModal>
+    
     </div>
 </template>
 
@@ -340,17 +412,23 @@ export default {
             pieDataOut: {},
             optionPieOut: {},
             outgoods: [],
-            pieDataBuyDirect:{},
+            pieDataBuyDirect: {},
             optionPieBuyDirect: {},
             buygoodsDirect: [],
+            pieDataOutERP: {},
+            optionPieOutERP: {},
+            outgoodsERP: [],
 
             backStep: -1,
             buyModalOption: {},
             buyModalOptionDirect: {},
             outModalOption: {},
+            outModalOptionERP: {},
             useModalOption: {},
-            selqrcode:0,
-            outTraceModalOption:{},
+            selqrcode: 0,
+            goodsOne:{},
+            goodsModalOption: {},
+            outTraceModalOption: {},
 
         }
     },
@@ -369,32 +447,42 @@ export default {
         },
     },
     watch: {
+        'project_code': 'init',
         'pieDataBuy': 'drawPieBuy',
         'pieDataBuyDirect': 'drawPieBuyDirect',
         'pieDataOut': 'drawPieOut',
+        'pieDataOutERP': 'drawPieOutERP',
     },
     mounted() {
-   
-        this.$store.dispatch("project_info_index").then((resp) => {
-            this.info = resp.body.itemMap
-        });
-        this.$store.dispatch("project_erp_one", { project_id: this.project_code }).then((resp) => {
-            this.project = resp.data[0]
-        });
-        this.$store.dispatch("project_info_buy", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
-            var items = resp.body.items
-            this.pieDataBuy = items;
-        });
-        this.$store.dispatch("project_info_out", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
-            var items = resp.body.items
-            this.pieDataOut = items;
-        });
-        this.$store.dispatch("project_info_buy_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
-            var items = resp.data
-            this.pieDataBuyDirect = items;
-        });
+        this.init()
+
     },
     methods: {
+        init() {
+            // console.log(this.project_code)
+            this.$store.dispatch("project_info_index").then((resp) => {
+                this.info = resp.body.itemMap
+            });
+            this.$store.dispatch("project_erp_one", { project_id: this.project_code }).then((resp) => {
+                this.project = resp.data[0]
+            });
+            this.$store.dispatch("project_info_buy", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
+                var items = resp.body.items
+                this.pieDataBuy = items;
+            });
+            this.$store.dispatch("project_info_out", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
+                var items = resp.body.items
+                this.pieDataOut = items;
+            });
+            this.$store.dispatch("project_info_buy_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
+                var items = resp.data
+                this.pieDataBuyDirect = items;
+            });
+            this.$store.dispatch("project_info_out_erp", { storecomp_code: this.storecomp_code, project_id: this.project_code }).then((resp) => {
+                var items = resp.data
+                this.pieDataOutERP = items;
+            });
+        },
         handleClickBuy(level_one_code) {
             this.buyModalOption = { visable: true }
             this.$store.dispatch("project_info_buylist", { comp_id: this.comp_id, project_code: this.project_code, level_one_code }).then((resp) => {
@@ -403,7 +491,7 @@ export default {
         },
         handleClickBuyDirect(level_one_code) {
             this.buyModalOptionDirect = { visable: true }
-            this.$store.dispatch("project_info_buylist_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type:level_one_code }).then((resp) => {
+            this.$store.dispatch("project_info_buylist_direct", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type: level_one_code }).then((resp) => {
                 this.buygoodsDirect = resp.data
             });
         },
@@ -422,19 +510,25 @@ export default {
                 this.outgoods = resp.body.items
             });
         },
-        handleItemClickForOut(qrcode_code){
-            this.selqrcode=qrcode_code
-            this.outTraceModalOption={visable:true}
+        handleClickOutERP(level_one_code) {
+            this.outModalOptionERP = { visable: true }
+            this.$store.dispatch("project_info_outlist_erp", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type: level_one_code }).then((resp) => {
+                this.outgoodsERP = resp.data
+            });
+        },
+        handleItemClickForOut(qrcode_code) {
+            this.selqrcode = qrcode_code
+            this.outTraceModalOption = { visable: true }
         },
         handleClickCompare(linked) {
-            console.log("click")
             this.backStep = -2
             this.$store.commit('setProLinked', linked)
             this.$router.push({ name: 'ProjectAsset' })
+            $("body").animate({scrollTop: $("#asset").offset().top}, 1000)
         },
-        handleSearch(text){
-            this.$store.commit("setProSearchState",true)
-            this.$store.commit("setProSearchText",text)
+        handleSearch(text) {
+            this.$store.commit("setProSearchState", true)
+            this.$store.commit("setProSearchText", text)
             this.$router.push("/project")
         },
         drawPieBuy() {
@@ -505,11 +599,34 @@ export default {
                     }
                 ]
             }
-        }
+        },
+        drawPieOutERP() {
+            this.optionPieOutERP = {
+                title: {
+                    // text: '全区物资类型分布',
+                    left: 'right'
+                },
+                tooltip: {},
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
+                },
+                series: [
+                    {
+                        name: '物资类型',
+                        type: 'pie',
+                        radius: ['20%', '55%'],
+                        data: this.pieDataOutERP
+                    }
+                ]
+            }
+        },
 
     },
     components: {
-        Chart, MyMenu, MyModal,TraceInfo,Excel
+        Chart, MyMenu, MyModal, TraceInfo, Excel
     }
 }
 </script>
@@ -540,9 +657,10 @@ export default {
         border-bottom: 1px solid #dfdfdf;
     }
 }
-.table{
-    td{
-        max-width:10em;
+
+.table {
+    td {
+        max-width: 10em;
     }
 }
 </style>

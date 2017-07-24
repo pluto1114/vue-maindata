@@ -28,25 +28,15 @@ function formatDate(date) {
     return y + '-' + m + '-' + d;  
 }
 
-// function s2ab(s) {
-//     if(typeof ArrayBuffer !== 'undefined') {
-//         var buf = new ArrayBuffer(s.length);
-//         var view = new Uint8Array(buf);
-//         for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-//         return buf;
-//     } else {
-//         var buf = new Array(s.length);
-//         for (var i=0; i!=s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
-//         return buf;
-//     }
-// }
-
-// function export_table_to_excel(selector, type, fn) {
-//     var wb = XLSX.utils.table_to_book(document.querySelector(selector), {sheet:"Sheet JS"});
-//     var wbout = XLSX.write(wb, {bookType:type, bookSST:true, type: 'binary'});
-//     var fname = fn || 'test.' + type;
-//     try {
-//         saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), fname);
-//     } catch(e) { if(typeof console != 'undefined') console.log(e, wbout); }
-//     return wbout;
-// }
+function filterArr(arr, searchText) {
+  var data = arr
+  var filterKey = searchText && searchText.toLowerCase()
+  if (filterKey.length > 0) {
+    data = data.filter(function (row) {
+      return Object.keys(row).some(function (key) {
+        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+      })
+    })
+  }
+  return data
+}

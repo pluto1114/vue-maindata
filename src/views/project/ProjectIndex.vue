@@ -119,15 +119,43 @@
                                     </i>
                                 </div>
                                 <div class="panel-body">
-                                    <chart :option="optionBar1" height="600px" loading="" theme="macarons" width="100%">
+                                    <chart :option="optionBar1" height="450px" loading="" theme="macarons" width="100%">
                                     </chart>
+                                    <div class="row">
+                                        <div class="col-sm-5" style="padding-left:0.8em;padding-top:2em;">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <i class="fa fa-bell-o fa-4x" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-sm-9 total">
+                                                    <div class="title">全区未完成项目总数</div>
+                                                    <div class="number">{{summary.unfinishNum}}</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row store-amount" style="margin-top:2em;">
+                                                <div class="col-sm-4">项目年份</div>
+                                                <div class="col-sm-4">项目数量</div>
+                                                <div class="col-sm-4">项目金额</div>
+                                            </div>
+                                            <div v-for="(x,index) of summary.unfinishYears" class="row store-amount" v-if="summary.unfinishYears">
+                                                <div class="col-sm-4">{{x.name}}</div>
+                                                <div class="col-sm-4">{{x.value1}}</div>
+                                                <div class="col-sm-4">￥{{(x.value2/10000).toFixed()}}万</div>
+                                            </div> 
+                                        </div>
+                            
+                                        <div class="col-sm-6">
+                                            <chart :option="optionPie" height="320px" loading theme="macarons" width="100%" @chartClick="handleClickForPie"></chart>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="search-wrap">
-                    <button @click="openCtrlClick" class="btn btn--search" id="btn-search">
+                    <button @click="openCtrlClick" class="btn btn--search" id="btn-search" hidden>
                         <svg class="icon icon--search">
                             <use xlink:href="#icon-search">
                             </use>
@@ -163,7 +191,41 @@
             </main>
             <!-- /main-wrap -->
         </div>
-    
+
+        <MyModal :option="yearModalOption" title="项目详情">
+            <div class="row">
+                <div class="col-sm-6 btn-ext">
+                    
+                </div>
+                <div class="col-sm-6">
+                    <div class="pull-right">
+                        <input type="search" class="form-control" placeholder="搜索" v-model="searchTextPro">
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>项目编号</th>
+                        <th>项目名称</th>
+                        <th>项目经理</th>
+                        <th>状态</th>
+                        <th>所属公司</th>
+                        <th>启动时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="x of filterPro" :key="x">
+                        <td>{{x.project_number}}</td>
+                        <td>{{x.project_name}}</td>
+                        <td>{{x.pm_person_name.split(',')[0]}}</td>
+                        <td>{{x.pjt_status_desc}}</td>
+                        <td>{{x.pa_org_name|sub(17)}}</td>
+                        <td>{{x.start_date|prettyDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </MyModal>
     </div>
 </template>
 
@@ -171,22 +233,27 @@
 
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import MyModal from '@/components/MyModal'
 import { mapState } from 'vuex';
 export default {
 
     data() {
         return {
-            menus: [
-            ],
+            menus: [],
             comps: [],
 
             years: [],
             projects: [],
             optionBar1: {},
+            optionPie: {},
+            summary:{},
             loading: false,
 
             searchInput: '',
 
+            searchTextPro:'',
+            projects:[],
+            yearModalOption:{}
         }
 
     },
@@ -199,7 +266,9 @@ export default {
             searchState: state => state.project.searchState,
             searchText: state => state.project.searchText,
         }),
-
+        filterPro(){
+            return filterArr(this.projects,this.searchTextPro)
+        }
     },
     mounted() {
 
@@ -227,13 +296,40 @@ export default {
                     type: 'bar',
                     data: resp.data
                 }]
-            };
+            }
+            this.summary.totalNum=_.sum(resp.data,'value')
             this.$store.commit("setProStatusListData", resp)
             this.$nextTick(() => {
                 $('.menu-1').lazeemenu();
             })
-        });
-
+        })
+        this.$store.dispatch("project_unfinish_year_list").then((resp) => {
+            this.summary.unfinishNum=_.sum(resp.data,'value1')
+            this.summary.unfinishYears=resp.data
+            this.optionPie = {
+                title: {
+                    text: '未完成项目金额分布',
+                    left: 'center'
+                },
+               
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 30,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
+                },
+                series: [
+                    {
+                        name: '年份',
+                        type: 'pie',
+                        radius: ['0%', '60%'],
+                        data: _.map(resp.data, item =>{
+                                return {name:item.name,value:item.value2}
+                            })
+                    }
+                ]
+            }
+        })
         if (!this.searchState) {
             if (this.storecomp_code && this.status && this.year) {
                 this.handleStatusClick(this.storecomp_code, this.status)
@@ -271,7 +367,14 @@ export default {
             this.years = _.sortByOrder(this.years, ['code'], ['desc'])
             this.$store.commit("setProYear", this.years[0].code);
             this.freshList(this.year)
-
+        },
+        handleClickForPie(params){
+            console.log(params.data)
+            this.yearModalOption={visable:true}
+            this.projects=[]
+            this.$store.dispatch("project_unfinish_year_one", { year: params.data.name }).then((resp) => {
+                this.projects = resp.data
+            })
         },
         showBar() {
             let option = this.optionBar1
@@ -281,7 +384,7 @@ export default {
             this.$store.commit("setProYear", year);
             this.$store.dispatch("project_erp_list", { storecomp_code: this.storecomp_code, state: this.status, year: this.year }).then((resp) => {
                 this.projects = resp.data
-            });
+            })
         },
         searchPro() {
             this.projects = []
@@ -291,7 +394,6 @@ export default {
             this.$store.dispatch("project_erp_search", { condition: encodeURIComponent(this.searchInput) }).then((resp) => {
                 this.projects = resp.data
                 this.$nextTick(() => {
-
                     this.loading = false
                 })
             });
@@ -328,7 +430,7 @@ export default {
         }
     },
     components: {
-        Chart, MyMenu
+        Chart, MyMenu,MyModal
     }
 }
 </script>
@@ -361,6 +463,18 @@ export default {
 }
 
 
+.total {
+    .title {}
+    .number {
+        font-size: 2em;
+        line-height: 1.8em;
+    }
+}
+
+.store-amount {
+    line-height: 2em;
+    font-size: 1.2em;
+}
 .project-item {
     .animated;
     .fadeInRight;
@@ -378,4 +492,6 @@ export default {
 .fa-search {
     margin-right: 0.2em;
 }
+
+
 </style>

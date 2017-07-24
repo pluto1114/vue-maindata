@@ -205,8 +205,7 @@
                                     <button class="btn btn-default">
                                         <span class="fa fa-download"></span></button>
                                 </Excel>
-                            </div>
-            
+                            </div>          
                         </div>
                         <table id="shopCityIndex_outInfosMonth" class="table" v-if="outInfosMonth">
                             <thead>

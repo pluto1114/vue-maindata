@@ -74,6 +74,8 @@ a {
 .shown-loop(12);
 .menu-item {
   padding-left: 20px;
+  font-weight: bold;
+  // text-shadow: 0 0 2px #933;
   float: left;
   .animated;
   .slideInUp;

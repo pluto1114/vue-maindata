@@ -18,7 +18,7 @@
     }
     ;(function validBrowser(){ 
         var u_agent = navigator.userAgent; 
-        console.log(u_agent)
+        // console.log(u_agent)
         var browser_name='Failed to identify the browser'; 
         if(u_agent.indexOf('Firefox')>-1){ 
             browser_name='Firefox'; 
@@ -37,9 +37,9 @@
         }else{ 
             browser_name+=',info:'+u_agent; 
         }
-        if(console){ 
-            console.log(browser_name)
-        }
+        // if(console){ 
+        //     console.log(browser_name)
+        // }
         if(browser_name=='IE(8-10)' || browser_name=='IE(6-7)'){
             alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
         }
@@ -79,7 +79,7 @@
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/bootbox.min.js"></script>
     <script type="text/javascript" src="./static/js/lazeemenu-jquery.js"></script>
-    <script type="text/javascript" src="./static/js/pluto.js"></script>
+    <script type="text/javascript" src="./static/js/pluto.js?t=0721"></script>
      <script type="text/javascript" src="./static/js/toastr.min.js"></script> 
     <script type="text/javascript" src="./static/js/excel/xlsx.full.min.js"></script>
     <script type="text/javascript" src="./static/js/excel/FileSaver.js"></script>
@@ -88,6 +88,6 @@
 
    
    
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MB73XZCnFasx1RpDQRmGFwtR4UmloIZO"></script>
+     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MB73XZCnFasx1RpDQRmGFwtR4UmloIZO"></script> 
   </body>
 </html>

@@ -16,6 +16,9 @@
 				    			<div class="box-cell-1">{{x.name}}</div>
 				    			<div class="">￥{{x.amount|money}}</div>
 				    		</li>
+							<li class="list-group-item" v-if="cityStoresL1[0].comp_id==2">
+								<a href="/vlc_play2.html" target="_blank">仓库视频监控</a>
+							</li>
 				    	</ul>					  
             		</div>
             		<div class="col-sm-6">

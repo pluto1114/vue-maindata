@@ -15,6 +15,7 @@ import TraceTimeLine from '@/views/trace/TraceTimeLine.vue'
 
 import StoreIndex from '@/views/store/StoreIndex.vue'
 import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
+import StoreCityInGoods from '@/views/store/StoreCityInGoods.vue'
 import StoreCountyIndex from '@/views/store/StoreCountyIndex.vue'
 import StoreHisIndex from '@/views/store/StoreHisIndex.vue'
 
@@ -97,6 +98,11 @@ export default new Router({
                 path: 'city/:comp_id',
                 component: StoreCityIndex,
                 name: 'StoreCityIndex',
+                description: '库存'
+            },{
+                path: 'city/ingoods/:comp_id',
+                component: StoreCityInGoods,
+                name: 'StoreCityInGoods',
                 description: '库存'
             },{
                 path: 'county/:dept_code',

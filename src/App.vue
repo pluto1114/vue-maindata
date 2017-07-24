@@ -46,6 +46,14 @@ a{
 ul li{
   list-style: none;
 }
+.modal{
+    .table{
+        td{
+            min-width:4em;
+            max-width:10em;
+        }
+    }
+}
 .btn-ext{
     .pad-15{
         padding: 15px 0;

@@ -7,7 +7,7 @@
       <div class="col-md-12">
         <div class="content">
           <article>
-            <h4>{{info.goodstype_descp}} {{info.recv_count}}{{info.unit}}</h4>
+            <h4><span v-html="info.goodstype_descp"></span> {{info.recv_count}}{{info.unit}}（现存数量 {{info.cur_count}}）</h4>
             <br>
             <section>
               <span class="point-time point-red"></span>
@@ -34,7 +34,7 @@
                 </time>
                 <aside>
                   <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求 <strong>{{y.ready_out_count}}</strong>{{info.unit}}</p>
-                  <p v-if="y.project_name" class="things ">项目名称：<span class="my-link" @click="handleClickForPro(y.start_comp_id,y.project_code)">{{y.project_name}}</span></p>
+                  <p v-if="y.project_name" class="things ">项目名称：<span class="my-link" @click="handleClickForPro(y.start_comp_id,y.project_code,y.storecomp_code)">{{y.project_name}}</span></p>
                   <p v-if="y.follow_comp_name" class="things">施工单位：{{y.follow_comp_name}}</p>
                   <p class="brief">
                     <span class="text-green">需求信息</span>
@@ -48,7 +48,7 @@
                   <span>{{z.realname}}</span>
                 </time>
                 <aside>
-                  <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单</p>
+                  <p class="things">{{z.realname}}在 {{z.createtime}} 发起出库单{{z.order_code}}</p>
                   <p class="things" v-if="z.order_status=='over'">{{z.storer}}在 {{z.endtime}} 扫码出库</p>
                   <p class="brief">
                     <span class="text-blue">物资出库</span>
@@ -158,9 +158,10 @@ export default {
         this.buyOrder = resp.body.itemMap.buyOrder
       })
     },
-    handleClickForPro(comp_id,project_code){
+    handleClickForPro(comp_id,project_code,storecomp_code){
       this.$store.commit("setProCompId",comp_id)
       this.$store.commit("setProProjectCode",project_code)
+      this.$store.commit("setProStoreCompCode",storecomp_code)
       this.$root.$emit("modalHideAll")
       this.$router.push("/project/one")
     },
@@ -168,6 +169,7 @@ export default {
       if (!this.qrcode) {
         return
       }
+      this.loading=true
       this.$store.dispatch("trace_storeGoodsInfo", { qrcode: this.qrcode, level: this.level }).then(resp => {
         this.info = resp.body.itemMap.storeGoodsInfo
         this.loading = false
