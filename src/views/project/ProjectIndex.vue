@@ -311,7 +311,7 @@ export default {
                     text: '未完成项目金额分布',
                     left: 'center'
                 },
-               
+                color:["#ac2925","#f0ad4e","#5cb85c"],
                 itemStyle: {
                     normal: {
                         shadowBlur: 30,

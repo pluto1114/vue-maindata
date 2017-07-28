@@ -31,7 +31,7 @@
                   <a role="button" data-toggle="collapse" data-parent="#accordion" :href="'#'+x.code" class="box">
                     <div class="box-cell-1 box">
                       <div class="unilineText" v-html="x.name"></div>
-                      <div>（{{x.left_count}}）</div>
+                      <div>（{{x.left_count}}/{{x.in_count}}）</div>
                     </div>
                     <div>￥{{x.in_amount|money}}</div>
                   </a>
@@ -134,15 +134,17 @@ export default {
       var year = date_.getYear() + 1900
       var month = date_.getMonth() + 1
 
-      this.start_date = year + '-' + month + '-01'
-      this.end_date = year + '-' + (month + 1) + '-01'
+      this.start_date = year + '-' + (month>9?month:('0'+month)) + '-01'
+      this.end_date = year + '-' + (month>8?(month+1):('0'+(month+1))) + '-01'
+      console.log(this.start_date)
+      
       this.search()
     },
     search() {
       this.$store.dispatch("store_city_ingoods_detail", { comp_id: this.comp_id, start_date: this.start_date, end_date: this.end_date }).then((resp) => {
         let groups = _.groupBy(resp.body.items, 'goodstype_code')
         this.gathergoods = _.map(groups, (val, key) => {
-          return { code: key, name: val[0].goodstype_name, in_amount: _.sum(val, "in_amount"), left_count: _.sum(val, "cur_count"), goods: val }
+          return { code: key, name: val[0].goodstype_name, in_amount: _.sum(val, "in_amount"),in_count:_.sum(val,"in_count"), left_count: _.sum(val, "cur_count"), goods: val }
         })
       })
 

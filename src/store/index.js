@@ -123,6 +123,9 @@ const myStore = {
     store_index_free(context, payload) {
       return api(`/api/store/index/free`);
     },
+    store_index_free_detail(context, payload) {
+      return api(`/api/store/index/freeDetail`, { params: payload });
+    },
     store_index_goodstype(context, payload) {
       let mock = {};
       return remote ? api(`/api/store/index/goodstypeOrderBy`) : Promise.resolve(mock);

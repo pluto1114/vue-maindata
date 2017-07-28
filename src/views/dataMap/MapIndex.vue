@@ -62,9 +62,9 @@
 	 		<Chart width="560px" height="400px" :option="optionPie" theme='dark' loading></Chart>
 	 	</div>
         <ul class="list-group ">
-            <li class="list-group-item" v-for="x of pieData">
+            <li class="list-group-item" v-for="x of pieData" :key="x" @click="handleClickForJump(x)">
                 <span class="pull-right">￥{{x.value|money}}</span>
-                <span class="name" @click="handleClickForGoodsType(x.code)">{{x.name}}</span>
+                <span class="name">{{x.name}}</span>
             </li>
         </ul>
 	 </MyModal>
@@ -276,8 +276,14 @@ export default {
     		this.storeInfo(id,level)
     	}
     },
-    handleClickForGoodsType(code){
-
+    handleClickForJump(item){
+		this.$store.commit("setDark",false)
+		this.$root.$emit("modalHideAll")
+		if(item.level==1){
+			this.$router.push({ name: 'StoreCityIndex', params: { comp_id:item.store.comp_id } })
+		}else if(item.level==2){
+			this.$router.push({ name: 'StoreCountyIndex', params: { dept_code:item.store.dept_code } })
+		}
     },
     index(){
     	this.selCity=null

@@ -182,7 +182,7 @@ export default {
     this.$store.dispatch("main_buyGoods").then((resp)=>{
         this.optionLine={
             title: {
-                text: '全区采购变化趋势(万元)',
+                text: '采购变化趋势(万元)',
                 left:'right'
             },
             tooltip: {},
@@ -340,7 +340,7 @@ export default {
     }
 }
 
-@-webkit-keyframes neon1 {
+@keyframes neon1 {
   from {
     text-shadow: 0 0 10px #fff,
                0 0 20px  #fff,

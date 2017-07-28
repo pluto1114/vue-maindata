@@ -35,6 +35,7 @@ function isDesktop () {
     
 }
 a{ 
+  text-decoration: none;  
   transition: all .1s;
   &:hover{
     padding-bottom:0.28em; 

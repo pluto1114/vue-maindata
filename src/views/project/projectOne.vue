@@ -217,10 +217,10 @@
                                 <span v-html="x.goodstype_name"></span>
                             </td>
                             <td>{{x.order_code}}</td>
-                            <td>{{x.ready_out_count}}</td>
+                            <td style="padding-left:1em;">{{x.ready_out_count}}</td>
                             <td>{{x.single_price}}</td>
                             <td>
-                                <a @click="handleItemClickForOut(x.qrcode_code)">追溯</a>
+                                <a @click="handleItemClickForOut(x.qrcode_code)">详情</a>
                             </td>
                         </tr>
                     </tbody>
@@ -374,18 +374,13 @@
             </div>
     
         </MyModal>
-        <MyModal :option="goodsModalOption" title="物资追溯" small>
-            <table class="table">
-                <tr>
-                    <td><label>物资编码：</label></td>
-                    <td>{{goodsOne.goodstype_code}}</td>
-                </tr>
-            </table>
+        <MyModal :option="goodsModalOption" title="物资详情">
+             <TraceTable :qrcode="selqrcode" level=1 @showD="handleClickForFollow"></TraceTable>
         </MyModal>
+        
         <MyModal :option="outTraceModalOption" title="物资追溯" small>
             <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
         </MyModal>
-    
     </div>
 </template>
 
@@ -394,6 +389,7 @@
 import MyModal from '@/components/MyModal'
 import Chart from '@/components/Chart'
 import MyMenu from '@/components/MyMenu'
+import TraceTable from '@/components/TraceTable'
 import TraceInfo from '@/components/TraceInfo'
 import Excel from '@/components/Excel'
 
@@ -426,10 +422,10 @@ export default {
             outModalOptionERP: {},
             useModalOption: {},
             selqrcode: 0,
-            goodsOne:{},
+       
             goodsModalOption: {},
             outTraceModalOption: {},
-
+          
         }
     },
     computed: {
@@ -517,6 +513,12 @@ export default {
             });
         },
         handleItemClickForOut(qrcode_code) {
+            this.selqrcode = qrcode_code
+            this.goodsModalOption={visable:true}
+            
+        },
+        handleClickForFollow(qrcode_code){
+            console.log("handle showD")
             this.selqrcode = qrcode_code
             this.outTraceModalOption = { visable: true }
         },
@@ -626,7 +628,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal, TraceInfo, Excel
+        Chart, MyMenu, MyModal, TraceTable,TraceInfo, Excel
     }
 }
 </script>
@@ -660,7 +662,16 @@ export default {
 
 .table {
     td {
-        max-width: 10em;
+        max-width: 14em;
+    }
+}
+table.goods-modal{
+    margin-left: 2em;
+    > tr{
+        height:2.4em;
+        td:nth-child(1){
+            width:8em;
+        }
     }
 }
 </style>

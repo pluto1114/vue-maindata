@@ -130,6 +130,7 @@
                             <th>计量单位</th>
                             <th>购买数量</th>
                             <th>单价</th>
+                            <th>采购时间</th>
     
                         </tr>
                     </thead>
@@ -144,6 +145,7 @@
                             <td>{{x.units}}</td>
                             <td>{{x.buy_number}}</td>
                             <td>{{x.real_price}}</td>
+                            <td>{{x.order_date|prettyDate}}</td>
     
                         </tr>
                     </tbody>

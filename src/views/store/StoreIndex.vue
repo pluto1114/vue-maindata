@@ -9,7 +9,7 @@
                     <Chart width="100%" height="400px" :option="optionNewAge" theme='macarons' @chartClick="handleClickForAgePie" loading></Chart>
                 </div>
                 <div class="col-md-3">
-                    <Chart width="100%" height="400px" :option="optionFree" theme='macarons' loading></Chart>
+                    <Chart width="100%" height="400px" :option="optionFree" theme='macarons' @chartClick="handleClickForFreePie" loading></Chart>
                 </div>
                 <div class="col-md-6">
                     <Chart width="100%" height="300px" :option="optionBar" theme='macarons' @chartClick="handleCityClick" loading></Chart>
@@ -278,7 +278,49 @@
                                 <span v-html="x.goodstype_name"></span>
                             </td>
                             <td>{{x.comp_name|sub(0,2)}}</td>
-                            <td>{{x.order_code}}</td>
+                            <td>{{x.logic_store_name}}</td>
+                            <td>{{x.store_name}}</td>
+                            <td>{{x.unit}}</td>
+                            <td>{{x.in_count}}</td>
+                            <td>{{x.cur_count}}</td>
+                            <td>{{x.single_price}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </MyModal>
+        <MyModal :option='freeModalOption' title="物资明细">
+            <div class="row">
+                <div class="col-md-12">
+                    <Excel selector="#storeIndexTable4" class="pull-right">
+                        <button class="btn btn-default">
+                            <span class="fa fa-download"></span>
+                        </button>
+                    </Excel>
+                </div>
+            </div>
+            <div style="height:630px;overflow-y:scroll;">
+                <table id="storeIndexTable4" class="table">
+                    <thead>
+                        <tr>
+                            <th>物资编号</th>
+                            <th>物资名称</th>
+                            <th>公司</th>
+                            <th>逻辑库</th>
+                            <th>实体库</th>
+                            <th>单位</th>
+                            <th>入库数量</th>
+                            <th>当前数量</th>
+                            <th>单价</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="x of goodsFree" :key="x">
+                            <td>{{x.goodstype_code}}</td>
+                            <td>
+                                <span v-html="x.goodstype_name"></span>
+                            </td>
+                            <td>{{x.comp_name|sub(0,2)}}</td>
                             <td>{{x.logic_store_name}}</td>
                             <td>{{x.store_name}}</td>
                             <td>{{x.unit}}</td>
@@ -320,6 +362,7 @@ export default {
             totals: [],
             percents: [],
             goodsAge: [],
+            goodsFree: [],
 
             showD: false,
             optionYear: {},
@@ -335,6 +378,7 @@ export default {
             l2Info: [],
 
             ageModalOption: {},
+            freeModalOption: {},
             monthModalOption: {},
             monthDtlModalOption: {},
         }
@@ -623,10 +667,18 @@ export default {
             $("body").animate({scrollTop: $("#age").offset().top}, 1000);
         },
         handleClickForAge(tag, level_one_code) {
-            // this.ageModalOption = { visable: true }
-            // this.$store.dispatch("store_index_age_detail", { tag, level_one_code }).then((resp) => {
-            //     this.goodsAge = resp.body.items
-            // })
+            this.ageModalOption = { visable: true }
+            this.goodsAge=[]
+            this.$store.dispatch("store_index_age_detail", { tag, level_one_code }).then((resp) => {
+                this.goodsAge = resp.body.items
+            })
+        },
+        handleClickForFreePie(params){
+            this.freeModalOption={visable:true}
+            this.goodsFree=[]
+            this.$store.dispatch("store_index_free_detail", {logic_store_id:params.data.id }).then((resp) => {
+                this.goodsFree = resp.body.items
+            })
         },
         handleInAmountClick(comp_id) {
             this.selMonthType = "in"

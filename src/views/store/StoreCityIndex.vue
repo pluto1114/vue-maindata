@@ -65,11 +65,11 @@
                     </div>
                 </transition>
                 <!-- <div class="row">
-                    <div class="col-sm-1">可用物资</div>
-                    <div class="col-sm-11">         
-                        <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
-                    </div>   
-                </div> -->
+                        <div class="col-sm-1">可用物资</div>
+                        <div class="col-sm-11">         
+                            <mu-checkbox name="group2" v-model="useable" label="去除全部预占物资" class="type-checkbox" @change="handleUseableChange"/> 
+                        </div>   
+                    </div> -->
     
             </div>
     
@@ -228,7 +228,7 @@ export default {
     },
     computed: {
         filterData() {
-            return filterArr(this.results,this.searchText)
+            return filterArr(this.results, this.searchText)
         }
     },
     watch: {
@@ -262,12 +262,12 @@ export default {
     },
     mounted() {
         this.menus = [
-            { name: "入库物资跟踪", to: { name: "StoreCityInGoods", params: { comp_id: this.comp_id} } },
-            { name:"二级库库存",customEvent:"click:l2"},
+            { name: "入库物资跟踪", to: { name: "StoreCityInGoods", params: { comp_id: this.comp_id } } },
+            { name: "二级库库存", customEvent: "click:l2" },
             { name: "历史库存", to: { name: "StoreHisIndex", params: { comp_id: this.comp_id, dept_code: 0 } } },
-            
+
         ]
-        
+
         this.$store.dispatch("store_city_index", { comp_id: this.comp_id }).then((resp) => {
             this.infoMap = resp.body.itemMap;
         });
@@ -278,7 +278,7 @@ export default {
 
     },
     methods: {
-        
+
         handleClickForL2() {
             this.l2ModalOption = { visable: true }
             this.$store.dispatch("store_city_index_l2", { comp_id: this.comp_id }).then((resp) => {
