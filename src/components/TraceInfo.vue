@@ -42,13 +42,14 @@
                 </time>
                 <aside>
                   <p class="things">{{y.realname}}在 {{y.createtime}} 提出需求
-                    <strong>{{y.ready_out_count}}</strong>{{info.unit}}</p>
+                    <strong>{{y.ready_out_count|fix(2)}}</strong>{{info.unit}}</p>
                   <p v-if="y.project_name" class="things ">项目名称：
                     <span class="my-link" @click="handleClickForPro(y.start_comp_id,y.project_code,y.storecomp_code)">{{y.project_name}}</span>
                   </p>
                   <p v-if="y.follow_comp_name" class="things">施工单位：{{y.follow_comp_name}}</p>
+                  <p v-if="y.require_descp" class="things">需求描述：{{y.require_descp}}</p>
                   <p class="brief">
-                    <span class="text-green">需求信息</span>
+                    <span class="text-green">需求信息{{y.is_allocation?"（迁移）":""}}</span>
                   </p>
                 </aside>
               </section>

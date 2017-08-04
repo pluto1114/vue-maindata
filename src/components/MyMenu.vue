@@ -4,8 +4,9 @@
       <a v-if="back" @click="handleRetClick" class="myback">
         <i class="fa fa-arrow-left"></i> 返回</a>
       <div style="float:right;" v-if="items.length>0">
-        <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''">
-          <a @click="handleLinkClick(x)">{{x.name}}</a>
+        <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''" :key="x">
+          <input v-if="x.type && x.type=='search'" type="text" :placeholder="searchPlaceholder" class="my-input" v-model="searchText" @keyup.enter="handleSearch(x)"/>
+          <a v-else @click="handleLinkClick(x)">{{x.name}}</a>
         </div>
       </div>
     </div>
@@ -16,10 +17,21 @@
 
 export default {
   name: 'my-menu',
-  props: ['items', 'back', 'step', 'customHandler'],
+  props: ['items', 'back', 'step'],
   data() {
     return {
+      searchText:'',
+      searchPlaceholder:'',
     }
+  },
+  mounted(){
+    var u_agent = window.navigator.userAgent; 
+    if(u_agent.indexOf('Trident')>-1&&(u_agent.indexOf('rv:11')>-1)){
+      this.searchPlaceholder=""
+    }else{
+      this.searchPlaceholder="  搜索..."
+    }
+
   },
   methods: {
     handleRetClick() {
@@ -40,6 +52,15 @@ export default {
       if (item.customEvent) {
         this.$emit(item.customEvent, item)
       } else {
+        this.$router.push(item.to)
+      }
+    },
+    handleSearch(item){
+      if(this.searchText!=''){
+        // if (item.customEvent) {
+        //   this.$emit(item.customEvent, this.searchText)
+        // }
+        item.to.params={key:this.searchText}
         this.$router.push(item.to)
       }
     }
@@ -79,6 +100,17 @@ a {
   float: left;
   .animated;
   .slideInUp;
+
+  .my-input{
+    width:7em;
+    height:1.8em;
+    border-radius: 0.3em;
+    border:none;
+    color:#333;
+  }
+  :-ms-input-placeholde{
+    color:white;
+  }
 }
 
 .menu-item a {
@@ -98,4 +130,6 @@ a {
   .flash; //animation-duration: 5000ms; 
   animation-iteration-count: 3;
 }
+
+
 </style>

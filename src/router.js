@@ -18,6 +18,7 @@ import StoreCityIndex from '@/views/store/StoreCityIndex.vue'
 import StoreCityInGoods from '@/views/store/StoreCityInGoods.vue'
 import StoreCountyIndex from '@/views/store/StoreCountyIndex.vue'
 import StoreHisIndex from '@/views/store/StoreHisIndex.vue'
+import StoreSearch from '@/views/store/StoreSearch.vue'
 
 import ProjectIndex from '@/views/project/ProjectIndex.vue'
 import ProjectOne from '@/views/project/ProjectOne.vue'
@@ -113,6 +114,11 @@ export default new Router({
                 path: 'his/:comp_id/:dept_code',
                 component: StoreHisIndex,
                 name: 'StoreHisIndex',
+                description: '库存'
+            },{
+                path: 'search/:key',
+                component: StoreSearch,
+                name: 'StoreSearch',
                 description: '库存'
             }
 

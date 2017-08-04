@@ -12,7 +12,7 @@ export function int(num) {
   return parseInt(num)
 }
 export function fix(num, n) {
-  return parseFloat(num).toFixed(n)
+  return  num%1===0?num:parseFloat(num).toFixed(n)
 }
 export function money(s, n) {
   n = n || 0;
@@ -20,6 +20,7 @@ export function money(s, n) {
   if (s > 10000000) {
     s = new Number(s)
   }
+ 
   s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
   var l = s.split(".")[0].split("").reverse()
   let r = s.split(".")[1];

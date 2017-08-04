@@ -509,7 +509,7 @@ export default {
         handleClickOutERP(level_one_code) {
             this.outModalOptionERP = { visable: true }
             this.$store.dispatch("project_info_outlist_erp", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type: level_one_code }).then((resp) => {
-                this.outgoodsERP = resp.data
+                this.outgoodsERP = _.sortBy(resp.data,'item_code')
             });
         },
         handleItemClickForOut(qrcode_code) {
@@ -526,7 +526,7 @@ export default {
             this.backStep = -2
             this.$store.commit('setProLinked', linked)
             this.$router.push({ name: 'ProjectAsset' })
-            $("body").animate({scrollTop: $("#asset").offset().top}, 1000)
+            $("body,html").animate({scrollTop: $("#asset").offset().top}, 1000)
         },
         handleSearch(text) {
             this.$store.commit("setProSearchState", true)

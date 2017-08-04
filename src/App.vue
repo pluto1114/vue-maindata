@@ -34,6 +34,7 @@ function isDesktop () {
 .app{
     
 }
+
 a{ 
   text-decoration: none;  
   transition: all .1s;

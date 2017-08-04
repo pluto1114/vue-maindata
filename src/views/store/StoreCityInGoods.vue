@@ -167,6 +167,7 @@ a:focus {
   text-decoration: none;
   outline: none;
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .title {

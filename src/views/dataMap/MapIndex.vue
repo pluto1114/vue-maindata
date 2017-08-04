@@ -442,7 +442,7 @@ export default {
     	
     },
     toHTML(params){
-    	return `${params.name}<br>
+    	return `${params.name}（${params.data.comp_name}）<br>
 				位置：[${params.data.lng},${params.data.lat}]<br>`
 				+'库存：'+money(params.data.amount)
     }

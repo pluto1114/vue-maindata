@@ -1,64 +1,93 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>内蒙古联通全物资全生命周期信息管理平台</title>
     <link rel="stylesheet" href="./static/css/Roboto_font.css">
     <link rel="stylesheet" href="./static/css/MaterialIcons-Regular_font.css">
     <link rel="stylesheet" href="./static/css/bootstrap.css">
-    
+
     <link rel="stylesheet" href="./static/css/muse-ui.css">
     <link rel="stylesheet" href="./static/css/font-awesome.min.css">
     <link rel="stylesheet" href="./static/css/lazeemenu.css">
     <link rel="stylesheet" href="./static/css/toastr.css">
-    
+
     <script type="text/javascript">
-    window.onerror=function(){
-    // alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
-    }
-    ;(function validBrowser(){ 
-        var u_agent = navigator.userAgent; 
-        // console.log(u_agent)
-        var browser_name='Failed to identify the browser'; 
-        if(u_agent.indexOf('Firefox')>-1){ 
-            browser_name='Firefox'; 
-        }else if(u_agent.indexOf('Chrome')>-1){ 
-            browser_name='Chrome'; 
-        }else if(u_agent.indexOf('Edge')>-1){ 
-            browser_name='Edge'; 
-        }else if(u_agent.indexOf('Trident')>-1&&(u_agent.indexOf('rv:11')>-1 || u_agent.indexOf('rv:10')>-1)){ 
-            browser_name='IE11(10)'; 
-        }else if(u_agent.indexOf('MSIE')>-1&&u_agent.indexOf('Trident')>-1){ 
-            browser_name='IE(8-10)'; 
-        }else if(u_agent.indexOf('MSIE')>-1){ 
-            browser_name='IE(6-7)'; 
-        }else if(u_agent.indexOf('Opera')>-1){ 
-            browser_name='Opera'; 
-        }else{ 
-            browser_name+=',info:'+u_agent; 
+        window.onerror = function () {
+            // alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
         }
-        // if(console){ 
-        //     console.log(browser_name)
-        // }
-        if(browser_name=='IE(8-10)' || browser_name=='IE(6-7)'){
-            alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
-        }
-    })()
-    
+        // ;(function validBrowser(){ 
+        //     var u_agent = navigator.userAgent; 
+        //     // console.log(u_agent)
+        //     var browser_name='Failed to identify the browser'; 
+        //     if(u_agent.indexOf('Firefox')>-1){ 
+        //         browser_name='Firefox'; 
+        //     }else if(u_agent.indexOf('Chrome')>-1){ 
+        //         browser_name='Chrome'; 
+        //     }else if(u_agent.indexOf('Edge')>-1){ 
+        //         browser_name='Edge'; 
+        //     }else if(u_agent.indexOf('Trident')>-1&&(u_agent.indexOf('rv:11')>-1)){ 
+        //         browser_name='IE11'; 
+        //     }else if(u_agent.indexOf('MSIE')>-1&&u_agent.indexOf('Trident')>-1){ 
+        //         browser_name='IE(8-10)'; 
+        //     }else if(u_agent.indexOf('MSIE')>-1){ 
+        //         browser_name='IE(6-7)'; 
+        //     }else if(u_agent.indexOf('Opera')>-1){ 
+        //         browser_name='Opera'; 
+        //     }else{ 
+        //         browser_name+=',info:'+u_agent; 
+        //     }
+        //     // if(console){ 
+        //     //     console.log(browser_name)
+        //     // }
+        //     if(browser_name=='IE(8-10)' || browser_name=='IE(6-7)'){
+        //         // alert("本系统采用HTML5编写。您的浏览器不支持HTML 5,请更换浏览器，推荐使用Chrome！");
+        //         location.href="/no_support_html5.html";
+        //     }
+        // })()
+        var supports_canvas = (function () {
+            if (!!document.createElement('canvas').getContext) {
+                var ua = navigator.userAgent;
+                var s = "MSIE";
+                var i = ua.indexOf(s);
+                if (i >= 0) {
+                    //获取IE版本号 
+                    var ver = parseFloat(ua.substr(i + s.length));
+                    if (ver <= 10) {
+                        location = "/no_support_html5.html";
+                    }
+                }
+                console.log("ok");
+            } else {
+                location = "/no_support_html5.html";
+            }
+
+        })();
     </script>
     <style type="text/css">
-      body{
-        font-family: "Microsoft YaHei" ! important;
-      }
+        body {
+            font-family: "Microsoft YaHei" ! important;
+        }
+        @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none) {
+            .menu-item .my-input{
+                margin-top:1em;
+                height:1.5em !important;
+                padding:0 !important;
+                border-radius: 0;
+            }
+        }
     </style>
-  </head>
-  <body>
+    
+</head>
+
+<body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script type="text/javascript" src="./static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="./static/js/lodash.js"></script>
     <script type="text/javascript" src="./static/js/echarts.min.js"></script>
-    
+
     <script type="text/javascript" src="./static/js/neimenggu.js"></script>
     <script type="text/javascript" src="./static/js/map/2.js"></script>
     <script type="text/javascript" src="./static/js/map/3.js"></script>
@@ -80,14 +109,15 @@
     <script type="text/javascript" src="./static/js/bootbox.min.js"></script>
     <script type="text/javascript" src="./static/js/lazeemenu-jquery.js"></script>
     <script type="text/javascript" src="./static/js/pluto.js?t=0721"></script>
-     <script type="text/javascript" src="./static/js/toastr.min.js"></script> 
+    <script type="text/javascript" src="./static/js/toastr.min.js"></script>
     <script type="text/javascript" src="./static/js/excel/xlsx.full.min.js"></script>
     <script type="text/javascript" src="./static/js/excel/FileSaver.js"></script>
     <script type="text/javascript" src="./static/js/jquery.freezeheader.js"></script>
     <script type="text/javascript" src="./static/js/animatext.js"></script>
 
-   
-   
-     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MB73XZCnFasx1RpDQRmGFwtR4UmloIZO"></script> 
-  </body>
+
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MB73XZCnFasx1RpDQRmGFwtR4UmloIZO"></script>
+</body>
+
 </html>

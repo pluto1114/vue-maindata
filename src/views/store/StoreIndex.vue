@@ -516,6 +516,8 @@ export default {
             }
 
             this.menus = this.cities;
+            this.menus.push({to:{name:"StoreSearch"},type:'search'})
+
             this.optionBar = {
                 title: {
                     text: '全区库存分布'
@@ -663,8 +665,8 @@ export default {
                 })
             }
         },
-        handleClickForAgePie(){
-            $("body").animate({scrollTop: $("#age").offset().top}, 1000);
+        handleClickForAgePie(){         
+            $("body,html").animate({scrollTop: $("#age").offset().top}, 1000)
         },
         handleClickForAge(tag, level_one_code) {
             this.ageModalOption = { visable: true }
@@ -763,6 +765,7 @@ export default {
         handleCountyClick(dept_code) {
             this.$router.push({ name: 'StoreCountyIndex', params: { dept_code } })
         },
+       
         showCompareHis(comp_id) {
             this.curMonthShow = false
 

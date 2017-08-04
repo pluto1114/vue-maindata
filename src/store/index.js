@@ -117,6 +117,10 @@ const myStore = {
     store_index(context, payload) {
       return api(`/api/store/index`);
     },
+    store_index_search(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/index/search`,{params:payload}) : Promise.resolve(mock);
+    },
     store_index_new_age(context, payload) {
       return api(`/api/store/index/newAge`);
     },
@@ -214,6 +218,7 @@ const myStore = {
       let mock = {};
       return remote ? api(`/api/store/city/ingoods/dtlgoods`,{params:payload}) : Promise.resolve(mock);
     },
+    
   }
 }
 const project = {

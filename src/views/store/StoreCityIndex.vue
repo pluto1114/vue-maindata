@@ -137,7 +137,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(x,index) of filterData" :key="x.id">
+                            <tr v-for="(x,index) of filterData" :key="x.id" :class="x.logic_store_id==9||x.logic_store_id==10?'text-danger':''">
                                 <td>{{index+1}}</td>
                                 <td>{{x.goodstype_code}}</td>
                                 <td>{{x.goodstype_name}}</td>

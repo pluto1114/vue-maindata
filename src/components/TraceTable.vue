@@ -17,7 +17,7 @@
               </td>
               <td>【{{x.realname}}】{{x.date}}发起需求</td>
              
-              <td>{{x.ready_out_count}}{{info.unit}}</td>
+              <td>{{x.ready_out_count|fix(2)}}{{info.unit}}</td>
               <td>{{x.storer_already_out?"已出库":"未出"}}</td>
             </tr>
           </table>

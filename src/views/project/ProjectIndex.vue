@@ -90,9 +90,9 @@
                                             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                                         </div>
                                         <ul class="list-group">
-                                            <li @click="handleProClick(x.project_number,x.comp_id,x.storecomp_code)" class="list-group-item project-item" v-for="x of projects">
+                                            <li @click="handleProClick(x)" class="list-group-item project-item" v-for="x of projects">
                                                 <h4>
-                                                    {{x.project_name}}
+                                                    {{x.project_name}}<span v-if="x.is_one=='1'">（{{x.comp_name}}）</span>
                                                 </h4>
                                                 <p class="">
                                                     项目编号：{{x.project_number}}
@@ -216,7 +216,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="x of filterPro" :key="x">
-                        <td>{{x.project_number}}</td>
+                        <td><span class="project-number" @click="handleProClick(x)">{{x.project_number}}</span></td>
                         <td>{{x.project_name}}</td>
                         <td>{{x.pm_person_name.split(',')[0]}}</td>
                         <td>{{x.pjt_status_desc}}</td>
@@ -351,10 +351,11 @@ export default {
         handleClickForGeneral() {
             this.$store.commit("setProStatus", null);
         },
-        handleProClick(project_id, comp_id,storecomp_code) {
-            this.$store.commit("setProCompId", comp_id)
-            this.$store.commit("setProProjectCode", project_id)
-            this.$store.commit("setProStoreCompCode", storecomp_code)
+        handleProClick(item) {
+            this.$store.commit("setProCompId", item.comp_id)
+            this.$store.commit("setProProjectCode", item.project_id||item.project_code||item.project_number)
+            this.$store.commit("setProStoreCompCode", item.storecomp_code)
+             this.$root.$emit("modalHideAll")
             this.$router.push("/project/one")
         },
         handleStatusClick(storecomp_code, status) {
@@ -493,5 +494,7 @@ export default {
     margin-right: 0.2em;
 }
 
-
+.project-number{
+    text-decoration: underline;
+}
 </style>
