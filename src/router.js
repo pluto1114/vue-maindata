@@ -26,6 +26,7 @@ import ProjectAsset from '@/views/project/asset/ProjectAsset.vue'
 
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
+import TerminalSearch from '@/views/resource/TerminalSearch.vue'
 
 import OPIndex from '@/views/operation/OPIndex.vue'
 
@@ -33,6 +34,8 @@ import MarketIndex from '@/views/market/MarketIndex.vue'
 
 import ShopIndex from '@/views/shop/ShopIndex.vue'
 import ShopCityIndex from '@/views/shop/ShopCityIndex.vue'
+
+import OfficeIndex from '@/views/office/OfficeIndex.vue'
 
 import MapIndex from '@/views/dataMap/MapIndex.vue'
 
@@ -166,6 +169,11 @@ export default new Router({
                 component: TerminalIndex,
                 name: 'TerminalIndex',
                 description: '资源'
+            },{
+                path: 'terminalSearch/:searchKey',
+                component: TerminalSearch,
+                name: 'TerminalSearch',
+                description: '资源'
             }
         ]
     },{
@@ -211,6 +219,19 @@ export default new Router({
                 name: 'ShopCityIndex',
                 description: '商城'
             },
+        ]
+    },{
+        path: '/office',
+        component: Main,
+        description: '商城',
+        auth: true,
+        children: [
+            {
+                path: '',
+                component: OfficeIndex,
+                name: 'OfficeIndex',
+                description: '办公'
+            }
         ]
     },{
         path: '/dataMap',

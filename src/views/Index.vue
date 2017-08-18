@@ -67,6 +67,7 @@ export default {
             {name:"固网终端分析",to:"/resource/terminalIndex"},
             {name:"运维物资分析",to:"/operation"},
             {name:"网络资源分析",to:"/resource"},
+            {name:"办公用品",to:"/office"},
             {name:"库存GIS地图",to:"/dataMap",dark:true,flash:true},
             // {name:"综合查询",to:"/resource"},
         ],
@@ -82,6 +83,7 @@ export default {
   },
   mounted(){
   	this.$store.dispatch("main_map").then((resp)=>{
+        let data=_.where(resp.body.items,{ekey:'erp_storegoods'})
         this.optionMap = {
             title: {
                 text: '全区物资分布情况',
@@ -124,7 +126,7 @@ export default {
                             show: true
                         }
                     },
-                    data:resp.body.items
+                    data:data
                 }
             ]
         };
@@ -226,30 +228,7 @@ export default {
         this.orderInfo3=_.where(resp.body.items,{group_index:3});
         this.orderInfo4=_.where(resp.body.items,{group_index:4});
     });
-    // this.orderInfo1=[
-    //     {name:"正常库存",value:0,to:""},
-    //     {name:"非正常库存",value:0,to:""},
-    //     {name:"工程物资总额",value:0,to:""},
-    //     {name:"闲置物资数量",value:0,to:""},
-    // ]
-    // this.orderInfo2=[
-    //     {name:"工程物资总额",value:0,to:""},
-    //     {name:"运维物资总额",value:0,to:""},
-    //     {name:"营销物资总额",value:0,to:""},
-       
-    // ]
-    // this.orderInfo3=[
-    //     {name:"工程项目总数",value:0,to:""},
-    //     {name:"工程物资总额",value:0,to:""},
-    //     {name:"在建项目总数",value:0,to:""},
-    //     {name:"在建项目总额",value:0,to:""},
-    // ]
-    // this.orderInfo4=[
-    //     {name:"光猫入库量",value:0,to:""},
-    //     {name:"光猫装机量",value:0,to:""},
-    //     {name:"机顶盒在库量",value:0,to:""},
-    //     {name:"机顶盒装机量",value:0,to:""},
-    // ]
+   
   },
   methods:{
   	handleMapClick(params){
@@ -260,7 +239,7 @@ export default {
         this.$router.push(url)
     },
     toHTML(params,items){
-        var arr=_.where(items,{comp_id:params.data.comp_id});
+        var arr=_.where(items,{name:params.data.name});
         var str="";
         for (var i = 0;i<arr.length;i++){
             str+="<br />"+arr[i].d_name+"  "+money(arr[i].value)
