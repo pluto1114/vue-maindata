@@ -67,11 +67,10 @@ export function $api(url,options) {
     // console.log("opt",opt)
 
     
-    if(opt.type==="get"){
-        p=$.get(url,opt.params);       
-    }else if(opt.type==="post"){
-        console.log("post data")
-        p=$.post(url,opt.params);
+    if(opt.type==="post"){
+        p=$.post(url,opt.params);       
+    }else{
+        p=$.get(url,opt.params); 
     }
     p.then(resp=>{
         if(debug){

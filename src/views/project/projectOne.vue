@@ -25,6 +25,10 @@
                                 <i class="fa fa-star-o"></i>项目状态：
                                 <span class="">{{project.pjt_status_desc}}</span>
                             </li>
+                            <li class="list-group-item" v-if="project.pjt_status_desc=='已关闭'">
+                                <i class="fa fa-star-o"></i>在审计台帐：
+                                <span class="text-danger">{{auditDesc}}</span>
+                            </li>
                             <li class="list-group-item">
                                 <i class="fa fa-clock-o"></i>项目开始日期：
                                 <span class="">{{project.start_date|prettyDate}}</span>
@@ -400,6 +404,8 @@ export default {
             menus: [],
             info: null,
             project: null,
+            auditDesc:"",
+
             pieDataBuy: {},
             optionPieBuy: {},
             buygoods: [],
@@ -461,6 +467,9 @@ export default {
             });
             this.$store.dispatch("project_erp_one", { project_id: this.project_code }).then((resp) => {
                 this.project = resp.data[0]
+            });
+            this.$store.dispatch("project_erp_one_audit", { project_id: this.project_code }).then((resp) => {
+                this.auditDesc = resp.data.length>0&&resp.data[0].value=="1"?"是":"否"
             });
             this.$store.dispatch("project_info_buy", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
                 var items = resp.body.items

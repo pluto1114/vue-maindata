@@ -1,0 +1,5 @@
+http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWListByStore&code=5L3V&goods_type=Z033&type=on
+
+###
+
+http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWListByStore&code=5AZ6&goods_type=Z033&type=in

@@ -292,10 +292,15 @@ const project = {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getErpProject`, { params: payload }) : Promise.resolve(mock);
     },
+    project_erp_one_audit(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getAuditProject`, { params: payload }) : Promise.resolve(mock);
+    },
     project_info_index(context, payload) {
       let mock = {};
       return remote ? api(`/api/project/one`, { params: { comp_id: context.state.comp_id, project_code: context.state.project_code } }) : Promise.resolve(mock);
     },
+    
     project_info_buy(context, payload) {
       let mock = {};
       return remote ? api(`/api/project/one/buy`, { params: payload }) : Promise.resolve(mock);
@@ -383,15 +388,24 @@ const resource = {
     },
     terminal_index(context, payload) {
       let mock = {};
-      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWSum`) : Promise.resolve(mock);
+      
+      if (payload&&payload.type&&payload.type == 'on') {
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWOnlineSum`) : Promise.resolve(mock);
+      } else {
+        return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWSum`) : Promise.resolve(mock);
+      }
     },
     terminal_index_search(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWQueryBySn&sn=${payload.sn}`) : Promise.resolve(mock);
     },
-    terminal_index_detail(context, payload) {
+    terminal_index_orgs(context, payload) {
       let mock = {};
-      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getTerminalList&kc_id=${payload.kc_id}`) : Promise.resolve(mock);
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWStoreBylocal`,{params:payload}) : Promise.resolve(mock);
+    },
+    terminal_index_orgs_detail(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWListByStore`,{params:payload}) : Promise.resolve(mock);
     }
   }
 }

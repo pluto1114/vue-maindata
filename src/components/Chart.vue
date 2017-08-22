@@ -61,7 +61,7 @@ export default {
      
     },
     doAction(){
-      if (myChart) {
+      if (myChart && this.actionOption) {
         myChart.dispatchAction(this.actionOption);
       }
       

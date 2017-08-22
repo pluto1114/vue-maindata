@@ -1,91 +1,46 @@
 <template>
     <div class="index">
         <MyMenu :items="menus" back=true></MyMenu>
-    
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12 banner">
                     <div class="row">
                         <div class="title col-sm-4">办公用品</div>
                         <div class="total col-sm-offset-6 col-sm-2">
-    
+
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="col-md-12 content">
                     <table class="table">
-                        <tbody><tr>
-                <td width="200" height="50"><p align="center">商品名称</p></td>
-                <td width="120" height="50"><p align="center">品牌型号 </p></td>
-                <td height="50"><p align="center">规 格 </p></td>
-                <td width="120" height="50"><p align="center">批发价格 </p></td>
-                <td width="120" height="50"><p align="center">零售价格</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">订书针 通用12#</p></td>
-                <td><p align="center">齐心B3058</p></td>
-                <td><p align="center">1000枚/盒 装订20页 </p></td>
-                <td><p align="center"><strong>0.78</strong></p></td>
-                <td><p align="center">1.5</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">回形针 防锈通用</p></td>
-                <td><p align="center">齐心B3500</p></td>
-                <td><p align="center">100枚/盒 29mm</p></td>
-                <td><p align="center"><strong>1.1</strong>0</p></td>
-                <td><p align="center">2.0</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">大头针 防锈通用</p></td>
-                <td><p align="center">齐心B3536</p></td>
-                <td><p align="center">50g/盒 </p></td>
-                <td><p align="center"><strong>1.55</strong></p></td>
-                <td><p align="center">2.0</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">图钉 防锈通用</p></td>
-                <td><p align="center">得力 0020</p></td>
-                <td><p align="center">1000枚/盒 </p></td>
-                <td><p align="center"><strong>1.80</strong></p></td>
-                <td><p align="center">3.0</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">美工刀 小型</p></td>
-                <td><p align="center">齐心B2806</p></td>
-                <td><p align="center">9mm</p></td>
-                <td><p align="center"><strong>1.8</strong>0</p></td>
-                <td><p align="center">3.0</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">美工刀 中型</p></td>
-                <td><p align="center">得力 2001</p></td>
-                <td><p align="center">100mm*18*0.5mm</p></td>
-                <td><p align="center"><strong>1.99</strong></p></td>
-                <td><p align="center">3.5</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">刀片 常规 </p></td>
-                <td><p align="center">啄木鸟 </p></td>
-                <td><p align="center">18mm 10片/盒 </p></td>
-                <td><p align="center"><strong>2.50</strong></p></td>
-                <td><p align="center">3.0</p></td>
-              </tr>
-              <tr>
-                <td><p align="center">剪刀 中型</p></td>
-                <td><p align="center">齐心B2715</p></td>
-                <td><p align="center">170*60mm</p></td>
-                <td><p align="center"><strong>2.90</strong></p></td>
-                <td><p align="center">4.0</p></td>
-              </tr>
-             
-             
-            </tbody>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>名称</th>
+                                <th>数量</th>
+                                <th>计量单位</th>
+                                <th>存放地点</th>
+                                <th>资产管理员</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(x,i) of items" :key="x">
+                                <td>{{i+1}}</td>
+                                <td>{{x.name}}</td>
+                                <td>{{x.c1}}</td>
+                                <td>{{x.c2}}</td>
+                                <td>{{x.c3}}</td>
+                                <td>{{x.c4}}</td>
+                            </tr>
+
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    
+
     </div>
 </template>
 
@@ -104,6 +59,8 @@ export default {
             dtlModalOption: {},
             compModalOption: {},
 
+            names:['会议桌','办公桌','办公椅','办公沙发','文件柜','铁皮柜','电脑','打印机','传真机','复印机','投影仪'],
+            items:[],
             searchKey: ""
         }
     },
@@ -163,8 +120,8 @@ export default {
             }
         });
 
-        $('#myModal').on('hidden.bs.modal', e => {
-            this.countyItems = []
+        this.names.forEach((n,i)=>{
+            this.items.push({name:n,c1:'--',c2:'--',c3:'--',c4:'--'})
         })
     },
     methods: {
