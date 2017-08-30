@@ -1,9 +1,9 @@
 <template>
     <div class="index">
-        <MyMenu :items="menus" back=true></MyMenu>
-    
+        <MyMenu :items="menus" back=true @click:search="handleSearch"></MyMenu>
+
         <div class="container">
-    
+
             <div class="row">
                 <div class="col-md-3">
                     <Chart width="100%" height="400px" :option="optionNewAge" theme='macarons' @chartClick="handleClickForAgePie" loading></Chart>
@@ -41,25 +41,25 @@
                         <div class="col-md-6">￥{{(x/10000).toFixed()}}万元</div>
                     </div>
                 </div>
-    
+
                 <div class="col-md-6">
                     <Chart width="100%" height="400px" :option="optionPie" theme='macarons' loading></Chart>
                 </div>
-    
+
                 <div class="col-md-3 goodstype-order">
                     <h3>物资类型排行</h3>
-    
+
                     <ol v-if="goodstypeOrderBy.length>0">
                         <li v-for="x of goodstypeOrderBy" class="my-item" :key="x">{{x.name}}
                             <span>{{parseInt(x.value/10000)}}万</span>
                         </li>
                     </ol>
-    
+
                 </div>
             </div>
-    
-             <div id="age" class="row age">
-    
+
+            <div id="age" class="row age">
+
                 <div class="col-sm-4">
                     <div class="panel panel-default" @click="handleShowD">
                         <div class="panel-body">
@@ -76,16 +76,16 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <ul class="list-group text-success" v-show="showD">
                         <li class="list-group-item" v-for="(x,index) of d150" :key="x" @click="handleClickForAge('d150',x.code)">
                             <span class="pull-right">{{x.value|money}}</span>
                             <span>{{x.name}}</span>
                         </li>
                     </ul>
-    
+
                 </div>
-    
+
                 <div class="col-sm-4">
                     <div class="panel panel-default" @click="handleShowD">
                         <div class="panel-body">
@@ -109,7 +109,7 @@
                         </li>
                     </ul>
                 </div>
-    
+
                 <div class="col-sm-4">
                     <div class="panel panel-default" @click="handleShowD">
                         <div class="panel-body">
@@ -133,13 +133,13 @@
                         </li>
                     </ul>
                 </div>
-    
+
                 <div class="col-sm-12">
                     <button type="button" class="btn btn-default btn-block" @click="handleShowD">{{showD?"收起":"查看库龄详情"}}</button>
                 </div>
-    
-            </div> 
-    
+
+            </div>
+
             <div class="panel panel-default compare">
                 <div class="panel-body">
                     <div class="row">
@@ -150,7 +150,7 @@
                                 </button>
                                 <button type="button" v-for="x of cities" @click="handleCompSel(x.id)" class="list-group-item" :class="{active:x.id==comp_id}">
                                     <i class="fa fa-lightbulb-o" aria-hidden="true"></i>{{x.name}}库存</button>
-    
+
                             </div>
                         </div>
                         <div class="col-md-10">
@@ -177,7 +177,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="panel panel-default l2">
                 <div class="panel-heading">
                     <h4>二级库库存信息</h4>
@@ -193,7 +193,7 @@
                 </div>
             </div>
         </div>
-    
+
         <MyModal :option='monthModalOption' title="物资详情" small>
             <Chart width="550px" height="400px" :option="optionPieMonth" theme='macarons' @chartClick="handleClickForPie" loading></Chart>
             <ul class="list-group" style="font-size:1.125em;">
@@ -332,6 +332,15 @@
                 </table>
             </div>
         </MyModal>
+        <MyModal :option='searchModalOption' title="库存搜索" small>
+            <div class="row">
+                <div class="col-sm-12">
+                    <input type="text" v-model="searchText" class="form-control" placeholder="请输入搜索信息..." @keyup.enter="startSearch">
+                </div>
+                
+            </div>
+
+        </MyModal>
     </div>
 </template>
 
@@ -351,14 +360,13 @@ export default {
             cities: [],
             optionNewAge: {},
             optionFree: {},
-            // optionNormal: {},
-            // optionProject: {},
+
             optionBar: {},
             optionPie: {},
             goodstypeOrderBy: [],
             d150: [],
             d180: [],
-            u180:[],
+            u180: [],
             totals: [],
             percents: [],
             goodsAge: [],
@@ -377,6 +385,8 @@ export default {
 
             l2Info: [],
 
+            searchModalOption: {},
+            searchText:"",
             ageModalOption: {},
             freeModalOption: {},
             monthModalOption: {},
@@ -408,7 +418,7 @@ export default {
                     left: 'left',
                     data: ['正常', '临界', '非正常']
                 },
-                color:["#5cb85c","#f0ad4e","#ac2925"],
+                color: ["#5cb85c", "#f0ad4e", "#ac2925"],
                 itemStyle: {
                     normal: {
                         shadowBlur: 30,
@@ -435,7 +445,7 @@ export default {
             this.optionFree = {
                 title: {
                     text: '无成本库存',
-                    subtext:'共计'+money(_.sum(resp.body.items,'value')),
+                    subtext: '共计' + money(_.sum(resp.body.items, 'value')),
                     left: 'center'
                 },
                 tooltip: {
@@ -446,7 +456,7 @@ export default {
                 legend: {
                     orient: 'vertical',
                     left: 'left',
-                  
+
                 },
                 // color:["#5cb85c","#f0ad4e","#ac2925"],
                 itemStyle: {
@@ -470,7 +480,7 @@ export default {
                     }
                 ]
             }
-           
+
         })
         this.$store.dispatch("store_index").then((resp) => {
             this.infoMap = resp.body.itemMap;
@@ -516,7 +526,7 @@ export default {
             }
 
             this.menus = this.cities;
-            this.menus.push({to:{name:"StoreSearch"},type:'search'})
+            this.menus.push({ name: "StoreSearch", customEvent: "click:search", type: 'search' })
 
             this.optionBar = {
                 title: {
@@ -628,7 +638,7 @@ export default {
             this.d150 = this.d150.length == 0 ? [none] : this.d150;
             this.d180 = this.d180.length == 0 ? [none] : this.d180;
             this.u180 = this.u180.length == 0 ? [none] : this.u180;
-           
+
             this.totals[0] = _.sum(_.pluck(this.d150, 'value'))
             this.totals[1] = _.sum(_.pluck(this.d180, 'value'))
             this.totals[2] = _.sum(_.pluck(this.u180, 'value'))
@@ -665,20 +675,20 @@ export default {
                 })
             }
         },
-        handleClickForAgePie(){         
-            $("body,html").animate({scrollTop: $("#age").offset().top}, 1000)
+        handleClickForAgePie() {
+            $("body,html").animate({ scrollTop: $("#age").offset().top }, 1000)
         },
         handleClickForAge(tag, level_one_code) {
             this.ageModalOption = { visable: true }
-            this.goodsAge=[]
+            this.goodsAge = []
             this.$store.dispatch("store_index_age_detail", { tag, level_one_code }).then((resp) => {
                 this.goodsAge = resp.body.items
             })
         },
-        handleClickForFreePie(params){
-            this.freeModalOption={visable:true}
-            this.goodsFree=[]
-            this.$store.dispatch("store_index_free_detail", {logic_store_id:params.data.id }).then((resp) => {
+        handleClickForFreePie(params) {
+            this.freeModalOption = { visable: true }
+            this.goodsFree = []
+            this.$store.dispatch("store_index_free_detail", { logic_store_id: params.data.id }).then((resp) => {
                 this.goodsFree = resp.body.items
             })
         },
@@ -765,7 +775,7 @@ export default {
         handleCountyClick(dept_code) {
             this.$router.push({ name: 'StoreCountyIndex', params: { dept_code } })
         },
-       
+
         showCompareHis(comp_id) {
             this.curMonthShow = false
 
@@ -820,6 +830,15 @@ export default {
             this.$store.dispatch("store_index_l2_info").then((resp) => {
                 this.l2Info = resp.body.items
             })
+        },
+        handleSearch() {
+            this.searchModalOption = { visable: true }
+        },
+        startSearch(){
+            if(this.searchText!=''){
+                this.$root.$emit("modalHideAll")
+                this.$router.push({name:"StoreSearch",params:{key:this.searchText}})
+            }
         }
     },
     components: {
@@ -893,7 +912,7 @@ export default {
     .list-group {
         .animated;
         .bounceInUp;
-    } 
+    }
 
     .shown-loop(@n, @i: 1) when (@i <=@n) {
         .col-sm-4:nth-child(@{i}) {

@@ -73,7 +73,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h4>出库运维物料2017年数据分析</h4>
+                    <h4>2017年运维物料使用情况跟踪</h4>
                     <table class="table">
                         <thead>
                             <tr>

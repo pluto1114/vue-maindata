@@ -5,7 +5,7 @@
         <i class="fa fa-arrow-left"></i> 返回</a>
       <div style="float:right;" v-if="items.length>0">
         <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''" :key="x">
-          <input v-if="x.type && x.type=='search'" type="text" :placeholder="searchPlaceholder" class="my-input" v-model="searchText" @keyup.enter="handleSearch(x)"/>
+          <i v-if="x.type && x.type=='search'" @click="handleLinkClick(x)" class="fa fa-search"></i>
           <a v-else @click="handleLinkClick(x)">{{x.name}}</a>
         </div>
       </div>
@@ -20,17 +20,11 @@ export default {
   props: ['items', 'back', 'step'],
   data() {
     return {
-      searchText:'',
-      searchPlaceholder:'',
+     
     }
   },
   mounted(){
-    var u_agent = window.navigator.userAgent; 
-    if(u_agent.indexOf('Trident')>-1&&(u_agent.indexOf('rv:11')>-1)){
-      this.searchPlaceholder=""
-    }else{
-      this.searchPlaceholder="  搜索..."
-    }
+    
 
   },
   methods: {
@@ -56,13 +50,7 @@ export default {
       }
     },
     handleSearch(item){
-      if(this.searchText!=''){
-        // if (item.customEvent) {
-        //   this.$emit(item.customEvent, this.searchText)
-        // }
-        item.to.params={key:this.searchText}
-        this.$router.push(item.to)
-      }
+      
     }
   }
 }
@@ -83,6 +71,10 @@ a {
   color: white;
   position: relative;
   top: -3.5em;
+
+  i{
+    cursor: pointer;
+  }
 }
 
 .shown-loop(@n, @i: 1) when (@i <=@n) {
@@ -101,16 +93,7 @@ a {
   .animated;
   .slideInUp;
 
-  .my-input{
-    width:7em;
-    height:1.8em;
-    border-radius: 0.3em;
-    border:none;
-    color:#333;
-  }
-  :-ms-input-placeholde{
-    color:white;
-  }
+  
 }
 
 .menu-item a {
