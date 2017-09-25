@@ -1,7 +1,7 @@
 <template>
     <div class="index">
         <MyMenu :items="menus" back=true :step="backStep"></MyMenu>
-    
+
         <div class="container page-info">
             <div class="row" v-if="info">
                 <div class="col-sm-3">
@@ -26,8 +26,11 @@
                                 <span class="">{{project.pjt_status_desc}}</span>
                             </li>
                             <li class="list-group-item" v-if="project.pjt_status_desc=='已关闭'">
-                                <i class="fa fa-star-o"></i>在审计台帐：
-                                <span class="text-danger">{{auditDesc}}</span>
+                                <a @click="handleAudit">
+                                    <i class="fa fa-star-o"></i>在审计台帐：
+                                    <span class="text-danger">{{auditDesc}}</span>
+                                </a>
+
                             </li>
                             <li class="list-group-item">
                                 <i class="fa fa-clock-o"></i>项目开始日期：
@@ -37,7 +40,7 @@
                                 <i class="fa fa-clock-o"></i>最后出库日期：
                                 <span class="">{{info.lastOutDate|prettyDate}}</span>
                             </li>
-    
+
                             <li class="list-group-item">
                                 <i class="fa fa-money"></i>采购总金额：
                                 <span class="">{{info.buyAmount|money}}</span>
@@ -57,12 +60,12 @@
                             <li class="list-group-item" style="padding:1em;">
                                 <div class="btn btn-default btn-block" @click="handleClickCompare(info.project!=null)">交资信息查看</div>
                             </li>
-    
+
                         </ul>
                     </div>
                 </div>
                 <div class="col-sm-9">
-    
+
                     <div class="row">
                         <div class="col-sm-6" v-if="pieDataBuy.length>0">
                             <div class="p3">
@@ -76,9 +79,9 @@
                                                 <a @click="handleClickBuy(x.code)">{{x.name}}</a>
                                             </li>
                                         </ul>
-    
+
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -95,13 +98,13 @@
                                             </li>
                                         </ul>
                                     </div>
-    
+
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
-    
+
                         <div class="col-sm-6" v-if="pieDataBuyDirect.length>0">
                             <div class="p3">
                                 <h4>直发采购物资</h4>
@@ -114,9 +117,9 @@
                                                 <a @click="handleClickBuyDirect(parseInt(x.code))">{{x.name}}</a>
                                             </li>
                                         </ul>
-    
+
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -133,20 +136,20 @@
                                             </li>
                                         </ul>
                                     </div>
-    
+
                                 </div>
-    
+
                             </div>
                         </div>
                     </div>
-    
+
                 </div>
             </div>
             <div id="asset">
                 <router-view></router-view>
             </div>
         </div>
-    
+
         <MyModal :option="buyModalOption" title="采购物资详情">
             <div class="row">
                 <div class="col-md-12">
@@ -156,10 +159,10 @@
                         </button>
                     </Excel>
                 </div>
-    
+
             </div>
             <div style="height:430px;overflow-y:scroll;">
-    
+
                 <table id="projectOneTable1" class="table">
                     <thead>
                         <tr>
@@ -186,10 +189,10 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
             </div>
         </MyModal>
-    
+
         <MyModal :option="outModalOption" title="出库物资详情">
             <div class="row">
                 <div class="col-md-12">
@@ -199,10 +202,10 @@
                         </button>
                     </Excel>
                 </div>
-    
+
             </div>
             <div style="height:430px;overflow-y:scroll;">
-    
+
                 <table id="projectOneTable2" class="table">
                     <thead>
                         <tr>
@@ -229,7 +232,7 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
             </div>
         </MyModal>
         <MyModal :option="outModalOptionERP" title="ERP出库物资">
@@ -241,10 +244,10 @@
                         </button>
                     </Excel>
                 </div>
-    
+
             </div>
             <div style="height:430px;overflow-y:scroll;">
-    
+
                 <table id="projectOneTable2" class="table">
                     <thead>
                         <tr>
@@ -253,7 +256,7 @@
                             <th>需求部门</th>
                             <th>数量</th>
                             <th>单价</th>
-    
+
                         </tr>
                     </thead>
                     <tbody>
@@ -265,11 +268,11 @@
                             <td>{{x.require_dept}}</td>
                             <td>{{x.issued_quantity}}</td>
                             <td>{{x.unit_cost}}</td>
-    
+
                         </tr>
                     </tbody>
                 </table>
-    
+
             </div>
         </MyModal>
         <MyModal :option="buyModalOptionDirect" title="采购物资详情">
@@ -281,10 +284,10 @@
                         </button>
                     </Excel>
                 </div>
-    
+
             </div>
             <div style="height:430px;overflow-y:scroll;">
-    
+
                 <table id="projectOneTable3" class="table">
                     <thead>
                         <tr>
@@ -293,7 +296,7 @@
                             <th>采购单号</th>
                             <th>数量</th>
                             <th>单价</th>
-    
+
                         </tr>
                     </thead>
                     <tbody>
@@ -305,11 +308,11 @@
                             <td>{{x.order_no}}</td>
                             <td>{{x.mate_qty}}</td>
                             <td>{{x.prot_price}}</td>
-    
+
                         </tr>
                     </tbody>
                 </table>
-    
+
             </div>
         </MyModal>
         <MyModal :option="useModalOption" title="使用物资详情" small>
@@ -371,19 +374,68 @@
                                     </aside>
                                 </section>
                             </div>
-    
+
                         </article>
                     </div>
                 </div>
             </div>
-    
+
         </MyModal>
         <MyModal :option="goodsModalOption" title="物资详情">
-             <TraceTable :qrcode="selqrcode" level=1 @showD="handleClickForFollow"></TraceTable>
+            <TraceTable :qrcode="selqrcode" level=1 @showD="handleClickForFollow"></TraceTable>
         </MyModal>
-        
+
         <MyModal :option="outTraceModalOption" title="物资追溯" small>
             <TraceInfo :qrcode="selqrcode" level=1></TraceInfo>
+        </MyModal>
+        <MyModal :option="auditModalOption" title="审计详情" small>
+            <table class="table">
+                <tr>
+                    <td class="audit-item">项目编码</td>
+                    <td>{{auditDetail.project_no}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">项目名称</td>
+                    <td>{{auditDetail.project_name}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">设计批复文号</td>
+                    <td>{{auditDetail.design_no}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">概算投资额</td>
+                    <td>{{auditDetail.total_num}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">建设单位</td>
+                    <td>{{auditDetail.build_dept}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">施工单位</td>
+                    <td>{{auditDetail.work_dept}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">开工时间</td>
+                    <td>{{auditDetail.begintime}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">完工时间</td>
+                    <td>{{auditDetail.endtime}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">初验时间</td>
+                    <td>{{auditDetail.first_check_time}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">终验时间</td>
+                    <td>{{auditDetail.last_check_time}}</td>
+                </tr>
+                <tr>
+                    <td class="audit-item">审定金额合计</td>
+                    <td>{{auditDetail.after_all_total_fee}}</td>
+                </tr>
+
+            </table>
         </MyModal>
     </div>
 </template>
@@ -404,7 +456,8 @@ export default {
             menus: [],
             info: null,
             project: null,
-            auditDesc:"",
+            auditDesc: "",
+            auditDetail: {},
 
             pieDataBuy: {},
             optionPieBuy: {},
@@ -422,16 +475,17 @@ export default {
             outgoodsERP: [],
 
             backStep: -1,
+            auditModalOption: {},
             buyModalOption: {},
             buyModalOptionDirect: {},
             outModalOption: {},
             outModalOptionERP: {},
             useModalOption: {},
             selqrcode: 0,
-       
+
             goodsModalOption: {},
             outTraceModalOption: {},
-          
+
         }
     },
     computed: {
@@ -469,7 +523,7 @@ export default {
                 this.project = resp.data[0]
             });
             this.$store.dispatch("project_erp_one_audit", { project_id: this.project_code }).then((resp) => {
-                this.auditDesc = resp.data.length>0&&resp.data[0].value=="1"?"是":"否"
+                this.auditDesc = resp.data.length > 0 && resp.data[0].value == "1" ? "是" : "否"
             });
             this.$store.dispatch("project_info_buy", { comp_id: this.comp_id, project_code: this.project_code }).then((resp) => {
                 var items = resp.body.items
@@ -487,6 +541,16 @@ export default {
                 var items = resp.data
                 this.pieDataOutERP = items;
             });
+        },
+        handleAudit() {
+            if (this.auditDesc == '是') {
+                this.auditModalOption = { visable: true }
+                this.$store.dispatch("project_erp_one_audit_detail", { project_id: this.project_code }).then((resp) => {
+                    this.auditDetail = resp.data[0]
+                })
+            } else {
+                bootbox.alert("当前项目未完成审计工作！")
+            }
         },
         handleClickBuy(level_one_code) {
             this.buyModalOption = { visable: true }
@@ -518,15 +582,15 @@ export default {
         handleClickOutERP(level_one_code) {
             this.outModalOptionERP = { visable: true }
             this.$store.dispatch("project_info_outlist_erp", { storecomp_code: this.storecomp_code, project_id: this.project_code, big_type: level_one_code }).then((resp) => {
-                this.outgoodsERP = _.sortBy(resp.data,'item_code')
+                this.outgoodsERP = _.sortBy(resp.data, 'item_code')
             });
         },
         handleItemClickForOut(qrcode_code) {
             this.selqrcode = qrcode_code
-            this.goodsModalOption={visable:true}
-            
+            this.goodsModalOption = { visable: true }
+
         },
-        handleClickForFollow(qrcode_code){
+        handleClickForFollow(qrcode_code) {
             console.log("handle showD")
             this.selqrcode = qrcode_code
             this.outTraceModalOption = { visable: true }
@@ -535,7 +599,7 @@ export default {
             this.backStep = -2
             this.$store.commit('setProLinked', linked)
             this.$router.push({ name: 'ProjectAsset' })
-            $("body,html").animate({scrollTop: $("#asset").offset().top}, 1000)
+            $("body,html").animate({ scrollTop: $("#asset").offset().top }, 1000)
         },
         handleSearch(text) {
             this.$store.commit("setProSearchState", true)
@@ -637,7 +701,7 @@ export default {
 
     },
     components: {
-        Chart, MyMenu, MyModal, TraceTable,TraceInfo, Excel
+        Chart, MyMenu, MyModal, TraceTable, TraceInfo, Excel
     }
 }
 </script>
@@ -657,6 +721,11 @@ export default {
     }
 }
 
+.audit-item {
+    text-align: center;
+    line-height:2.4em;
+}
+
 .p3 {
     border: 1px solid #d5d5d5;
     border-radius: 1em;
@@ -674,12 +743,13 @@ export default {
         max-width: 14em;
     }
 }
-table.goods-modal{
+
+table.goods-modal {
     margin-left: 2em;
-    > tr{
-        height:2.4em;
-        td:nth-child(1){
-            width:8em;
+    >tr {
+        height: 2.4em;
+        td:nth-child(1) {
+            width: 8em;
         }
     }
 }

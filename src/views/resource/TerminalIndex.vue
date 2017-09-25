@@ -1,6 +1,6 @@
 <template>
     <div class="index">
-        <MyMenu :items="menus" back=true></MyMenu>
+        <MyMenu :items="menus" back=true @click:search="searchByDate"></MyMenu>
 
         <div class="container">
             <div class="row">
@@ -115,7 +115,9 @@
                             <td>{{x.comdity_code}}</td>
                             <td>{{x.comdity_name}}</td>
                             <td>{{x.fix_oper_name}}</td>
-                            <td><a @click="handleLink(x.sn_new_code)">{{x.sn_new_code}}</a></td>
+                            <td>
+                                <a @click="handleLink(x.sn_new_code)">{{x.sn_new_code}}</a>
+                            </td>
                             <td>{{x.sale_state_name}}</td>
                             <td>{{x.organ_name}}</td>
                             <td>{{x.broadband}}</td>
@@ -125,6 +127,19 @@
             </div>
         </MyModal>
 
+        <MyModal :option="searchModalOption" title="终端查询" small>
+            <div class="form-inline">
+                <div class="form-group">
+                    <mu-date-picker hintText="开始日期" v-model="startDate" autoOk/>
+                </div>
+                <div class="form-group">
+                    <mu-date-picker hintText="截止日期" v-model="endDate" autoOk/>
+                </div>
+                <div class="form-group">
+                <button class="btn btn-default" @click="pushDate">查询</button>
+                </div>
+            </div>
+        </MyModal>
     </div>
 </template>
 
@@ -146,6 +161,9 @@ export default {
             type: "in",
             orgItems: [],
             dtlItems: [],
+            searchModalOption: {},
+            startDate: '',
+            endDate: '',
             dtlModalOption: {},
             compModalOption: {},
             actionOption: null,
@@ -158,7 +176,7 @@ export default {
 
     },
     mounted() {
-
+        this.menus = [{ name: "按时间段查询", customEvent: "click:search" }]
         this.initBar("in")
         this.initBar("on")
 
@@ -195,6 +213,13 @@ export default {
             this.$root.$emit("modalHideAll")
             this.searchKey = imei
             this.handleSearch()
+        },
+        searchByDate() {
+            this.searchModalOption = { visable: true, footer: false }
+        },
+        pushDate(){
+            this.$root.$emit("modalHideAll")
+             this.$router.push({ name: "TerminalSearchByDate", params: { startDate: this.startDate,endDate:this.endDate } })
         },
         initBar(type) {
             this.$store.dispatch("terminal_index", { type }).then((resp) => {

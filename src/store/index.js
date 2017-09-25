@@ -121,6 +121,10 @@ const myStore = {
       let mock = {};
       return remote ? api(`/api/store/index/search`,{params:payload}) : Promise.resolve(mock);
     },
+    store_index_all(context, payload) {
+      let mock = {};
+      return remote ? api(`/api/store/index/all`) : Promise.resolve(mock);
+    },
     store_index_new_age(context, payload) {
       return api(`/api/store/index/newAge`);
     },
@@ -296,6 +300,10 @@ const project = {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getAuditProject`, { params: payload }) : Promise.resolve(mock);
     },
+    project_erp_one_audit_detail(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getAuditDetailProject`, { params: payload }) : Promise.resolve(mock);
+    },
     project_info_index(context, payload) {
       let mock = {};
       return remote ? api(`/api/project/one`, { params: { comp_id: context.state.comp_id, project_code: context.state.project_code } }) : Promise.resolve(mock);
@@ -398,6 +406,14 @@ const resource = {
     terminal_index_search(context, payload) {
       let mock = {};
       return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWQueryBySn&sn=${payload.sn}`) : Promise.resolve(mock);
+    },
+    terminal_index_search_by_date(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWBuySumByDate&begindate=${payload.begindate}&enddate=${payload.enddate}`) : Promise.resolve(mock);
+    },
+    terminal_index_search_by_date_and_organ(context, payload) {
+      let mock = {};
+      return remote ? $api(`http://10.68.26.80:8090/InterfaceData/interfacedataaction.do?action=getGWBuySumStateByDate&begindate=${payload.begindate}&enddate=${payload.enddate}&organ_code=${payload.organ_code}`) : Promise.resolve(mock);
     },
     terminal_index_orgs(context, payload) {
       let mock = {};

@@ -14,7 +14,7 @@
             没有相关信息。
           </slot>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" v-if="option.footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default {
   props: {
     option: {
       type: Object,
-      default() { return { visable: false } },
+      default() { return { visable: false ,footer:true} },
       required: true
     },
     title: {
@@ -43,7 +43,8 @@ export default {
     dark: {
       type: Boolean,
       default: false
-    }
+    },
+   
   },
   data() {
     return {
@@ -52,17 +53,19 @@ export default {
   },
   watch: {
     'option': function (val, oldVal) {
-      console.log(val)
+      if(val.footer==null){
+        val.footer=true
+      }
       if (val.visable) {
         this.show()
       } else {
         this.hide()
       }
 
-
     },
   },
   mounted() {
+    
     this.$root.$on("modalHideAll",p=>{
       this.hide()
     })

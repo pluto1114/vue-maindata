@@ -6,6 +6,7 @@
       <div style="float:right;" v-if="items.length>0">
         <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''" :key="x">
           <i v-if="x.type && x.type=='search'" @click="handleLinkClick(x)" class="fa fa-search"></i>
+          <i v-else-if="x.type && x.type=='all'" @click="handleLinkClick(x)" class="fa fa-download"></i>
           <a v-else @click="handleLinkClick(x)">{{x.name}}</a>
         </div>
       </div>

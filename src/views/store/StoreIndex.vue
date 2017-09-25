@@ -1,6 +1,6 @@
 <template>
     <div class="index">
-        <MyMenu :items="menus" back=true @click:search="handleSearch"></MyMenu>
+        <MyMenu :items="menus" back=true @click:search="handleSearch" @click:all="handleAll"></MyMenu>
 
         <div class="container">
 
@@ -337,7 +337,57 @@
                 <div class="col-sm-12">
                     <input type="text" v-model="searchText" class="form-control" placeholder="请输入搜索信息..." @keyup.enter="startSearch">
                 </div>
-                
+
+            </div>
+
+        </MyModal>
+        <MyModal :option='allModalOption' title="库存导出" small>
+            <div v-if="allStoreGoods.length==0" class="row center-block">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            </div>
+            <div v-else class="row center-block ">
+                <Excel selector="#storeIndexAllTable">
+                    <button class="btn btn-block btn-default">
+                        <span class="fa fa-download"></span>导出Excel</button>
+                </Excel>
+            </div>
+            <div class="row hide">
+                <div class="col-sm-12">
+
+                    <table id="storeIndexAllTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>物资编号</th>
+                                <th>物资名称</th>
+                                <th>所属公司</th>
+                                <th>入库数量</th>
+                                <th>占用数量</th>
+                                <th>现存数量</th>
+                                <th>单位</th>
+                                <th>单价</th>
+                                <th>入库时间</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(y,index) of allStoreGoods" :key="y.id">
+                                <td>{{index+1}}</td>
+                                <td>{{y.goodstype_code}}</td>
+                                <td>{{y.goodstype_name}}</td>
+                                <td>{{y.comp_name}}</td>
+                                <td>{{y.in_count|money(1)}}</td>
+                                <td>{{y.ready_out_count|money(1)}}</td>
+                                <td>{{y.cur_count|money(1)}}</td>
+                                <td>{{y.unit}}</td>
+                                <td>{{y.single_price}}</td>
+                                <td>{{y.createtime|prettyDate}}</td>
+                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
         </MyModal>
@@ -385,8 +435,11 @@ export default {
 
             l2Info: [],
 
+            allStoreGoods: [],
+            allModalOption: {},
+
             searchModalOption: {},
-            searchText:"",
+            searchText: "",
             ageModalOption: {},
             freeModalOption: {},
             monthModalOption: {},
@@ -525,8 +578,12 @@ export default {
                 this.cities[i].to = { name: "StoreCityIndex", params: { comp_id: this.cities[i].id } };
             }
 
-            this.menus = this.cities;
+            this.cities.forEach(n => {
+                this.menus.push(n)
+            })
+            // this.menus = this.cities;
             this.menus.push({ name: "StoreSearch", customEvent: "click:search", type: 'search' })
+            this.menus.push({ name: "StoreAll", customEvent: "click:all", type: 'all' })
 
             this.optionBar = {
                 title: {
@@ -834,10 +891,16 @@ export default {
         handleSearch() {
             this.searchModalOption = { visable: true }
         },
-        startSearch(){
-            if(this.searchText!=''){
+        handleAll() {
+            this.allModalOption = { visable: true }
+            this.$store.dispatch("store_index_all").then((resp) => {
+                this.allStoreGoods = resp.body.items
+            })
+        },
+        startSearch() {
+            if (this.searchText != '') {
                 this.$root.$emit("modalHideAll")
-                this.$router.push({name:"StoreSearch",params:{key:this.searchText}})
+                this.$router.push({ name: "StoreSearch", params: { key: this.searchText } })
             }
         }
     },

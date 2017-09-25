@@ -27,6 +27,7 @@ import ProjectAsset from '@/views/project/asset/ProjectAsset.vue'
 import RescIndex from '@/views/resource/RescIndex.vue'
 import TerminalIndex from '@/views/resource/TerminalIndex.vue'
 import TerminalSearch from '@/views/resource/TerminalSearch.vue'
+import TerminalSearchByDate from '@/views/resource/TerminalSearchByDate.vue'
 
 import OPIndex from '@/views/operation/OPIndex.vue'
 
@@ -173,6 +174,11 @@ export default new Router({
                 path: 'terminalSearch/:searchKey',
                 component: TerminalSearch,
                 name: 'TerminalSearch',
+                description: '资源'
+            },{
+                path: 'terminalSearchByDate',
+                component: TerminalSearchByDate,
+                name: 'TerminalSearchByDate',
                 description: '资源'
             }
         ]
