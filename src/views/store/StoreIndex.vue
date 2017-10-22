@@ -582,8 +582,8 @@ export default {
                 this.menus.push(n)
             })
             // this.menus = this.cities;
-            this.menus.push({ name: "StoreSearch", customEvent: "click:search", type: 'search' })
-            this.menus.push({ name: "StoreAll", customEvent: "click:all", type: 'all' })
+            this.menus.push({ name: "搜索", customEvent: "click:search", type: 'search' })
+            this.menus.push({ name: "全区物资导出", customEvent: "click:all", type: 'all' })
 
             this.optionBar = {
                 title: {

@@ -66,6 +66,43 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
+                                <h3 class="panel-title">待装信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>商品编号</th>
+                                            <th>商品名称</th>
+                                            <th>装维人</th>
+                                            <th>盟市</th>
+                                            <th>终端状态</th>
+                                            <th>所属组织</th>
+                                            <th>宽带号码</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="list_4.length">
+                                        <tr v-for="(x,i) of list_4" :key="i">
+                                            <td>{{x.comdity_code}}</td>
+                                            <td>{{x.comdity_name}}</td>
+                                            <td>{{x.fix_oper_name}}</td>
+                                            <td>{{x.localname}}</td>
+                                            <td>{{x.sale_state_name}}</td>
+                                            <td>{{x.organ_name}}</td>
+                                            <td>{{x.broadband}}</td>
+
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="6" style="text-align:center;">目前没有相关信息</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <h3 class="panel-title">在库信息</h3>
                             </div>
                             <div class="panel-body">
@@ -103,6 +140,7 @@
                                 </table>
                             </div>
                         </div>
+                        
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">业务工单</h3>
@@ -164,6 +202,7 @@ export default {
             list_1: [],
             list_2: [],
             list_3: [],
+            list_4: [],
 
             searchKey: ""
         }
@@ -187,6 +226,7 @@ export default {
                 this.list_1 = _.find(resp.data, { code: "apply" }).list1
                 this.list_2 = _.find(resp.data, { code: "library" }).list1
                 this.list_3 = _.find(resp.data, { code: "storage" }).list1
+                this.list_4 = _.find(resp.data, { code: "ready" }).list1
             })
         }
     },

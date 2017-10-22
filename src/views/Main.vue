@@ -26,17 +26,25 @@
     <transition name="slide-up" mode="out-in">
       <div v-show="footerShow" class="footer">
         <div class="container">
-          <div class="">版权所有：内蒙古联通</div>
+          <div class="">版权所有：内蒙古联通<a @click="modalOption={visable:true}" style="color:white;margin-left:1em;">联系我们</a></div>
           <!-- <div class="other-link">友情链接：<a href="http://10.197.1.60:8080" target="_blank">实物管理平台</a></div> -->
         </div>
       </div>
     </transition>
+
+    <MyModal :option='modalOption' title="联系我们" small>
+      <ul>
+        <li class="my-item">平台交流qq群：484305477</li>
+        <li class="my-item">意见反馈：shilj31@chinaunicom.cn</li>
+        <li class="my-item">支撑联系人：施利君 0471-6918036</li>
+      </ul>
+    </MyModal>
   </div>
 </template>
 
 <script>
 
-
+import MyModal from '@/components/MyModal'
 export default {
   data() {
     const desktop = isDesktop()
@@ -44,6 +52,7 @@ export default {
       loginname: '',
       slideName: 'slide-1',
       footerShow: true,
+      modalOption:{}
 
     }
   },
@@ -104,6 +113,9 @@ export default {
       }
     }
   },
+  components:{
+    MyModal
+  },
   destroyed() {
 
   },
@@ -161,7 +173,9 @@ a {
 .page-info {
   min-height: 700px;
 }
-
+.my-item{
+  line-height: 2.5em;
+}
 .footer {
   text-align: center;
   background: url(../assets/bottom-line.png);

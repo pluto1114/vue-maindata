@@ -288,6 +288,8 @@ export default {
 
     },
     mounted() {
+        this.menus=[{name:'运维物资订单回填',type:'outlink',link:'http://10.68.26.80:8081'}]
+
         this.$store.dispatch("operation_erp_index").then((resp) => {
             let data = _.sortByAll(resp.data, ['comp_name', 'material_name'])
             let compGroupBy = _.groupBy(data, 'comp_name')

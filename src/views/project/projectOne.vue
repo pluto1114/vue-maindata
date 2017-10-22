@@ -404,7 +404,7 @@
                 </tr>
                 <tr>
                     <td class="audit-item">概算投资额</td>
-                    <td>{{auditDetail.total_num}}</td>
+                    <td>{{auditDetail.total_num}}万元</td>
                 </tr>
                 <tr>
                     <td class="audit-item">建设单位</td>
@@ -432,7 +432,7 @@
                 </tr>
                 <tr>
                     <td class="audit-item">审定金额合计</td>
-                    <td>{{auditDetail.after_all_total_fee}}</td>
+                    <td>{{auditDetail.after_all_total_fee}}元</td>
                 </tr>
 
             </table>

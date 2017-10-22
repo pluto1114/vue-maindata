@@ -5,8 +5,9 @@
         <i class="fa fa-arrow-left"></i> 返回</a>
       <div style="float:right;" v-if="items.length>0">
         <div v-for="x of items" class="menu-item" :class="x.flash?'flash':''" :key="x">
-          <i v-if="x.type && x.type=='search'" @click="handleLinkClick(x)" class="fa fa-search"></i>
-          <i v-else-if="x.type && x.type=='all'" @click="handleLinkClick(x)" class="fa fa-download"></i>
+          <i v-if="x.type && x.type=='search'" @click="handleLinkClick(x)" class="fa fa-search" :title="x.name"></i>
+          <i v-else-if="x.type && x.type=='all'" @click="handleLinkClick(x)" class="fa fa-download":title="x.name"></i>
+          <a v-else-if="x.type && x.type=='outlink'" :href="x.link"  target="_blank">{{x.name}}</a>
           <a v-else @click="handleLinkClick(x)">{{x.name}}</a>
         </div>
       </div>

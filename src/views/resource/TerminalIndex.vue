@@ -26,17 +26,50 @@
                         </div>
                     </div>
                     <br>
-                    <h4>在库终端信息</h4>
+                    <div class="box">
+                        <h4>在库终端信息</h4>
+                        <div style="margin:0.6em;">（ONU终端 {{total_in[0]}}，IPTV机顶盒 {{total_in[1]}}）</div>
+                        <Excel v-if="excel_in.length" :cols="{'name':'公司名称','value':'终端总数','value1':'ONU终端','value2':'IPTV机顶盒'}" :items="excel_in" filename="在库终端信息" style="margin:0.6em;">
+                            <i class="fa fa-download"></i>
+                        </Excel>
+                    </div>
+
                     <Chart width="100%" height="600px" :option="optionBar_in" :actionOption="actionOption" theme="infographic" @chartClick="handleBarClick" loading></Chart>
                     <br>
-                    <h4>在网终端信息</h4>
+                    <div class="box">
+                        <h4>在网终端信息</h4>
+                        <div style="margin:0.6em;">（ONU终端 {{total_on[0]}}，IPTV机顶盒 {{total_on[1]}}）</div>
+                        <Excel v-if="excel_on.length" :cols="{'name':'公司名称','value':'终端总数','value1':'ONU终端','value2':'IPTV机顶盒'}" :items="excel_on" filename="在网终端信息" style="margin:0.6em;">
+                            <i class="fa fa-download"></i>
+                        </Excel>
+                    </div>
                     <Chart width="100%" height="600px" :option="optionBar_on" :actionOption="actionOption" theme="shine" @chartClick="handleBarClick" loading></Chart>
+                    <!-- <div style="margin-top:4em;">
+                        <table class="table" style="line-height:2.6em;">
+                            <tr>
+                                <td></td>
+                                <td>ONU终端总数</td>
+                                <td>IPTV机顶盒总数</td>
+                            </tr>
+                            <tr>
+                                <td>在库</td>
+                                <td>{{total_in[0]}}</td>
+                                <td>{{total_in[1]}}</td>
+                            </tr>
+                            <tr>
+                                <td>在网</td>
+                                <td>{{total_on[0]}}</td>
+                                <td>{{total_on[1]}}</td>
+                            </tr>
+                        </table>
+                    </div> -->
                 </div>
+
             </div>
         </div>
 
         <MyModal :option='compModalOption' :title="compModalTitle" small>
-            <div style="height:630px;overflow-y:scroll;">
+            <div v-if="orgItems.length" style="height:630px;overflow-y:scroll;">
                 <table class="table">
                     <thead>
                         <tr>
@@ -58,6 +91,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div v-else class="row center-block">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
             </div>
         </MyModal>
         <MyModal :option='dtlModalOption' :title="dtlModalTitle">
@@ -136,7 +172,7 @@
                     <mu-date-picker hintText="截止日期" v-model="endDate" autoOk/>
                 </div>
                 <div class="form-group">
-                <button class="btn btn-default" @click="pushDate">查询</button>
+                    <button class="btn btn-default" @click="pushDate">查询</button>
                 </div>
             </div>
         </MyModal>
@@ -156,6 +192,10 @@ export default {
             menus: [],
             optionBar_in: {},
             optionBar_on: {},
+            excel_in: [],
+            excel_on: [],
+            total_in: [],
+            total_on: [],
             comp_id: 2,
             goods_type: "",
             type: "in",
@@ -176,9 +216,11 @@ export default {
 
     },
     mounted() {
-        this.menus = [{ name: "按时间段查询", customEvent: "click:search" }]
+        this.menus = [{ name: "分时段采购终端信息", customEvent: "click:search" }]
         this.initBar("in")
         this.initBar("on")
+
+
 
     },
     methods: {
@@ -217,9 +259,9 @@ export default {
         searchByDate() {
             this.searchModalOption = { visable: true, footer: false }
         },
-        pushDate(){
+        pushDate() {
             this.$root.$emit("modalHideAll")
-             this.$router.push({ name: "TerminalSearchByDate", params: { startDate: this.startDate,endDate:this.endDate } })
+            this.$router.push({ name: "TerminalSearchByDate", params: { startDate: this.startDate, endDate: this.endDate } })
         },
         initBar(type) {
             this.$store.dispatch("terminal_index", { type }).then((resp) => {
@@ -244,6 +286,15 @@ export default {
                         })
                     })
                 }
+                this["excel_" + type] = _.map(resp.data, n => {
+                    n.name1 = n.list1[0].name
+                    n.name2 = n.list1[1].name
+                    n.value1 = n.list1[0].value
+                    n.value2 = n.list1[1].value
+                    return n
+                })
+                this["total_" + type][0] = _.sum(this["excel_" + type], 'value1')
+                this["total_" + type][1] = _.sum(this["excel_" + type], 'value2')
 
                 this["optionBar_" + type] = {
                     tooltip: {
@@ -261,10 +312,10 @@ export default {
                         bottom: '3%',
                         containLabel: true
                     },
-                    xAxis: {
+                    yAxis: {
                         type: 'value'
                     },
-                    yAxis: {
+                    xAxis: {
                         type: 'category',
                         data: compNames,
                         nameTextStyle: {
@@ -281,6 +332,8 @@ export default {
                     series: series
                 }
             })
+
+
         }
     },
     components: {
