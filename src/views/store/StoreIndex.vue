@@ -851,7 +851,7 @@ export default {
                         trigger: 'axis'
                     },
                     legend: {
-                        data: ['2016', '2017']
+                        data: ['2018', '2019']
                     },
                     xAxis: [
                         {
@@ -866,16 +866,16 @@ export default {
                         }
                     ],
                     series: [{
-                        name: '2016',
+                        name: '2018',
                         type: 'line',
                         data: _.pluck(resp.body.itemMap.lastYear, 'value')
                     }, {
-                        name: '2017',
+                        name: '2019',
                         type: 'line',
                         data: thisYear,
                         markLine: {
                             data: [
-                                { name: "上月库存", yAxis: thisYear[thisYear.length - 2] },
+                                { name: "上月库存", yAxis: thisYear[thisYear.length>1?thisYear.length-2:0] },
                                 { name: "本月库存", yAxis: thisYear[thisYear.length - 1] },
                             ]
                         }
